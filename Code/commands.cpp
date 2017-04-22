@@ -2,10 +2,11 @@
 //********************************************
 #include <sys/stat.h>
 #include "commands.h"
-#include "signals.h"
+
 
 
 History smash_history;
+
 
 
 /**
@@ -123,6 +124,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
 
     }
         /*************************************************/
+//todo yonathan is in charge of this
     else if (!strcmp(cmd, "quit")) {
         if (num_arg==1)
             sigHandler.sendSig(getpid(),9);
@@ -140,7 +142,13 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         }
 
 
+    } else if(!strcmp(cmd, "kill")){
+        if(num_arg<4){
+            smash_history.process_kill(char * args[MAX_ARG]);
+        }
     }
+
+
         /*************************************************/
     else // external command
     {

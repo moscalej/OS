@@ -17,6 +17,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <iostream>
+#include <signals.h>
+#include "signals.h"
 using namespace std;
 
 
@@ -127,6 +129,7 @@ private:
     int _number_of_commands=0;
     int _iterator=0;
     int _number_of_process;
+    SignalHandler sigHandler;
 
 
     void add_process(char *Process_name, time_t Start_time, int Process_id);
