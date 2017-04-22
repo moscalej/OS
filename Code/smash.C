@@ -1,6 +1,13 @@
 /*	smash.c
 main file. This file contains the main function of smash
 *******************************************************************/
+
+/**
+ * this is the homework wet 1 for Operating systems
+ * this file was made by:
+ * Alejandro Moscoso and Yonathan (dificult last name)
+ *
+ */
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>

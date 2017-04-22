@@ -3,14 +3,17 @@
 #include <sys/stat.h>
 #include "commands.h"
 
-//********************************************
+
+History smash_history;
+
+
+
+/**
 // function name: ExeCmd
 // Description: interperts and executes built-in commands
 // Parameters: pointer to jobs, command string
 // Returns: 0 - success,1 - failure
-//**************************************************************************************
-History smash_history;
-
+//**************************************************************************************/
 int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
     char *cmd;
     char *args[MAX_ARG];
@@ -31,12 +34,13 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
 
     }
 
-/*************************************************/
+/**
 // Built in Commands PLEASE NOTE NOT ALL REQUIRED
 // ARE IN THIS CHAIN OF IF COMMANDS. PLEASE ADD
 // MORE IF STATEMENTS AS REQUIRED
 /*************************************************/
 //todo check what happend when we use cd ..
+
     if (!strcmp(cmd, "cd")) { //todo need to check the arguments
         if (num_arg < 2) {
 
@@ -54,7 +58,8 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
     }
 
         /*************************************************/
-    else if (!strcmp(cmd, "pwd")) {
+    else if (!strcmp(cmd, "pwd"))
+    {
         if (num_arg == 0) {
             getcwd(pwd, sizeof(pwd));
 
@@ -62,6 +67,14 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         } else{
             illegal_cmd = true;
         }
+    }
+
+    else if(!strcmp(cmd, "history")){
+        if (num_arg == 0){
+            smash_history.print_history();
+
+        }
+
     }
 
         /*************************************************/
@@ -77,25 +90,35 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         }
     }
         /*************************************************/
-
+        //Todo need to debug and try
     else if (!strcmp(cmd, "jobs")) {
-
-    }
-        /*************************************************/
-    else if (!strcmp(cmd, "showpid")) {
-        if(num_arg==0){
-        cout<<getpid()<<endl;
-            } else{
-            illegal_cmd = true;
+        if(num_arg == 0){
+            smash_history.jobs();
         }
 
     }
         /*************************************************/
+    else if (!strcmp(cmd, "showpid")) {
+        if (num_arg == 0) {
+            cout <<"smash pid is "<< getpid() << endl;
+        } else {
+            illegal_cmd = true;
+        }
+
+    }
+
+        //Todo need to debug and try
+        /*************************************************/
     else if (!strcmp(cmd, "fg")) {
+        if (num_arg == 1){//todo need to check is args[1] is also a number
+
+            smash_history.foreground(atoi(args[1]));
+        }
 
     }
         /*************************************************/
     else if (!strcmp(cmd, "bg")) {
+        smash_history.background(atoi(args[1]));
 
     }
         /*************************************************/
@@ -212,10 +235,7 @@ void History::add_commands(string command) {
         _iterator++;
         _number_of_comands++;
     }
-
-
 }
-
 
 int History::add_proccess(char *process_name, char *args[]) {
     int process_id;
@@ -228,4 +248,35 @@ int History::add_proccess(char *process_name, char *args[]) {
 
 
     return 0;
+}
+
+void History::print_history() {
+    for (int i = _number_of_comands; i >0 ; --i) {
+        cout<<_commands[i-1]<<endl;
+    }
+
+
+}
+
+int History::jobs() {
+    for (int i = 0; i < _number_of_process; ++i) {
+        time_t time_running;
+        time(&time_running);
+        time_running = time_running - _process_running[i]._time; //todo check is in the linux compiler time lib also works in sec
+
+        cout<<"["<<i<<"] "<<_process_running[i]._process_name\
+        <<" : "<<_process_running[i]._process_id<<" "\
+        <<time_running<<" secs"<<endl;
+    }
+
+    return 0;
+}
+
+//todo this funtions need to be write i am jus leaving the base structure here
+int History::foreground(int place) {
+    return 0;
+}
+
+void History::background(int place) {
+
 }
