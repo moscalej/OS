@@ -119,6 +119,7 @@ public:
      *          (-1)  - if the peoess is not listed on jobs
      */
     int Process_number(int process_id);
+    int getPidByIndex(int process_number);
 
 private:
     Process _process_running[100];

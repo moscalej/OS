@@ -7,7 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
-
+#include <iostream>
+using namespace std;
+class SignalHandler {
+public:
+    int sendSig(int pID,int sigNum);
+};
 
 
 #endif

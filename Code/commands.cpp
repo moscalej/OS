@@ -2,6 +2,7 @@
 //********************************************
 #include <sys/stat.h>
 #include "commands.h"
+#include "signals.h"
 
 
 History smash_history;
@@ -123,6 +124,21 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
     }
         /*************************************************/
     else if (!strcmp(cmd, "quit")) {
+        if (num_arg==1)
+            sigHandler.sendSig(getpid(),9);
+        else
+        {
+            if (num_arg==2 && args[1]=="kill")
+            {
+                for (int i=0; i<smash_history._number_of_process; i++)
+                {
+                    sigHandler.sendSig(smash_history.getPidByIndex(i),9);
+                }
+            } else
+            {illegal_cmd==true}
+
+        }
+
 
     }
         /*************************************************/
@@ -313,4 +329,13 @@ int History::Process_number(int process_id) {
         if (process_id == _process_running[i]._process_id) return i+1;
     }
     return -1;
+}
+
+int History::getPidByIndex(int process_number) {
+    if (process_number<_number_of_process-1 && process_number>=0)
+        return  _process_running[process_number]._process_id;
+    else
+        return -1;
+
+
 }
