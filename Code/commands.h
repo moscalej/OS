@@ -117,11 +117,23 @@ public:
     /**
      * This method will search the process number listed on jobs based on the process id
      * @param process_id - the process identification number
-     * @return (1-100) - the process number listed on jobs
-     *          (-1)  - if the peoess is not listed on jobs
+     * @return  0 - the process number listed on jobs
+     *          (-1)  - if the process is not listed on jobs
      */
     int Process_number(int process_id);
+
+    /**
+     * This method search the process id if in the jobs list
+     * @param process_number - id of the process
+     * @return Process id > 0
+     *          -1 - if the the the number is not in the parameters of the list
+     */
     int getPidByIndex(int process_number);
+
+    /**
+     * this class is use to manage the signal
+     */
+    SignalHandler sigHandler;
 
 private:
     Process _process_running[100];
@@ -129,7 +141,7 @@ private:
     int _number_of_commands=0;
     int _iterator=0;
     int _number_of_process;
-    SignalHandler sigHandler;
+
 
 
     void add_process(char *Process_name, time_t Start_time, int Process_id);

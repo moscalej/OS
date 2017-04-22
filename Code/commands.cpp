@@ -4,9 +4,7 @@
 #include "commands.h"
 
 
-
 History smash_history;
-
 
 
 /**
@@ -126,24 +124,20 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         /*************************************************/
 //todo yonathan is in charge of this
     else if (!strcmp(cmd, "quit")) {
-        if (num_arg==1)
-            sigHandler.sendSig(getpid(),9);
-        else
-        {
-            if (num_arg==2 && args[1]=="kill")
-            {
-                for (int i=0; i<smash_history._number_of_process; i++)
-                {
-                    sigHandler.sendSig(smash_history.getPidByIndex(i),9);
+        if (num_arg == 1)
+            sigHandler.sendSig(getpid(), 9);
+        else {
+            if (num_arg == 2 && args[1] == "kill") {
+                for (int i = 0; i < smash_history._number_of_process; i++) {
+                    sigHandler.sendSig(smash_history.getPidByIndex(i), 9);
                 }
-            } else
-            {illegal_cmd==true}
+            } else { illegal_cmd == true }
 
         }
 
 
-    } else if(!strcmp(cmd, "kill")){
-        if(num_arg<4){
+    } else if (!strcmp(cmd, "kill")) {
+        if (num_arg < 4) {
             smash_history.process_kill(char * args[MAX_ARG]);
         }
     }
@@ -258,7 +252,7 @@ int History::Start_process(char *process_name, char **args) {
 
             time_t time_process_start;
             time(&time_process_start);
-            this->add_process(args[0], (int)time_process_start, pID);
+            this->add_process(args[0], (int) time_process_start, pID);
 
 
     }
@@ -303,13 +297,13 @@ void History::add_process(char *Process_name, time_t Start_time, int Process_id)
         for (int i = 0; i < 99; ++i) {
             _process_running[i] = _process_running[i + 1];
         }
-        _process_running[99]._time = (int)Start_time;
+        _process_running[99]._time = (int) Start_time;
         _process_running[99]._process_id = Process_id;
         _process_running[99]._process_name = Process_name;
     } else {
         _process_running[_number_of_process]._process_name = Process_name;
         _process_running[_number_of_process]._process_id = Process_id;
-        _process_running[_number_of_process]._time = (int)Start_time;
+        _process_running[_number_of_process]._time = (int) Start_time;
         _number_of_process++;
     }
 
@@ -319,7 +313,7 @@ void History::add_process(char *Process_name, time_t Start_time, int Process_id)
 int History::process_remover(int process_id) {
     for (int i = 0; i < _number_of_process; ++i) {
 
-        if(process_id == _process_running[i]._process_id) {
+        if (process_id == _process_running[i]._process_id) {
 
             for (int j = i; j < _number_of_process; ++j) {
                 _process_running[j] = _process_running[j + 1];
@@ -334,14 +328,14 @@ int History::process_remover(int process_id) {
 
 int History::Process_number(int process_id) {
     for (int i = 0; i < _number_of_process; ++i) {
-        if (process_id == _process_running[i]._process_id) return i+1;
+        if (process_id == _process_running[i]._process_id) return i + 1;
     }
     return -1;
 }
 
 int History::getPidByIndex(int process_number) {
-    if (process_number<_number_of_process-1 && process_number>=0)
-        return  _process_running[process_number]._process_id;
+    if (process_number < _number_of_process - 1 && process_number >= 0)
+        return _process_running[process_number]._process_id;
     else
         return -1;
 
