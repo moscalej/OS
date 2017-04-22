@@ -124,42 +124,44 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         /*************************************************/
 //todo yonathan is in charge of this
     else if (!strcmp(cmd, "quit")) {
-        if (num_arg==1)
-            smash_history.sigHandler.sendSig(getpid(),9);
-        else
-        {
-            if (num_arg==2 && args[1]=="kill")
-            {
-                for (int i=0; i<smash_history.getNumOfProccess; i++)
-                {
-					time_t start = time(NULL);
-					while (difftime(time(NULL), start)<=5 && smash_history.sigHandler.sendSig(smash_history.getPidByIndex(i), 15) != 0);
-
-						if (difftime(time(NULL), start) > 5)
-							smash_history.sigHandler.sendSig(smash_history.getPidByIndex(i),9);
-                }
-            } else
-			{
-				illegal_cmd == true;
-			}
+        if (num_arg == 0) {
+            return smash_history.sigHandler.sendSig(getpid(), 9);
 
         }
 
+        else if (num_arg == 1 && args[1] == "kill") {
+            for (int i = 0; i < smash_history.get_number_process(); i++) {
+                time_t start = time(NULL);
+                while (difftime(time(NULL), start) <= 5 &&
+                       smash_history.sigHandler.sendSig(smash_history.getPidByIndex(i), 15) != 0) {
 
-    } else if(!strcmp(cmd, "kill")){
-        if(num_arg==3){
-			char* sigNum;
-			sigNum = strtok(args[1], "-");
-			if (smash_history.Process_number(atoi(args[2])))
-				if (!smash_history.sigHandler.sendSig(smash_history.getPidByIndex(atoi(args[2])), atoi(sigNum)))
-					cout << "smash error : > kill job � cannot send signal";
-				else
-					cout << "smash error: > kill job � job does not exist";
-		else
-				{
-					cout << "smash error : > kill job � cannot send signal";
-					illegal_cmd == true;
-				}
+                    if (difftime(time(NULL), start) > 5) {
+                        smash_history.sigHandler.sendSig(smash_history.getPidByIndex(i), 9);
+                    }
+                }
+                return smash_history.sigHandler.sendSig(getpid(), 9);
+            }
+
+
+            illegal_cmd = true;
+        }
+
+
+
+
+    } else if (!strcmp(cmd, "kill")) {
+        if (num_arg == 3) {
+            char *sigNum;
+            sigNum = strtok(args[1], "-");
+            if (smash_history.Process_number(atoi(args[2])))
+                if (!smash_history.sigHandler.sendSig(smash_history.getPidByIndex(atoi(args[2])), atoi(sigNum)))
+                    cout << "smash error : > kill job " <<args[2]<<" cannot send signal"<<endl;
+                else
+                    cout << "smash error: > kill job "<<args[2]<<" job does not exist"<<endl;
+            else {
+                cout << "smash error : > kill job "<<args[2]<<" cannot send signal"<<endl;
+                illegal_cmd = true;
+            }
         }
     }
 
@@ -212,22 +214,19 @@ int ExeComp(char *lineSize) {
 
 //**************************************************************************************
 // function name: BgCmd
-// Description: if command is in background, insert the command to jobs
-// Parameters: command string, pointer to jobs
+// Description: this will check if the process nets to be run in the background
+// Parameters: command string
 // Returns: 0- BG command -1- if not
 //**************************************************************************************
-int BgCmd(char *lineSize, History &smash) {
+int BgCmd(char *lineSize) {
 
     char *Command;
     char *delimiters = (char *) " \t\n";
     char *args[MAX_ARG];
     if (lineSize[strlen(lineSize) - 2] == '&') {
         lineSize[strlen(lineSize) - 2] = '\0';
-        // Add your code here (execute a in the background)
-		time_t time_process_start;
-		time(&time_process_start);
-		smash.add_process(args[0], (int)time_process_start, pID);
-		return 0;
+
+        return 0;
 
     }
     return -1;
@@ -252,15 +251,17 @@ void History::add_commands(string command) {
     }
 }
 
-int History::Start_process(char *process_name, char **args) {
+int History::Start_process(char *line_size, char **args) {
     int pID;
+    time_t start_time;
+    time(&start_time);
+
+
     switch (pID = fork()) {
         case -1:
             perror("fail at creating the child process");
 
-            /*
-            your code
-            */
+            return -1;
         case 0 :
             // Child Process
             if (setpgrp() == -1) perror("Fail to set the group id");
@@ -268,10 +269,20 @@ int History::Start_process(char *process_name, char **args) {
             execv(args[0], args); //here the program supouse to end
 
             perror("Error executing the program");
+            return -1;
 //todo check this part if bgcmd is -1 have to wait until end
         default:
 
-			if (BgCmd(process_name, this)
+            if (!BgCmd(line_size)) {
+                add_process(args[0], (int) start_time, pID);
+            } else {
+                int status;
+                int result = waitpid(pID, &status, WUNTRACED);
+                if (result == -1) {
+                    perror("something");
+                    return -1;
+                }
+            }
 
 
     }
@@ -305,13 +316,13 @@ int History::jobs() {
 //todo this funtions need to be write i am jus leaving the base structure here
 int History::foreground(int place) {
     int temp_pid;
-    if (place == (-1)){
+    if (place == (-1)) {
         temp_pid = getPidByIndex(_number_of_process);
 
 
-    }else if(0<=(temp_pid =getPidByIndex(place))) {
+    } else if (0 <= (temp_pid = getPidByIndex(place))) {
 
-        sigHandler.sendSig(temp_pid,)
+        //sigHandler.sendSig(temp_pid,)
 
     }
 
@@ -372,7 +383,9 @@ int History::getPidByIndex(int process_number) {
 
 }
 
-int History::getNumOfProccess()
-{
-	return this->_number_of_process;
+int History::get_number_process() {
+
+    return this->_number_of_process;
 }
+
+

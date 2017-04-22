@@ -17,7 +17,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <iostream>
-#include <signals.h>
 #include "signals.h"
 using namespace std;
 
@@ -109,6 +108,8 @@ public:
      */
     void background(int place);
 
+    void add_process(char *Process_name, time_t Start_time, int Process_id);
+
     /**
      * This method will remove the process (by process Id) from the jobs list
      * @param process_id
@@ -138,6 +139,8 @@ public:
      */
     SignalHandler sigHandler;
 
+    int get_number_process();
+
 private:
     Process _process_running[100];
     string  _commands[50];
@@ -147,7 +150,7 @@ private:
 
 
 
-    void add_process(char *Process_name, time_t Start_time, int Process_id, bool is_bg);
+
 };
 
 

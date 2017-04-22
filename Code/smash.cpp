@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 					// perform a complicated Command
 		if(!ExeComp(lineSize)) continue; 
 					// background command	
-	 	if(!BgCmd(lineSize, jobs)) continue; 
+	 	//if(!BgCmd(lineSize, jobs)) continue; //todo check if this
 					// built in commands
 		ExeCmd(jobs, lineSize, cmdString);
 		
