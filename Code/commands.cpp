@@ -113,6 +113,9 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         if (num_arg == 1) {//todo need to check is args[1] is also a number
 
             smash_history.foreground(atoi(args[1]));
+        } else if(num_arg ==0){
+            smash_history.foreground(-1);
+
         }
 
     }
@@ -252,7 +255,7 @@ int History::Start_process(char *process_name, char **args) {
 
             time_t time_process_start;
             time(&time_process_start);
-            this->add_process(args[0], (int) time_process_start, pID);
+            this->add_process(args[0], (int) time_process_start, pID, true);
 
 
     }
@@ -272,12 +275,12 @@ int History::jobs() {
     for (int i = 0; i < _number_of_process; ++i) {
         time_t time_running;
         time(&time_running);
-        time_running = time_running -
-                       _process_running[i]._time; //todo check is in the linux compiler time lib also works in sec
-
-        cout << "[" << i << "] " << _process_running[i]._process_name\
- << " : " << _process_running[i]._process_id << " "\
- << time_running << " secs" << endl;
+        time_running = time_running - _process_running[i]._time; //todo check is in the linux compiler time lib also works in sec
+        if(_process_running[i].is_on_bg) {
+            cout << "[" << i << "] " << _process_running[i]._process_name\
+                        << " : " << _process_running[i]._process_id << " "\
+                         << time_running << " secs" << endl;
+        }
     }
 
     return 0;
@@ -285,6 +288,17 @@ int History::jobs() {
 
 //todo this funtions need to be write i am jus leaving the base structure here
 int History::foreground(int place) {
+    int temp_pid;
+    if (place == (-1)){
+        temp_pid = getPidByIndex(_number_of_process);
+
+
+    }else if(0<=(temp_pid =getPidByIndex(place))) {
+
+        sigHandler.sendSig(temp_pid,)
+
+    }
+
     return 0;
 }
 
@@ -292,7 +306,7 @@ void History::background(int place) {
 
 }
 
-void History::add_process(char *Process_name, time_t Start_time, int Process_id) {
+void History::add_process(char *Process_name, time_t Start_time, int Process_id, bool is_bg) {
     if (this->_number_of_process >= 100) {
         for (int i = 0; i < 99; ++i) {
             _process_running[i] = _process_running[i + 1];
@@ -300,10 +314,12 @@ void History::add_process(char *Process_name, time_t Start_time, int Process_id)
         _process_running[99]._time = (int) Start_time;
         _process_running[99]._process_id = Process_id;
         _process_running[99]._process_name = Process_name;
+        _process_running[99].is_on_bg=is_bg;
     } else {
         _process_running[_number_of_process]._process_name = Process_name;
         _process_running[_number_of_process]._process_id = Process_id;
         _process_running[_number_of_process]._time = (int) Start_time;
+        _process_running[99].is_on_bg=is_bg;
         _number_of_process++;
     }
 

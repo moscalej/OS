@@ -41,6 +41,9 @@ public:
     string _process_name;
     int _process_id=0;
     int _time=0;
+    bool is_on_bg;
+    bool is_waitng;
+    bool is_stop;
 
 };
 
@@ -144,7 +147,7 @@ private:
 
 
 
-    void add_process(char *Process_name, time_t Start_time, int Process_id);
+    void add_process(char *Process_name, time_t Start_time, int Process_id, bool is_bg);
 };
 
 
