@@ -7,7 +7,6 @@
 History smash_history;
 
 
-
 /**
 // function name: ExeCmd
 // Description: interperts and executes built-in commands
@@ -18,7 +17,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
     char *cmd;
     char *args[MAX_ARG];
     char pwd[MAX_LINE_SIZE];
-    char *delimiters = (char*)" \t\n";
+    char *delimiters = (char *) " \t\n";
     int i = 0, num_arg = 0;
 
 
@@ -51,28 +50,29 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
             } else {
                 cout << args[0] << "- path not found" << endl;
             }
-        } else{
+        } else {
             illegal_cmd = true;
         }
 
     }
 
         /*************************************************/
-    else if (!strcmp(cmd, "pwd"))
-    {
+    else if (!strcmp(cmd, "pwd")) {
         if (num_arg == 0) {
             getcwd(pwd, sizeof(pwd));
 
             cout << pwd << endl;
-        } else{
+        } else {
             illegal_cmd = true;
         }
     }
-
-    else if(!strcmp(cmd, "history")){
-        if (num_arg == 0){
+//todo also include the arguments
+    else if (!strcmp(cmd, "history")) {
+        if (num_arg == 0) {
             smash_history.print_history();
 
+        } else {
+            illegal_cmd = true;
         }
 
     }
@@ -92,7 +92,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         /*************************************************/
         //Todo need to debug and try
     else if (!strcmp(cmd, "jobs")) {
-        if(num_arg == 0){
+        if (num_arg == 0) {
             smash_history.jobs();
         }
 
@@ -100,7 +100,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         /*************************************************/
     else if (!strcmp(cmd, "showpid")) {
         if (num_arg == 0) {
-            cout <<"smash pid is "<< getpid() << endl;
+            cout << "smash pid is " << getpid() << endl;
         } else {
             illegal_cmd = true;
         }
@@ -110,7 +110,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         //Todo need to debug and try
         /*************************************************/
     else if (!strcmp(cmd, "fg")) {
-        if (num_arg == 1){//todo need to check is args[1] is also a number
+        if (num_arg == 1) {//todo need to check is args[1] is also a number
 
             smash_history.foreground(atoi(args[1]));
         }
@@ -131,7 +131,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         ExeExternal(args, cmdString);
         return 0;
     }
-    if (illegal_cmd == true) {
+    if (illegal_cmd) {
         printf("smash error: > \"%s\"\n", cmdString);
         return 1;
     }
@@ -147,32 +147,8 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
 // Returns: void
 //**************************************************************************************
 void ExeExternal(char *args[MAX_ARG], char *cmdString) {
-    int pID;
-    switch (pID = fork()) {
-        case -1:
-            // Add your code here (error)
+    smash_history.Start_process(cmdString, args);
 
-            /*
-            your code
-            */
-        case 0 :
-            // Child Process
-            setpgrp();
-
-            // Add your code here (execute an external command)
-
-            /*
-            your code
-            */
-
-        default:
-            return;
-            // Add your code here
-
-            /*
-            your code
-            */
-    }
 }
 
 //**************************************************************************************
@@ -204,7 +180,7 @@ int ExeComp(char *lineSize) {
 int BgCmd(char *lineSize, void *jobs) {
 
     char *Command;
-    char *delimiters = (char *)" \t\n";
+    char *delimiters = (char *) " \t\n";
     char *args[MAX_ARG];
     if (lineSize[strlen(lineSize) - 2] == '&') {
         lineSize[strlen(lineSize) - 2] = '\0';
@@ -225,7 +201,7 @@ int BgCmd(char *lineSize, void *jobs) {
 
 void History::add_commands(string command) {
 
-    if (_number_of_comands >= 50) {
+    if (_number_of_commands >= 50) {
         for (int i = 0; i < 50; ++i) {
             _commands[i] = _commands[i + 1];
         }
@@ -233,26 +209,42 @@ void History::add_commands(string command) {
     } else {
         _commands[_iterator] = command;
         _iterator++;
-        _number_of_comands++;
+        _number_of_commands++;
     }
 }
 
-int History::add_proccess(char *process_name, char *args[]) {
-    int process_id;
-    fork();
-    process_id = getpid();
-    if (0 == process_id) {
-        //child process
-        execv(process_name, args);
-    }
+int History::Start_process(char *process_name, char **args) {
+    int pID;
+    switch (pID = fork()) {
+        case -1:
+            perror("fail at creating the child process");
 
+            /*
+            your code
+            */
+        case 0 :
+            // Child Process
+            if (setpgrp() == -1) perror("Fail to set the group id");
+
+            execv(args[0], args); //here the program supouse to end
+
+            perror("Error executing the program");
+
+        default:
+
+            time_t time_process_start;
+            time(&time_process_start);
+            this->add_process(args[0], (int)time_process_start, pID);
+
+
+    }
 
     return 0;
 }
 
 void History::print_history() {
-    for (int i = _number_of_comands; i >0 ; --i) {
-        cout<<_commands[i-1]<<endl;
+    for (int i = _number_of_commands; i > 0; --i) {
+        cout << _commands[i - 1] << endl;
     }
 
 
@@ -262,11 +254,12 @@ int History::jobs() {
     for (int i = 0; i < _number_of_process; ++i) {
         time_t time_running;
         time(&time_running);
-        time_running = time_running - _process_running[i]._time; //todo check is in the linux compiler time lib also works in sec
+        time_running = time_running -
+                       _process_running[i]._time; //todo check is in the linux compiler time lib also works in sec
 
-        cout<<"["<<i<<"] "<<_process_running[i]._process_name\
-        <<" : "<<_process_running[i]._process_id<<" "\
-        <<time_running<<" secs"<<endl;
+        cout << "[" << i << "] " << _process_running[i]._process_name\
+ << " : " << _process_running[i]._process_id << " "\
+ << time_running << " secs" << endl;
     }
 
     return 0;
@@ -279,4 +272,45 @@ int History::foreground(int place) {
 
 void History::background(int place) {
 
+}
+
+void History::add_process(char *Process_name, time_t Start_time, int Process_id) {
+    if (this->_number_of_process >= 100) {
+        for (int i = 0; i < 99; ++i) {
+            _process_running[i] = _process_running[i + 1];
+        }
+        _process_running[99]._time = (int)Start_time;
+        _process_running[99]._process_id = Process_id;
+        _process_running[99]._process_name = Process_name;
+    } else {
+        _process_running[_number_of_process]._process_name = Process_name;
+        _process_running[_number_of_process]._process_id = Process_id;
+        _process_running[_number_of_process]._time = (int)Start_time;
+        _number_of_process++;
+    }
+
+}
+
+//todo check is this loop works
+int History::process_remover(int process_id) {
+    for (int i = 0; i < _number_of_process; ++i) {
+
+        if(process_id == _process_running[i]._process_id) {
+
+            for (int j = i; j < _number_of_process; ++j) {
+                _process_running[j] = _process_running[j + 1];
+            }
+            _number_of_process--;
+            return 0;
+        }
+
+    }
+    return -1;
+}
+
+int History::Process_number(int process_id) {
+    for (int i = 0; i < _number_of_process; ++i) {
+        if (process_id == _process_running[i]._process_id) return i+1;
+    }
+    return -1;
 }
