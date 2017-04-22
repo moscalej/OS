@@ -41,7 +41,7 @@ public:
     string _process_name;
     int _process_id=0;
     int _time=0;
-    bool is_on_bg;
+
     bool is_waitng;
     bool is_stop;
 

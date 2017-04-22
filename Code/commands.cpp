@@ -113,9 +113,6 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         if (num_arg == 1) {//todo need to check is args[1] is also a number
 
             smash_history.foreground(atoi(args[1]));
-        } else if(num_arg ==0){
-            smash_history.foreground(-1);
-
         }
 
     }
@@ -127,21 +124,42 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         /*************************************************/
 //todo yonathan is in charge of this
     else if (!strcmp(cmd, "quit")) {
-        if (num_arg == 1)
-            sigHandler.sendSig(getpid(), 9);
-        else {
-            if (num_arg == 2 && args[1] == "kill") {
-                for (int i = 0; i < smash_history._number_of_process; i++) {
-                    sigHandler.sendSig(smash_history.getPidByIndex(i), 9);
+        if (num_arg==1)
+            smash_history.sigHandler.sendSig(getpid(),9);
+        else
+        {
+            if (num_arg==2 && args[1]=="kill")
+            {
+                for (int i=0; i<smash_history.getNumOfProccess; i++)
+                {
+					time_t start = time(NULL);
+					while (difftime(time(NULL), start)<=5 && smash_history.sigHandler.sendSig(smash_history.getPidByIndex(i), 15) != 0);
+
+						if (difftime(time(NULL), start) > 5)
+							smash_history.sigHandler.sendSig(smash_history.getPidByIndex(i),9);
                 }
-            } else { illegal_cmd == true }
+            } else
+			{
+				illegal_cmd == true;
+			}
 
         }
 
 
-    } else if (!strcmp(cmd, "kill")) {
-        if (num_arg < 4) {
-            smash_history.process_kill(char * args[MAX_ARG]);
+    } else if(!strcmp(cmd, "kill")){
+        if(num_arg==3){
+			char* sigNum;
+			sigNum = strtok(args[1], "-");
+			if (smash_history.Process_number(atoi(args[2])))
+				if (!smash_history.sigHandler.sendSig(smash_history.getPidByIndex(atoi(args[2])), atoi(sigNum)))
+					cout << "smash error : > kill job � cannot send signal";
+				else
+					cout << "smash error: > kill job � job does not exist";
+		else
+				{
+					cout << "smash error : > kill job � cannot send signal";
+					illegal_cmd == true;
+				}
         }
     }
 
@@ -198,7 +216,7 @@ int ExeComp(char *lineSize) {
 // Parameters: command string, pointer to jobs
 // Returns: 0- BG command -1- if not
 //**************************************************************************************
-int BgCmd(char *lineSize, void *jobs) {
+int BgCmd(char *lineSize, History &smash) {
 
     char *Command;
     char *delimiters = (char *) " \t\n";
@@ -206,10 +224,10 @@ int BgCmd(char *lineSize, void *jobs) {
     if (lineSize[strlen(lineSize) - 2] == '&') {
         lineSize[strlen(lineSize) - 2] = '\0';
         // Add your code here (execute a in the background)
-
-        /*
-        your code
-        */
+		time_t time_process_start;
+		time(&time_process_start);
+		smash.add_process(args[0], (int)time_process_start, pID);
+		return 0;
 
     }
     return -1;
@@ -250,12 +268,10 @@ int History::Start_process(char *process_name, char **args) {
             execv(args[0], args); //here the program supouse to end
 
             perror("Error executing the program");
-
+//todo check this part if bgcmd is -1 have to wait until end
         default:
 
-            time_t time_process_start;
-            time(&time_process_start);
-            this->add_process(args[0], (int) time_process_start, pID, true);
+			if (BgCmd(process_name, this)
 
 
     }
@@ -275,12 +291,12 @@ int History::jobs() {
     for (int i = 0; i < _number_of_process; ++i) {
         time_t time_running;
         time(&time_running);
-        time_running = time_running - _process_running[i]._time; //todo check is in the linux compiler time lib also works in sec
-        if(_process_running[i].is_on_bg) {
-            cout << "[" << i << "] " << _process_running[i]._process_name\
-                        << " : " << _process_running[i]._process_id << " "\
-                         << time_running << " secs" << endl;
-        }
+        time_running = time_running -
+                       _process_running[i]._time; //todo check is in the linux compiler time lib also works in sec
+
+        cout << "[" << i << "] " << _process_running[i]._process_name\
+ << " : " << _process_running[i]._process_id << " "\
+ << time_running << " secs" << endl;
     }
 
     return 0;
@@ -306,7 +322,7 @@ void History::background(int place) {
 
 }
 
-void History::add_process(char *Process_name, time_t Start_time, int Process_id, bool is_bg) {
+void History::add_process(char *Process_name, time_t Start_time, int Process_id) {
     if (this->_number_of_process >= 100) {
         for (int i = 0; i < 99; ++i) {
             _process_running[i] = _process_running[i + 1];
@@ -314,12 +330,10 @@ void History::add_process(char *Process_name, time_t Start_time, int Process_id,
         _process_running[99]._time = (int) Start_time;
         _process_running[99]._process_id = Process_id;
         _process_running[99]._process_name = Process_name;
-        _process_running[99].is_on_bg=is_bg;
     } else {
         _process_running[_number_of_process]._process_name = Process_name;
         _process_running[_number_of_process]._process_id = Process_id;
         _process_running[_number_of_process]._time = (int) Start_time;
-        _process_running[99].is_on_bg=is_bg;
         _number_of_process++;
     }
 
@@ -356,4 +370,9 @@ int History::getPidByIndex(int process_number) {
         return -1;
 
 
+}
+
+int History::getNumOfProccess()
+{
+	return this->_number_of_process;
 }
