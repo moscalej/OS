@@ -35,16 +35,11 @@ void ExeExternal(char *args[MAX_ARG], char* cmdString);
  */
 class Process{
 public:
-    Process ();
-    Process(string process_name,int proccess_id,int time){
-        _process_name = process_name;
-        _process_id = proccess_id;
-        _time = time;
-    }
 
     string _process_name;
-    int _process_id;
-    int _time;
+    int _process_id=0;
+    int _time=0;
+
 };
 
 
@@ -57,6 +52,7 @@ class History{
 
 public:
 
+
     /**
      * Adds a procces to the background afterwards
      * @param process_name - Name of the process to run
@@ -64,7 +60,7 @@ public:
      * @return  0 -if the process was successfully set
      *         1 - otherwise
      */
-    int add_proccess(char *process_name, char **args);
+    int Start_process(char *process_name, char **args);
 
     /**
      * This method will print all the jobs running on the
@@ -108,14 +104,31 @@ public:
      */
     void background(int place);
 
+    /**
+     * This method will remove the process (by process Id) from the jobs list
+     * @param process_id
+     * @return 0 - if the process was successfully remove from jobs
+     *         (-1) - if the process is not on the jobs list
+     */
+    int process_remover(int process_id);
+
+    /**
+     * This method will search the process number listed on jobs based on the process id
+     * @param process_id - the process identification number
+     * @return (1-100) - the process number listed on jobs
+     *          (-1)  - if the peoess is not listed on jobs
+     */
+    int Process_number(int process_id);
+
 private:
     Process _process_running[100];
     string  _commands[50];
-    int _number_of_comands=0;
+    int _number_of_commands=0;
     int _iterator=0;
     int _number_of_process;
 
 
+    void add_process(char *Process_name, time_t Start_time, int Process_id);
 };
 
 
