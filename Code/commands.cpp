@@ -4,7 +4,9 @@
 #include "commands.h"
 
 
+
 History smash_history;
+
 
 
 /**
@@ -124,21 +126,42 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         /*************************************************/
 //todo yonathan is in charge of this
     else if (!strcmp(cmd, "quit")) {
-        if (num_arg == 1)
-            sigHandler.sendSig(getpid(), 9);
-        else {
-            if (num_arg == 2 && args[1] == "kill") {
-                for (int i = 0; i < smash_history._number_of_process; i++) {
-                    sigHandler.sendSig(smash_history.getPidByIndex(i), 9);
+        if (num_arg==1)
+            smash_history.sigHandler.sendSig(getpid(),9);
+        else
+        {
+            if (num_arg==2 && args[1]=="kill")
+            {
+                for (int i=0; i<smash_history.getNumOfProccess; i++)
+                {
+					time_t start = time(NULL);
+					while (difftime(time(NULL), start)<=5 && smash_history.sigHandler.sendSig(smash_history.getPidByIndex(i), 15) != 0);
+				
+						if (difftime(time(NULL), start) > 5)
+							smash_history.sigHandler.sendSig(smash_history.getPidByIndex(i),9);
                 }
-            } else { illegal_cmd == true }
+            } else
+			{
+				illegal_cmd == true;
+			}
 
         }
 
 
-    } else if (!strcmp(cmd, "kill")) {
-        if (num_arg < 4) {
-            smash_history.process_kill(char * args[MAX_ARG]);
+    } else if(!strcmp(cmd, "kill")){
+        if(num_arg==3){
+			char* sigNum;
+			sigNum = strtok(args[1], "-");
+			if (smash_history.Process_number(atoi(args[2])))
+				if (!smash_history.sigHandler.sendSig(smash_history.getPidByIndex(atoi(args[2])), atoi(sigNum)))
+					cout << "smash error : > kill job – cannot send signal";
+				else
+					cout << "smash error: > kill job – job does not exist";
+		else
+				{
+					cout << "smash error : > kill job – cannot send signal";
+					illegal_cmd == true;
+				}
         }
     }
 
@@ -195,7 +218,7 @@ int ExeComp(char *lineSize) {
 // Parameters: command string, pointer to jobs
 // Returns: 0- BG command -1- if not
 //**************************************************************************************
-int BgCmd(char *lineSize, void *jobs) {
+int BgCmd(char *lineSize, History &smash) {
 
     char *Command;
     char *delimiters = (char *) " \t\n";
@@ -203,10 +226,10 @@ int BgCmd(char *lineSize, void *jobs) {
     if (lineSize[strlen(lineSize) - 2] == '&') {
         lineSize[strlen(lineSize) - 2] = '\0';
         // Add your code here (execute a in the background)
-
-        /*
-        your code
-        */
+		time_t time_process_start;
+		time(&time_process_start);
+		smash.add_process(args[0], (int)time_process_start, pID);
+		return 0;
 
     }
     return -1;
@@ -249,10 +272,8 @@ int History::Start_process(char *process_name, char **args) {
             perror("Error executing the program");
 
         default:
-
-            time_t time_process_start;
-            time(&time_process_start);
-            this->add_process(args[0], (int) time_process_start, pID);
+			 
+			if (BgCmd(process_name, this)
 
 
     }
@@ -297,13 +318,13 @@ void History::add_process(char *Process_name, time_t Start_time, int Process_id)
         for (int i = 0; i < 99; ++i) {
             _process_running[i] = _process_running[i + 1];
         }
-        _process_running[99]._time = (int) Start_time;
+        _process_running[99]._time = (int)Start_time;
         _process_running[99]._process_id = Process_id;
         _process_running[99]._process_name = Process_name;
     } else {
         _process_running[_number_of_process]._process_name = Process_name;
         _process_running[_number_of_process]._process_id = Process_id;
-        _process_running[_number_of_process]._time = (int) Start_time;
+        _process_running[_number_of_process]._time = (int)Start_time;
         _number_of_process++;
     }
 
@@ -313,7 +334,7 @@ void History::add_process(char *Process_name, time_t Start_time, int Process_id)
 int History::process_remover(int process_id) {
     for (int i = 0; i < _number_of_process; ++i) {
 
-        if (process_id == _process_running[i]._process_id) {
+        if(process_id == _process_running[i]._process_id) {
 
             for (int j = i; j < _number_of_process; ++j) {
                 _process_running[j] = _process_running[j + 1];
@@ -328,16 +349,21 @@ int History::process_remover(int process_id) {
 
 int History::Process_number(int process_id) {
     for (int i = 0; i < _number_of_process; ++i) {
-        if (process_id == _process_running[i]._process_id) return i + 1;
+        if (process_id == _process_running[i]._process_id) return i+1;
     }
     return -1;
 }
 
 int History::getPidByIndex(int process_number) {
-    if (process_number < _number_of_process - 1 && process_number >= 0)
-        return _process_running[process_number]._process_id;
+    if (process_number<_number_of_process-1 && process_number>=0)
+        return  _process_running[process_number]._process_id;
     else
         return -1;
 
 
+}
+
+int History::getNumOfProccess()
+{
+	return this->_number_of_process;
 }
