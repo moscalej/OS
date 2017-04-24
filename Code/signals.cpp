@@ -1,6 +1,10 @@
 // signals.c
 // contains signal handler funtions
 // contains the function/s that set the signal handlers
+/*
+ *
+ */
+
 
 /*******************************************/
 /* Name: handler_cntlc
@@ -61,15 +65,16 @@ int SignalHandler::sendSig(int pID, int sigNum) {
 void SignalHandler::handleSIGTSTP(int status)
 {
 	if (jobs_and_history.fg_proc._process_id==0){
+		//todo check if what happend if is 0 and if needs to send a perror
 		return ;
 	}
 	sendSig(jobs_and_history.fg_proc._process_id,20);
 	jobs_and_history.fg_proc.is_stop = true;
-	jobs_and_history.add_process(jobs_and_history.fg_proc._process_name,(int)jobs_and_history.fg_proc._time, jobs_and_history.fg_proc._process_id);
+	jobs_and_history.add_process(jobs_and_history.fg_proc._process_name, jobs_and_history.fg_proc._time, jobs_and_history.fg_proc._process_id);
 	jobs_and_history.fg_proc._process_id=0;
 	return ;
 }
-void SignalHandler::handleSIGCHLD(int parameter, siginfo_t *info, void *funtion) {
+void SignalHandler::handleSIGCHLD(int parammeter, siginfo_t *info, void *function) {
 	pid_t pID = info->si_pid;
 	pID = (int)pID;
 	jobs_and_history.process_remover(pID);

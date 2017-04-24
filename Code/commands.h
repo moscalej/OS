@@ -141,6 +141,7 @@ public:
 
 
     int get_number_process();
+
 	Process fg_proc;
 
 private:

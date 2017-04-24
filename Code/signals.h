@@ -11,7 +11,6 @@
 #include "commands.h"
 using namespace std;
 
-
 class SignalHandler {
 public:
 	int sendSig(int pID, int sigNum);
@@ -20,7 +19,7 @@ public:
 
 	void handleSIGTSTP(int status);//CTRL Z
 
-	void handleSIGCHLD(int parameter, siginfo_t *info, void *funtion);// END OF PROCESS
+	void handleSIGCHLD(int parammeter, siginfo_t *info, void *function);// END OF PROCESS
 
 	void handleSIGINT(int status);//ctrl c
 

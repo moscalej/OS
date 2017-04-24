@@ -22,8 +22,8 @@ main file. This file contains the main function of smash
 #define MAX_LINE_SIZE 80
 #define MAXARGS 20
 
-char* L_Fg_Cmd;
-void* jobs = NULL; //This represents the list of jobs. Please change to a preferred type (e.g array of char*)
+char* L_Fg_Cmd;//todo do we need this allocation??? also when do release this memory
+void* jobs = NULL; //todo This represents the list of jobs. Please change to a preferred type (e.g array of char*)
 char lineSize[MAX_LINE_SIZE];
 SignalHandler Smash01_handler;
 
@@ -53,13 +53,13 @@ int main(int argc, char *argv[])
 
 	
 	//signal declaretions
-	//NOTE: the signal handlers and the function/s that sets the handler should be found in siganls.c
+	//NOTE: the signal handlers and the function/s that sets the handler should be found in signals.c
 	 /* add your code here */
 	
 	/**
-	//NOTE: the signal handlers and the function/s that sets the handler should be found in siganls.c
+	//NOTE: the signal handlers and the function/s that sets the handler should be found in signals.c
 	//set your signal handlers here
-	/* add your code here */
+	 */
 
 	struct sigaction TSTP, INT, CHLD;
 
@@ -108,6 +108,6 @@ int main(int argc, char *argv[])
 		lineSize[0]='\0';
 		cmdString[0]='\0';
 	}
-    return 0;
+
 }
 

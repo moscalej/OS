@@ -200,12 +200,12 @@ void ExeExternal(char *args[MAX_ARG], char *cmdString) {
 // Parameters: command string
 // Returns: 0- if complicated -1- if not
 //**************************************************************************************
-int ExeComp(char *lineSize) {
+int ExeComp(char *lineSize) {//todo we need to see the way to use this it only returns -1(late version
     char ExtCmd[MAX_LINE_SIZE + 2];
     char *args[MAX_ARG];
     if ((strstr(lineSize, "|")) || (strstr(lineSize, "<")) || (strstr(lineSize, ">")) || (strstr(lineSize, "*")) ||
         (strstr(lineSize, "?")) || (strstr(lineSize, ">>")) || (strstr(lineSize, "|&"))) {
-
+        return  0;
     }
     return -1;
 }
@@ -264,7 +264,7 @@ int Smash_handler::Start_process(char *line_size, char **args) {
             // Child Process
             if (setpgrp() == -1) perror("Fail to set the group id");
 
-            execv(args[0], args); //here the program supouse to end
+            execv(args[0], args);
 
             perror("Error executing the program");
             return -1;
