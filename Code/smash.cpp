@@ -28,17 +28,17 @@ char lineSize[MAX_LINE_SIZE];
 SignalHandler Smash01_handler;
 
 void func_handler_TSTP(int parameter){
-	std::cout<<"the TSTP signal handler was call"<<std::endl;
+
 	Smash01_handler.handleSIGTSTP(parameter);
 
 }
 void func_handler_INT(int paramater){
 	Smash01_handler.handleSIGINT(paramater);
-	std::cout<<"the INT signal handler was call"<<std::endl;
+
 }
 void func_handler_CHILD(int parameter, siginfo_t *info, void *funtion){
 	Smash01_handler.handleSIGCHLD(parameter,info,funtion);
-	std::cout<<"the CHILD signal handler was call"<<std::endl;
+
 }
 
 //**************************************************************************************
