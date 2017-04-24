@@ -221,8 +221,8 @@ int BgCmd(char *lineSize) {
     char *Command;
     char *delimiters = (char *) " \t\n";
     char *args[MAX_ARG];
-    if (lineSize[strlen(lineSize) - 2] == '&') {
-        lineSize[strlen(lineSize) - 2] = '\0';
+    if (lineSize[strlen(lineSize) - 1] == '&') {
+        lineSize[strlen(lineSize) - 1] = '\0';
 
         return 0;
 

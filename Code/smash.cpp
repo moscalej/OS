@@ -30,15 +30,17 @@ SignalHandler Smash01_handler;
 void func_handler_TSTP(int parameter){
 
 	Smash01_handler.handleSIGTSTP(parameter);
-
+	cout<<"this is the TSTP handler"<<endl;
 }
 void func_handler_INT(int paramater){
+	cout<<"this is the INT handler"<<endl;
 	Smash01_handler.handleSIGINT(paramater);
+
 
 }
 void func_handler_CHILD(int parameter, siginfo_t *info, void *funtion){
 	Smash01_handler.handleSIGCHLD(parameter,info,funtion);
-
+	cout<<"this is the CHILD handler"<<endl;
 }
 
 //**************************************************************************************
@@ -54,7 +56,7 @@ int main(int argc, char *argv[])
 	//NOTE: the signal handlers and the function/s that sets the handler should be found in siganls.c
 	 /* add your code here */
 	
-	/************************************/
+	/**
 	//NOTE: the signal handlers and the function/s that sets the handler should be found in siganls.c
 	//set your signal handlers here
 	/* add your code here */
