@@ -55,18 +55,31 @@ int SignalHandler::sendSig(int pID, int sigNum) {
     return 0;
 }
 
-int SignalHandler::handleStp(int pID)
+void SignalHandler::handleSIGTSTP()
 {
-	if (jobs_and_history.fg_proc==NULL){
+	if (&jobs_and_history.fg_proc==NULL){
 		return 0;
 	}
-	sendSig(pID,20);
+	sendSig(jobs_and_history.fg_proc._process_id,20);
+	jobs_and_history.fg_proc.is_stop = true;
 	jobs_and_history.add_process(jobs_and_history.fg_proc._process_name,(int)jobs_and_history.fg_proc._time, jobs_and_history.fg_proc._process_id);
-
-	fg_proc=NULL;
+	&jobs_and_history.fg_proc=NULL;
 	return 0;
 }
 
-int SignalHandler::handleTerm(int pID) {
+void SignalHandler::handleSIGCHLD(siginfo_t* info) {
+	pid_t pID = info->si_pid;
+	pID = (int)pID;
+	jobs_and_history.process_remover(pID);
+	return 0;
+}
+
+void SignalHandler::handleSIGINT()
+{
+	if (jobs_and_history.fg_proc == NULL) {
+		return 0;
+	}
+	sendSig(jobs_and_history.fg_proc._process_id, 2);
+	&jobs_and_history.fg_proc = NULL;
 	return 0;
 }

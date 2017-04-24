@@ -43,9 +43,25 @@ int main(int argc, char *argv[])
 	//set your signal handlers here
 	/* add your code here */
 
-	/************************************/
+	struct sigaction TSTP, INT, CHLD;
 
-	/************************************/
+	//handler for SIGTSTP
+	sigemptyset(&TSTP.sa_mask);
+	TSTP.sa_handler = SignalHandler.handleSIGTSTP;
+	TSTP.sa_flags = SA_RESTART;
+	sigaction(SIGTSTP, &TSTP, NULL);
+
+	//handler for SIGINT
+	sigemptyset(&INTsa.sa_mask);
+	INT.sa_handler = SignalHandler.handleSIGINT;
+	INT.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &INT, NULL);
+
+	//handler for SIGCHLD
+	sigemptyset(&CHLDsa.sa_mask);
+	CHLD.sa_sigaction = SignalHandler.handleSIGCHLD;
+	CHLD.sa_flags = SA_SIGINFO;
+	sigaction(SIGCHLD, &CHLD, NULL);
 	// Init globals 
 
 

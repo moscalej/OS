@@ -16,11 +16,11 @@ public:
 
 	char *sigNumToName(int signum);
 
-	int handleStp(int pID, Process &fg_proc);
+	void handleSIGTSTP();//CTRL Z
 
-	int handleTerm(int pID);
+	void handleSIGCHLD(siginfo_t* info);// END OF PROCESS
 
-	int handleSleep(int pID);
+	void handleSIGINT();//ctrl c
 
 	Smash_handler jobs_and_history;
 private:
