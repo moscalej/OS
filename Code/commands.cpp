@@ -284,9 +284,9 @@ int Smash_handler::Start_process(char *line_size, char **args) {
                     perror("something");
                     return -1;
                 }
-				fg_proc._process_name = args[0];
-				fg_proc._process_id = pID;
-				fg_proc._time = start_time;
+                fg_proc._process_name = args[0];
+                fg_proc._process_id = pID;
+                fg_proc._time = (int)start_time;
             }
 
 
@@ -311,30 +311,39 @@ int Smash_handler::jobs() {
                        _process_running[i]._time; //todo check is in the linux compiler time lib also works in sec
 
         cout << "[" << i << "] " << _process_running[i]._process_name\
- << " : " << _process_running[i]._process_id << " "\
- << time_running << " secs" << endl;
+         << " : " << _process_running[i]._process_id << " "\
+        << time_running << " secs" << endl;
     }
 
     return 0;
 }
 
-//todo this funtions need to be write i am jus leaving the base structure here
+//todo this functions need to be write i am jus leaving the base structure here
 int Smash_handler::foreground(int place) {
-    int temp_pid;
+
     if (place == (-1)) {
         perror("this is an illigal place");
+        return -1;
 
 
-    } else if (0 <= (temp_pid = getPidByIndex(place))) {
-        this->process_remover(temp_pid);
+    } else if (place <= this->_number_of_commands){
+        this->fg_proc = _process_running[place-1];
+
+        for (int i = place; i <_number_of_commands ; ++i) {
+            _process_running[i-1]=_process_running[i];
+
+        }
+        _number_of_process --;
+        return 0;
 
     }
 
-    return 0;
+    perror("illegal place");
+    return -1;
 }
-
+//todo solve this method
 void Smash_handler::background(int place) {
-    int parrent_id=this->getPidByIndex(place);
+
 
 
 
@@ -370,7 +379,6 @@ int Smash_handler::process_remover(int process_id) {
             _number_of_process--;
             return 0;
         }
-
     }
     return -1;
 }
@@ -379,6 +387,7 @@ int Smash_handler::Process_number(int process_id) {
     for (int i = 0; i < _number_of_process; ++i) {
         if (process_id == _process_running[i]._process_id) return i + 1;
     }
+    perror("Problem in Smash handler::Process_number");
     return -1;
 }
 

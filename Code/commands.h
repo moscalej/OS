@@ -82,7 +82,7 @@ public:
      * method
      * @param place - is the place on the jobs history
      * @return 0 -if the process was successfully set
-     *         1 - otherwise
+     *         (-1) - otherwise
      */
     int foreground(int place);
 
@@ -142,6 +142,7 @@ public:
 
     int get_number_process();
 	Process fg_proc;
+
 private:
 	
     Process _process_running[100];
