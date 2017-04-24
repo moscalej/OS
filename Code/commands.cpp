@@ -271,7 +271,7 @@ int Smash_handler::Start_process(char *line_size, char **args) {
 //todo check this part if bgcmd is -1 have to wait until end
         default:
 
-            if (!BgCmd(line_size)) {
+            if (BgCmd(line_size)==0) {
                 add_process(args[0], (int) start_time, pID);
             } else {
                 int status;
