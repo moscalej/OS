@@ -39,8 +39,8 @@ class Process{
 public:
 
     string _process_name;
-    int _process_id=0;
-    int _time=0;
+    int _process_id;
+    int _time;
 
     bool is_waitng;
     bool is_stop;
@@ -147,8 +147,8 @@ private:
 	
     Process _process_running[100];
     string  _commands[50];
-    int _number_of_commands=0;
-    int _iterator=0;
+    int _number_of_commands;
+    int _iterator;
     int _number_of_process;
 
 

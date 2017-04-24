@@ -275,11 +275,11 @@ int Smash_handler::Start_process(char *line_size, char **args) {
                 add_process(args[0], (int) start_time, pID);
             } else {
                 int status;
-                int result = waitpid(pID, &status, WUNTRACED);
-                if (result == -1) {
-                    perror("something");
-                    return -1;
-                }
+                //int result = waitpid(pID, &status, WUNTRACED);
+//                if (result == -1) {
+//                    perror("something");
+//                    return -1;
+//                }-1
                 fg_proc._process_name = args[0];
                 fg_proc._process_id = pID;
                 fg_proc._time = (int)start_time;
