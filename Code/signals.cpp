@@ -55,8 +55,16 @@ int SignalHandler::sendSig(int pID, int sigNum) {
     return 0;
 }
 
-int SignalHandler::handleStp(int pID, process fg_proc)
+int SignalHandler::handleStp(int pID, process &fg_proc)
 {
-	 add_process(fg_proc._name,fg_proc._time,fg_proc._pID);
+	if (fg_proc==null){
+		return 0;
+	}
+	 jobs_and_history.add_process(fg_proc._name,fg_proc._time,fg_proc._pID);
+	fg_proc==null;
+	return 0;
+}
+
+int SignalHandler::handleTerm(int pID) {
 	return 0;
 }

@@ -16,7 +16,7 @@ public:
 
 	char *sigNumToName(int signum);
 
-	int handleStp(int pID);
+	int handleStp(int pID, process &fg_proc);
 
 	int handleTerm(int pID);
 
