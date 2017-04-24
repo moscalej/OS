@@ -205,11 +205,7 @@ int ExeComp(char *lineSize) {
     char *args[MAX_ARG];
     if ((strstr(lineSize, "|")) || (strstr(lineSize, "<")) || (strstr(lineSize, ">")) || (strstr(lineSize, "*")) ||
         (strstr(lineSize, "?")) || (strstr(lineSize, ">>")) || (strstr(lineSize, "|&"))) {
-        // Add your code here (execute a complicated command)
 
-        /*
-        your code
-        */
     }
     return -1;
 }
@@ -350,7 +346,7 @@ void Smash_handler::background(int place) {
 
 }
 
-void Smash_handler::add_process(char *Process_name, time_t Start_time, int Process_id) {
+void Smash_handler::add_process(string Process_name, time_t Start_time, int Process_id) {
     if (this->_number_of_process >= 100) {
         for (int i = 0; i < 99; ++i) {
             _process_running[i] = _process_running[i + 1];
@@ -380,6 +376,7 @@ int Smash_handler::process_remover(int process_id) {
             return 0;
         }
     }
+
     return -1;
 }
 

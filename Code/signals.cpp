@@ -6,7 +6,8 @@
 /* Name: handler_cntlc
    Synopsis: handle the Control-C */
 #include "signals.h"
-char* sigNumToName(int signum) {
+
+string SignalHandler::sigNumToName(int signum) {
 	switch (signum) {
 	case(1):	return "SIGHUP";
 	case(2):	return "SIGINT";
@@ -37,49 +38,50 @@ char* sigNumToName(int signum) {
 	case(28):	return "SIGWINCH";
 	case(29):	return "SIGIO";
 	case(30):	return "SIGPWR";
-	default: 	return NULL;
+	default: 	return "\0";
 	}
-	return NULL;
+
 }
 
 
 int SignalHandler::sendSig(int pID, int sigNum) {
     if (kill(pID,sigNum) == 0)
     {
-		cout << "smash > signal ";
-		cout << sigNumToName(sigNum);
-		cout << " sent to pid ";
-		cout << pID;
+		string temp;
+		temp=sigNumToName(sigNum);
+		cout << "smash > signal "<<endl;
+		cout << temp <<endl;
+		cout << " sent to pid "<<endl;
+		cout << pID<<endl;
     } else
         cout<<"smash error: > signal not sent to pid ";
     return 0;
 }
 
-void SignalHandler::handleSIGTSTP()
+void SignalHandler::handleSIGTSTP(int status)
 {
-	if (&jobs_and_history.fg_proc==NULL){
-		return 0;
+	if (jobs_and_history.fg_proc._process_id==0){
+		return ;
 	}
 	sendSig(jobs_and_history.fg_proc._process_id,20);
 	jobs_and_history.fg_proc.is_stop = true;
 	jobs_and_history.add_process(jobs_and_history.fg_proc._process_name,(int)jobs_and_history.fg_proc._time, jobs_and_history.fg_proc._process_id);
-	&jobs_and_history.fg_proc=NULL;
-	return 0;
+	jobs_and_history.fg_proc._process_id=0;
+	return ;
 }
-
-void SignalHandler::handleSIGCHLD(siginfo_t* info) {
+void SignalHandler::handleSIGCHLD(int parameter, siginfo_t *info, void *funtion) {
 	pid_t pID = info->si_pid;
 	pID = (int)pID;
 	jobs_and_history.process_remover(pID);
-	return 0;
+	return;
 }
 
-void SignalHandler::handleSIGINT()
+void SignalHandler::handleSIGINT(int status)
 {
-	if (jobs_and_history.fg_proc == NULL) {
-		return 0;
+	if (jobs_and_history.fg_proc._process_id==0) {
+		return;
 	}
 	sendSig(jobs_and_history.fg_proc._process_id, 2);
-	&jobs_and_history.fg_proc = NULL;
-	return 0;
+	jobs_and_history.fg_proc._process_id=0;
+	return;
 }

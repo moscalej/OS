@@ -10,22 +10,26 @@
 #include <iostream>
 #include "commands.h"
 using namespace std;
+
+
 class SignalHandler {
 public:
 	int sendSig(int pID, int sigNum);
 
-	char *sigNumToName(int signum);
+	string sigNumToName(int signum);
 
-	void handleSIGTSTP();//CTRL Z
+	void handleSIGTSTP(int status);//CTRL Z
 
-	void handleSIGCHLD(siginfo_t* info);// END OF PROCESS
+	void handleSIGCHLD(int parameter, siginfo_t *info, void *funtion);// END OF PROCESS
 
-	void handleSIGINT();//ctrl c
+	void handleSIGINT(int status);//ctrl c
 
 	Smash_handler jobs_and_history;
 private:
 
 };
+
+
 
 
 #endif

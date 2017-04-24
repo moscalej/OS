@@ -109,7 +109,7 @@ public:
      */
     void background(int place);
 
-    void add_process(char *Process_name, time_t Start_time, int Process_id);
+    void add_process(string Process_name, time_t Start_time, int Process_id);
 
     /**
      * This method will remove the process (by process Id) from the jobs list
