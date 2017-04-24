@@ -8,14 +8,23 @@
 #include <string.h>
 #include <signal.h>
 #include <iostream>
+#include "commands.h"
 using namespace std;
 class SignalHandler {
 public:
-    int sendSig(int pID,int sigNum);
-	char* sigNumToName(int signum);
+	int sendSig(int pID, int sigNum);
+
+	char *sigNumToName(int signum);
+
 	int handleStp(int pID);
+
 	int handleTerm(int pID);
+
 	int handleSleep(int pID);
+
+	Smash_handler jobs_and_history;
+private:
+
 };
 
 

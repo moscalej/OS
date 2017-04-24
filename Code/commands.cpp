@@ -2,9 +2,11 @@
 //********************************************
 #include <sys/stat.h>
 #include "commands.h"
+#include "signals.h"
 
 
-History smash_history;
+
+SignalHandler Handler;
 
 
 /**
@@ -21,7 +23,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
     int i = 0, num_arg = 0;
 
 
-	smash_history.add_commands(lineSize);
+	Handler.jobs_and_history.add_commands(lineSize);
     bool illegal_cmd = false; // illegal command
     cmd = strtok(lineSize, delimiters);
     if (cmd == NULL)
@@ -70,7 +72,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
 //todo also include the arguments
     else if (!strcmp(cmd, "history")) {
         if (num_arg == 0) {
-            smash_history.print_history();
+            Handler.jobs_and_history.print_history();
 
         } else {
             illegal_cmd = true;
@@ -94,7 +96,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         //Todo need to debug and try
     else if (!strcmp(cmd, "jobs")) {
         if (num_arg == 0) {
-            smash_history.jobs();
+            Handler.jobs_and_history.jobs();
         }
 
     }
@@ -113,34 +115,34 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
     else if (!strcmp(cmd, "fg")) {
         if (num_arg == 1) {//todo need to check is args[1] is also a number
 
-            smash_history.foreground(atoi(args[1]));
+            Handler.jobs_and_history.foreground(atoi(args[1]));
         }
 
     }
         /*************************************************/
     else if (!strcmp(cmd, "bg")) {
-        smash_history.background(atoi(args[1]));
+        Handler.jobs_and_history.background(atoi(args[1]));
 
     }
         /*************************************************/
 //todo yonathan is in charge of this
     else if (!strcmp(cmd, "quit")) {
         if (num_arg == 0) {
-            return smash_history.sigHandler.sendSig(getpid(), 9);
+            return Handler.sendSig(getpid(), 9);
 
         }
 
         else if (num_arg == 1 && args[1] == "kill") {
-            for (int i = 0; i < smash_history.get_number_process(); i++) {
+            for (int i = 0; i < Handler.jobs_and_history.get_number_process(); i++) {
                 time_t start = time(NULL);
                 while (difftime(time(NULL), start) <= 5 &&
-                       smash_history.sigHandler.sendSig(smash_history.getPidByIndex(i), 15) != 0) {
+                       Handler.sendSig(Handler.jobs_and_history.getPidByIndex(i), 15) != 0) {
 
                     if (difftime(time(NULL), start) > 5) {
-                        smash_history.sigHandler.sendSig(smash_history.getPidByIndex(i), 9);
+                        Handler.sendSig(Handler.jobs_and_history.getPidByIndex(i), 9);
                     }
                 }
-                return smash_history.sigHandler.sendSig(getpid(), 9);
+                return Handler.sendSig(getpid(), 9);
             }
 
 
@@ -154,8 +156,8 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         if (num_arg == 3) {
             char *sigNum;
             sigNum = strtok(args[1], "-");
-            if (smash_history.Process_number(atoi(args[2])))
-                if (!smash_history.sigHandler.sendSig(smash_history.getPidByIndex(atoi(args[2])), atoi(sigNum)))
+            if (Handler.jobs_and_history.Process_number(atoi(args[2])))
+                if (!Handler.sendSig(Handler.jobs_and_history.getPidByIndex(atoi(args[2])), atoi(sigNum)))
                     cout << "smash error : > kill job " <<args[2]<<" cannot send signal"<<endl;
                 else
                     cout << "smash error: > kill job "<<args[2]<<" job does not exist"<<endl;
@@ -188,7 +190,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
 // Returns: void
 //**************************************************************************************
 void ExeExternal(char *args[MAX_ARG], char *cmdString) {
-    smash_history.Start_process(cmdString, args);
+    Handler.jobs_and_history.Start_process(cmdString, args);
 
 }
 
@@ -234,10 +236,10 @@ int BgCmd(char *lineSize) {
 //Todo check if the history save the commands like it should do
 
 /*This function will fill a char array with all the commands use until now
- * we will use this to print the History afterwards*/
+ * we will use this to print the Smash_handler afterwards*/
 
 
-void History::add_commands(string command) {
+void Smash_handler::add_commands(string command) {
 
     if (_number_of_commands >= 50) {
         for (int i = 0; i < 50; ++i) {
@@ -251,7 +253,7 @@ void History::add_commands(string command) {
     }
 }
 
-int History::Start_process(char *line_size, char **args) {
+int Smash_handler::Start_process(char *line_size, char **args) {
     int pID;
     time_t start_time;
     time(&start_time);
@@ -293,7 +295,7 @@ int History::Start_process(char *line_size, char **args) {
     return 0;
 }
 
-void History::print_history() {
+void Smash_handler::print_history() {
     for (int i = _number_of_commands; i > 0; --i) {
         cout << _commands[i - 1] << endl;
     }
@@ -301,7 +303,7 @@ void History::print_history() {
 
 }
 
-int History::jobs() {
+int Smash_handler::jobs() {
     for (int i = 0; i < _number_of_process; ++i) {
         time_t time_running;
         time(&time_running);
@@ -317,26 +319,29 @@ int History::jobs() {
 }
 
 //todo this funtions need to be write i am jus leaving the base structure here
-int History::foreground(int place) {
+int Smash_handler::foreground(int place) {
     int temp_pid;
     if (place == (-1)) {
-        temp_pid = getPidByIndex(_number_of_process);
+        perror("this is an illigal place");
 
 
     } else if (0 <= (temp_pid = getPidByIndex(place))) {
-
-        //sigHandler.sendSig(temp_pid,)
+        this->process_remover(temp_pid);
 
     }
 
     return 0;
 }
 
-void History::background(int place) {
+void Smash_handler::background(int place) {
+    int parrent_id=this->getPidByIndex(place);
+
+
+
 
 }
 
-void History::add_process(char *Process_name, time_t Start_time, int Process_id) {
+void Smash_handler::add_process(char *Process_name, time_t Start_time, int Process_id) {
     if (this->_number_of_process >= 100) {
         for (int i = 0; i < 99; ++i) {
             _process_running[i] = _process_running[i + 1];
@@ -354,7 +359,7 @@ void History::add_process(char *Process_name, time_t Start_time, int Process_id)
 }
 
 //todo check is this loop works
-int History::process_remover(int process_id) {
+int Smash_handler::process_remover(int process_id) {
     for (int i = 0; i < _number_of_process; ++i) {
 
         if (process_id == _process_running[i]._process_id) {
@@ -370,14 +375,14 @@ int History::process_remover(int process_id) {
     return -1;
 }
 
-int History::Process_number(int process_id) {
+int Smash_handler::Process_number(int process_id) {
     for (int i = 0; i < _number_of_process; ++i) {
         if (process_id == _process_running[i]._process_id) return i + 1;
     }
     return -1;
 }
 
-int History::getPidByIndex(int process_number) {
+int Smash_handler::getPidByIndex(int process_number) {
     if (process_number < _number_of_process - 1 && process_number >= 0)
         return _process_running[process_number]._process_id;
     else
@@ -386,7 +391,7 @@ int History::getPidByIndex(int process_number) {
 
 }
 
-int History::get_number_process() {
+int Smash_handler::get_number_process() {
 
     return this->_number_of_process;
 }

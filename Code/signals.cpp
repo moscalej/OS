@@ -57,6 +57,6 @@ int SignalHandler::sendSig(int pID, int sigNum) {
 
 int SignalHandler::handleStp(int pID, process fg_proc)
 {
-	add_process(fg_proc._name,fg_proc._time,fg_proc._pID)
+	 add_process(fg_proc._name,fg_proc._time,fg_proc._pID);
 	return 0;
 }

@@ -17,7 +17,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <iostream>
-#include "signals.h"
+
+
 using namespace std;
 
 
@@ -52,7 +53,7 @@ public:
  *      and also the history of the commands and the process run by the user
  *
  */
-class History{
+class Smash_handler{
 
 public:
 
@@ -137,7 +138,7 @@ public:
     /**
      * this class is use to manage the signal
      */
-    SignalHandler sigHandler;
+
 
     int get_number_process();
 
