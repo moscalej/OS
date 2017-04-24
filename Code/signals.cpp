@@ -54,3 +54,9 @@ int SignalHandler::sendSig(int pID, int sigNum) {
         cout<<"smash error: > signal not sent to pid ";
     return 0;
 }
+
+int SignalHandler::handleStp(int pID, process fg_proc)
+{
+	add_process(fg_proc._name,fg_proc._time,fg_proc._pID)
+	return 0;
+}

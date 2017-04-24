@@ -21,6 +21,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
     int i = 0, num_arg = 0;
 
 
+	smash_history.add_commands(lineSize);
     bool illegal_cmd = false; // illegal command
     cmd = strtok(lineSize, delimiters);
     if (cmd == NULL)
@@ -177,7 +178,6 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         return 1;
     }
 
-    smash_history.add_commands(args[0]);
     return 0;
 }
 
@@ -282,6 +282,9 @@ int History::Start_process(char *line_size, char **args) {
                     perror("something");
                     return -1;
                 }
+				fg_proc._process_name = args[0];
+				fg_proc._process_id = pID;
+				fg_proc._time = start_time;
             }
 
 

@@ -142,6 +142,7 @@ public:
     int get_number_process();
 
 private:
+	Process fg_proc;
     Process _process_running[100];
     string  _commands[50];
     int _number_of_commands=0;

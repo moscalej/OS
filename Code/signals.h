@@ -12,6 +12,10 @@ using namespace std;
 class SignalHandler {
 public:
     int sendSig(int pID,int sigNum);
+	char* sigNumToName(int signum);
+	int handleStp(int pID);
+	int handleTerm(int pID);
+	int handleSleep(int pID);
 };
 
 
