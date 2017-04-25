@@ -51,7 +51,7 @@ class Smash_handler{
 
 public:
 
-
+    Smash_handler();
     /**
      * Adds a procces to the background afterwards
      * @param process_name - Name of the process to run
@@ -144,9 +144,9 @@ private:
 
     Process _process_running[100];
     string  _commands[50];
-    int _number_of_commands=0;
-    int _iterator=0;
-    int _number_of_process=0;
+    int _number_of_commands;
+    int _iterator;
+    int _number_of_process;
 
 
 

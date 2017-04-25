@@ -94,6 +94,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) 
         /*************************************************/
         //Todo need to debug and try
     else if (!strcmp(cmd, "jobs")) {
+        cout <<"jobs1 with numargs: "<<num_arg<<endl;
         if (num_arg == 0) {
             Handler.jobs_and_history.jobs();
         }
@@ -410,6 +411,14 @@ int Smash_handler::child_status(int child_id) {
     }
     return -2;
 
+
+}
+
+Smash_handler::Smash_handler() {
+    _number_of_process=0;
+    _iterator=0;
+    _number_of_commands=0;
+    fg_proc._process_id=0;
 
 }
 
