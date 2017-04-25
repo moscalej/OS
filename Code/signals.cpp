@@ -63,15 +63,19 @@ int SignalHandler::sendSig(int pID, int sigNum) {
     return 0;
 }
 
+/**
+ * this handler is run by the child thats why we didnt have contrl of it
+ * @param status
+ */
 void SignalHandler::handleSIGTSTP(int status)
 {
-    cout<<"we want to know what is status"<<status<<endl;
-    cout<<"and if the pid is rigth: "<<jobs_and_history.fg_proc._process_id<<endl;
+
 	if (jobs_and_history.fg_proc._process_id==0){
-		//todo check if what happend if is 0 and if needs to send a perror
+		sendSig(getpid(),20);
+
 		return ;
 	}
-	sendSig(jobs_and_history.fg_proc._process_id,20);
+
 	jobs_and_history.fg_proc.is_stop = true;
 	jobs_and_history.add_process(jobs_and_history.fg_proc._process_name, jobs_and_history.fg_proc._time, jobs_and_history.fg_proc._process_id);
 	jobs_and_history.fg_proc._process_id=0;
