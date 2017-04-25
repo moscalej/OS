@@ -79,7 +79,6 @@ void SignalHandler::handleSIGTSTP(int status)
 	sendSig(jobs_and_history.fg_proc._process_id,20);
 	jobs_and_history.fg_proc.is_stop = true;
 	jobs_and_history.add_process(jobs_and_history.fg_proc._process_name, jobs_and_history.fg_proc._time, jobs_and_history.fg_proc._process_id);
-	cout<<"process add"<<endl;
 	jobs_and_history.fg_proc._process_id=0;
 	return ;
 }

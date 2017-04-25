@@ -275,7 +275,7 @@ int Smash_handler::Start_process(char *line_size, char **args) {
                 fg_proc._process_name = args[0];
                 this->fg_proc._process_id = pID;
                 fg_proc._time = (int) start_time;
-                cout<<pID<<endl;
+
                 int result = waitpid(pID, &status, WUNTRACED);
 
                 //debug cout<<"we got control back"<<status<<endl;
@@ -294,7 +294,7 @@ void Smash_handler::print_history() {
         cout << _commands[i] << endl;
     }
 }
-
+//todo need to debug
 int Smash_handler::jobs() {
     cout <<"number of process is: "<<_number_of_process<<endl;
     for (int i = 0; i < _number_of_process; ++i) {
@@ -327,6 +327,7 @@ int Smash_handler::foreground(int place) {
 
         }
         _number_of_process--;
+        kill(fg_proc._process_id,18);
         return 0;
     }
     perror("illegal place");
@@ -352,7 +353,7 @@ void Smash_handler::add_process(string Process_name, time_t Start_time, int Proc
         _process_running[_number_of_process]._process_id = Process_id;
         _process_running[_number_of_process]._time = (int) Start_time;
         _number_of_process++;
-        cout<<"a procces was add: "<<_number_of_process<<endl;
+        cout<<"the "<<Process_name<<" procces was add: "<<_number_of_process<<endl;
     }
 
 }
