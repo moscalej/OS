@@ -71,6 +71,7 @@ void SignalHandler::handleSIGTSTP(int status)
 {
 
 	if (jobs_and_history.fg_proc._process_id==0){
+		cout<<"my number is: "<< getpid()<<endl;
 		sendSig(getpid(),19);
 
 		return ;
