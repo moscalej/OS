@@ -277,7 +277,8 @@ int Smash_handler::Start_process(char *line_size, char **args) {
                 fg_proc._time = (int) start_time;
                 cout<<pID<<endl;
                 int result = waitpid(pID, &status, WUNTRACED);
-                cout<<"we got control back"<<status<<endl;
+
+                //debug cout<<"we got control back"<<status<<endl;
                 if (result == -1) {
                     perror("something");
                     return -1;
@@ -295,6 +296,7 @@ void Smash_handler::print_history() {
 }
 
 int Smash_handler::jobs() {
+    cout <<"number of process is: "<<_number_of_process<<endl;
     for (int i = 0; i < _number_of_process; ++i) {
 
         time_t time_running;
@@ -302,8 +304,8 @@ int Smash_handler::jobs() {
         time_running = time_running - _process_running[i]._time;
 
         cout << "[" << i << "] " << _process_running[i]._process_name\
- << " : " << _process_running[i]._process_id << " "\
- << time_running << " secs" << endl;
+        << " : " << _process_running[i]._process_id << " "\
+        << time_running << " secs" << endl;
     }
 
     return 0;
