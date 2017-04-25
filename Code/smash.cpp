@@ -30,7 +30,7 @@ SignalHandler Smash01_handler;
 void func_handler_TSTP(int parameter){
 
 	Smash01_handler.handleSIGTSTP(parameter);
-	cout<<"this is the TSTP handler"<<endl;
+
 }
 void func_handler_INT(int parameter){
 	cout<<"this is the INT handler"<<endl;

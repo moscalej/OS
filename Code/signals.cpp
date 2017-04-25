@@ -71,14 +71,15 @@ void SignalHandler::handleSIGTSTP(int status)
 {
 
 	if (jobs_and_history.fg_proc._process_id==0){
-		cout<<"Error Error you hoe"<<endl;
+		sendSig(getpid(),19);
 		return ;
 	}
 
-	cout<<"my number is: "<< getpid()<<" and i am stoping: "<<this->jobs_and_history.fg_proc._process_id<<endl;
-	sendSig(jobs_and_history.fg_proc._process_id,19);
+
+	sendSig(jobs_and_history.fg_proc._process_id,20);
 	jobs_and_history.fg_proc.is_stop = true;
 	jobs_and_history.add_process(jobs_and_history.fg_proc._process_name, jobs_and_history.fg_proc._time, jobs_and_history.fg_proc._process_id);
+	cout<<"process add"<<endl;
 	jobs_and_history.fg_proc._process_id=0;
 	return ;
 }
