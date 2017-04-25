@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
 
 
-	//handler for SIGTSTP
+	//handler for SIGTSTP this is the handler for the Control Z
 	sigemptyset(&TSTP.sa_mask);
 	TSTP.sa_handler = &func_handler_TSTP ;
 	TSTP.sa_flags = SA_RESTART;

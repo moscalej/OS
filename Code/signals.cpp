@@ -65,6 +65,8 @@ int SignalHandler::sendSig(int pID, int sigNum) {
 
 void SignalHandler::handleSIGTSTP(int status)
 {
+    cout<<"we want to know what is status"<<status<<endl;
+    cout<<"and if the pid is rigth: "<<jobs_and_history.fg_proc._process_id<<endl;
 	if (jobs_and_history.fg_proc._process_id==0){
 		//todo check if what happend if is 0 and if needs to send a perror
 		return ;
@@ -77,12 +79,7 @@ void SignalHandler::handleSIGTSTP(int status)
 }
 void SignalHandler::handleSIGCHLD(int parammeter, siginfo_t *info, void *function) {
 
-    int exit_status = info->si_status;
     pid_t pID = info->si_pid;
-    cout<<"The exit status we got is"<<exit_status<<endl;
-    cout<<"of the pid "<<pID<<endl;
-    cout<<"only for fun we want to know the parameter: "<< parammeter<<endl;
-
 	pID = (int)pID;
 	jobs_and_history.process_remover(pID);
 	return;
