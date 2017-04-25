@@ -298,8 +298,7 @@ int Smash_handler::jobs() {
 
         time_t time_running;
         time(&time_running);
-        time_running = time_running -
-                       _process_running[i]._time;
+        time_running = time_running - _process_running[i]._time;
 
         cout << "[" << i << "] " << _process_running[i]._process_name\
  << " : " << _process_running[i]._process_id << " "\
@@ -350,6 +349,7 @@ void Smash_handler::add_process(string Process_name, time_t Start_time, int Proc
         _process_running[_number_of_process]._process_id = Process_id;
         _process_running[_number_of_process]._time = (int) Start_time;
         _number_of_process++;
+        cout<<"a procces was add: "<<_number_of_process<<endl;
     }
 
 }

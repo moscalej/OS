@@ -144,9 +144,9 @@ private:
 
     Process _process_running[100];
     string  _commands[50];
-    int _number_of_commands;
-    int _iterator;
-    int _number_of_process;
+    int _number_of_commands=0;
+    int _iterator=0;
+    int _number_of_process=0;
 
 
 
