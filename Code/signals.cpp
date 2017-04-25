@@ -71,7 +71,7 @@ void SignalHandler::handleSIGTSTP(int status)
 {
 
 	if (jobs_and_history.fg_proc._process_id==0){
-		sendSig(getpid(),20);
+		sendSig(getpid(),19);
 
 		return ;
 	}
