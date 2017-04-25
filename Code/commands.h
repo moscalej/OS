@@ -19,18 +19,12 @@
 #include <iostream>
 
 
+
 using namespace std;
 
 
 #define MAX_LINE_SIZE 80
 #define MAX_ARG 20
-
-//typedef enum { FALSE , TRUE } bool;
-int ExeComp(char* lineSize);
-int BgCmd(char* lineSize, void* jobs);
-int ExeCmd(void* jobs, char* lineSize, char* cmdString);
-void ExeExternal(char *args[MAX_ARG], char* cmdString);
-
 
 /**
  * This class will store the process data need it
@@ -147,7 +141,7 @@ public:
 private:
 
     int child_status(int child_id);
-	
+
     Process _process_running[100];
     string  _commands[50];
     int _number_of_commands;
@@ -158,6 +152,8 @@ private:
 
 
 };
+
+
 
 
 

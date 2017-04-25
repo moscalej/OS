@@ -14,7 +14,7 @@ SignalHandler Handler;
 // Parameters: pointer to jobs, command string
 // Returns: 0 - success,1 - failure
 //**************************************************************************************/
-int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
+int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) {
     char *cmd;
     char *args[MAX_ARG];
     char pwd[MAX_LINE_SIZE];
@@ -167,7 +167,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         /*************************************************/
     else // external command //
     {
-        ExeExternal(args, cmdString);
+        ExeExternal(cmdString, args, Handler);
         return 0;
     }
     if (illegal_cmd) {
@@ -184,7 +184,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
 // Parameters: external command arguments, external command string
 // Returns: void
 //**************************************************************************************
-void ExeExternal(char *args[MAX_ARG], char *cmdString) {
+void ExeExternal(char *cmdString, char *args[20], SignalHandler &Handler) {
     Handler.jobs_and_history.Start_process(cmdString, args);
 
 }
@@ -272,7 +272,7 @@ int Smash_handler::Start_process(char *line_size, char **args) {
             } else {
                 int status;
                 fg_proc._process_name = args[0];
-                fg_proc._process_id = pID;
+                this->fg_proc._process_id = pID;
                 fg_proc._time = (int) start_time;
                 cout<<pID<<endl;
                 int result = waitpid(pID, &status, WUNTRACED);

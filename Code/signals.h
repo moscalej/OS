@@ -29,6 +29,13 @@ private:
 };
 
 
+//typedef enum { FALSE , TRUE } bool;
+int ExeComp(char* lineSize);
+int BgCmd(char* lineSize, void* jobs);
+int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler);
+void ExeExternal(char *cmdString, char *args[20], SignalHandler &Handler);
+
+
 
 
 #endif

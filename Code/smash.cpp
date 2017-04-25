@@ -17,8 +17,8 @@ main file. This file contains the main function of smash
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
-#include "commands.h"
 #include "signals.h"
+
 #define MAX_LINE_SIZE 80
 #define MAXARGS 20
 
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 					// background command	
 	 	//if(!BgCmd(lineSize, jobs)) continue; //todo check if this
 					// built in commands
-		ExeCmd(jobs, lineSize, cmdString);
+            ExeCmd(jobs, lineSize, cmdString, Smash01_handler);
 		
 		/* initialize for next line read*/
 		lineSize[0]='\0';
