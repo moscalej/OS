@@ -5,7 +5,6 @@
 #include "signals.h"
 
 
-
 SignalHandler Handler;
 
 
@@ -23,7 +22,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
     int i = 0, num_arg = 0;
 
 
-	Handler.jobs_and_history.add_commands(lineSize);
+    Handler.jobs_and_history.add_commands(cmdString);
     bool illegal_cmd = false; // illegal command
     cmd = strtok(lineSize, delimiters);
     if (cmd == NULL)
@@ -130,9 +129,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         if (num_arg == 0) {
             return Handler.sendSig(getpid(), 9);
 
-        }
-
-        else if (num_arg == 1 && args[1] == "kill") {
+        } else if (num_arg == 1 && args[1] == "kill") {
             for (int i = 0; i < Handler.jobs_and_history.get_number_process(); i++) {
                 time_t start = time(NULL);
                 while (difftime(time(NULL), start) <= 5 &&
@@ -150,19 +147,17 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
         }
 
 
-
-
     } else if (!strcmp(cmd, "kill")) {
         if (num_arg == 3) {
             char *sigNum;
             sigNum = strtok(args[1], "-");
             if (Handler.jobs_and_history.Process_number(atoi(args[2])))
                 if (!Handler.sendSig(Handler.jobs_and_history.getPidByIndex(atoi(args[2])), atoi(sigNum)))
-                    cout << "smash error : > kill job " <<args[2]<<" cannot send signal"<<endl;
+                    cout << "smash error : > kill job " << args[2] << " cannot send signal" << endl;
                 else
-                    cout << "smash error: > kill job "<<args[2]<<" job does not exist"<<endl;
+                    cout << "smash error: > kill job " << args[2] << " job does not exist" << endl;
             else {
-                cout << "smash error : > kill job "<<args[2]<<" cannot send signal"<<endl;
+                cout << "smash error : > kill job " << args[2] << " cannot send signal" << endl;
                 illegal_cmd = true;
             }
         }
@@ -170,7 +165,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString) {
 
 
         /*************************************************/
-    else // external command
+    else // external command //
     {
         ExeExternal(args, cmdString);
         return 0;
@@ -205,7 +200,7 @@ int ExeComp(char *lineSize) {//todo we need to see the way to use this it only r
     char *args[MAX_ARG];
     if ((strstr(lineSize, "|")) || (strstr(lineSize, "<")) || (strstr(lineSize, ">")) || (strstr(lineSize, "*")) ||
         (strstr(lineSize, "?")) || (strstr(lineSize, ">>")) || (strstr(lineSize, "|&"))) {
-        return  0;
+        return 0;
     }
     return -1;
 }
@@ -271,44 +266,44 @@ int Smash_handler::Start_process(char *line_size, char **args) {
 //todo check this part if bgcmd is -1 have to wait until end
         default:
 
-            if (BgCmd(line_size)==0) {
+            if (BgCmd(line_size) == 0) {
                 add_process(args[0], (int) start_time, pID);
+
             } else {
                 int status;
+                fg_proc._process_name = args[0];
+                fg_proc._process_id = pID;
+                fg_proc._time = (int) start_time;
+                cout<<pID<<endl;
                 int result = waitpid(pID, &status, WUNTRACED);
+                cout<<"we got control back"<<status<<endl;
                 if (result == -1) {
                     perror("something");
                     return -1;
                 }
-                fg_proc._process_name = args[0];
-                fg_proc._process_id = pID;
-                fg_proc._time = (int)start_time;
             }
-
-
     }
 
     return 0;
 }
 
 void Smash_handler::print_history() {
-    for (int i = _number_of_commands; i > 0; --i) {
-        cout << _commands[i - 1] << endl;
+    for (int i = 0; i < _number_of_commands - 1; ++i) {
+        cout << _commands[i] << endl;
     }
-
-
 }
 
 int Smash_handler::jobs() {
     for (int i = 0; i < _number_of_process; ++i) {
+
         time_t time_running;
         time(&time_running);
         time_running = time_running -
-                       _process_running[i]._time; //todo check is in the linux compiler time lib also works in sec
+                       _process_running[i]._time;
 
         cout << "[" << i << "] " << _process_running[i]._process_name\
-         << " : " << _process_running[i]._process_id << " "\
-        << time_running << " secs" << endl;
+ << " : " << _process_running[i]._process_id << " "\
+ << time_running << " secs" << endl;
     }
 
     return 0;
@@ -322,26 +317,22 @@ int Smash_handler::foreground(int place) {
         return -1;
 
 
-    } else if (place <= this->_number_of_commands){
-        this->fg_proc = _process_running[place-1];
+    } else if (place <= this->_number_of_commands) {
+        this->fg_proc = _process_running[place - 1];
 
-        for (int i = place; i <_number_of_commands ; ++i) {
-            _process_running[i-1]=_process_running[i];
+        for (int i = place; i < _number_of_commands; ++i) {
+            _process_running[i - 1] = _process_running[i];
 
         }
-        _number_of_process --;
+        _number_of_process--;
         return 0;
-
     }
-
     perror("illegal place");
     return -1;
 }
+
 //todo solve this method
 void Smash_handler::background(int place) {
-
-
-
 
 
 }
@@ -400,6 +391,26 @@ int Smash_handler::getPidByIndex(int process_number) {
 int Smash_handler::get_number_process() {
 
     return this->_number_of_process;
+}
+
+/**
+ * This method will check if the
+ * @param child_id
+ * @return
+ */
+int Smash_handler::child_status(int child_id) {
+    int status;
+    pid_t return_pid = waitpid(child_id,&status,WNOHANG);
+    if (return_pid == -1 )cout<<"there was an error checking the status of the child"<<endl;
+    else if(return_pid==0){
+        return 0;
+    }
+    else if(return_pid==child_id){
+        return status;
+    }
+    return -2;
+
+
 }
 
 

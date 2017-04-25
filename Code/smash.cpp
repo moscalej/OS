@@ -32,15 +32,15 @@ void func_handler_TSTP(int parameter){
 	Smash01_handler.handleSIGTSTP(parameter);
 	cout<<"this is the TSTP handler"<<endl;
 }
-void func_handler_INT(int paramater){
+void func_handler_INT(int parameter){
 	cout<<"this is the INT handler"<<endl;
-	Smash01_handler.handleSIGINT(paramater);
+	Smash01_handler.handleSIGINT(parameter);
 
 
 }
 void func_handler_CHILD(int parameter, siginfo_t *info, void *funtion){
 	Smash01_handler.handleSIGCHLD(parameter,info,funtion);
-	cout<<"this is the CHILD handler"<<endl;
+	cout<<"this is the CHILD handler and this \n will be send when a child finish his process" <<endl;
 }
 
 //**************************************************************************************
@@ -52,10 +52,7 @@ int main(int argc, char *argv[])
     char cmdString[MAX_LINE_SIZE]; 	   
 
 	
-	//signal declaretions
-	//NOTE: the signal handlers and the function/s that sets the handler should be found in signals.c
-	 /* add your code here */
-	
+
 	/**
 	//NOTE: the signal handlers and the function/s that sets the handler should be found in signals.c
 	//set your signal handlers here
@@ -98,7 +95,7 @@ int main(int argc, char *argv[])
 		strcpy(cmdString, lineSize);    	
 		cmdString[strlen(lineSize)-1]='\0';
 					// perform a complicated Command
-		if(!ExeComp(lineSize)) continue; 
+		//if(!ExeComp(lineSize)) continue;
 					// background command	
 	 	//if(!BgCmd(lineSize, jobs)) continue; //todo check if this
 					// built in commands

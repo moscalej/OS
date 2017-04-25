@@ -145,6 +145,8 @@ public:
 	Process fg_proc;
 
 private:
+
+    int child_status(int child_id);
 	
     Process _process_running[100];
     string  _commands[50];

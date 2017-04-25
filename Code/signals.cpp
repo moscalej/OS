@@ -9,6 +9,7 @@
 /*******************************************/
 /* Name: handler_cntlc
    Synopsis: handle the Control-C */
+
 #include "signals.h"
 
 string SignalHandler::sigNumToName(int signum) {
@@ -75,7 +76,13 @@ void SignalHandler::handleSIGTSTP(int status)
 	return ;
 }
 void SignalHandler::handleSIGCHLD(int parammeter, siginfo_t *info, void *function) {
-	pid_t pID = info->si_pid;
+
+    int exit_status = info->si_status;
+    pid_t pID = info->si_pid;
+    cout<<"The exit status we got is"<<exit_status<<endl;
+    cout<<"of the pid "<<pID<<endl;
+    cout<<"only for fun we want to know the parameter: "<< parammeter<<endl;
+
 	pID = (int)pID;
 	jobs_and_history.process_remover(pID);
 	return;
