@@ -286,6 +286,7 @@ int Smash_handler::Start_process(char *line_size, char **args) {
                 fg_proc._process_name = args[0];
                 this->fg_proc._process_id = pID;
                 fg_proc._time = (int) start_time;
+                fg_proc.is_stop=false;
 
                 int result = waitpid(pID, &status, WUNTRACED);
 
@@ -313,10 +314,10 @@ int Smash_handler::jobs() {
         time_t time_running;
         time(&time_running);
         time_running = time_running - _process_running[i]._time;
-
+        string temp= (_process_running[i].is_stop)?("Stopped)"):("");
         cout << "[" << i+1 << "] " << _process_running[i]._process_name\
         << " : " << _process_running[i]._process_id << " "\
-        << time_running << " secs" << endl;
+        << time_running << " secs " <<temp << endl;
     }
 
     return 0;
@@ -370,10 +371,12 @@ void Smash_handler::add_process(string Process_name, time_t Start_time, int Proc
         _process_running[99]._time = (int) Start_time;
         _process_running[99]._process_id = Process_id;
         _process_running[99]._process_name = Process_name;
+        _process_running[99].is_stop=false;
     } else {
         _process_running[_number_of_process]._process_name = Process_name;
         _process_running[_number_of_process]._process_id = Process_id;
         _process_running[_number_of_process]._time = (int) Start_time;
+        _process_running[_number_of_process].is_stop=false;
         _number_of_process++;
         cout<<"the "<<Process_name<<" procces was add: "<<_number_of_process<<endl;
     }
