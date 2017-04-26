@@ -19,9 +19,6 @@ public:
 
 	void handleSIGTSTP(int status);//CTRL Z
 
-    /*todo i think this handler is call every time a child process change his state, if so this could be the bug
-    becouse every time the process change from running to stoped will send a signal to the parent*/
-
 	void handleSIGCHLD(int parammeter, siginfo_t *info, void *function);// END OF PROCESS or change
 
 	void handleSIGINT(int status);//ctrl c
@@ -35,7 +32,7 @@ private:
 //typedef enum { FALSE , TRUE } bool;
 int ExeComp(char* lineSize);
 int BgCmd(char* lineSize, void* jobs);
-int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler);
+int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler);
 void ExeExternal(char *cmdString, char *args[20], SignalHandler &Handler);
 
 

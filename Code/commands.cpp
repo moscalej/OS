@@ -14,7 +14,7 @@
 // Parameters: pointer to jobs, command string
 // Returns: 0 - success,1 - failure
 //**************************************************************************************/
-int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) {
+int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
     char *cmd;
     char *args[MAX_ARG];
     char pwd[MAX_LINE_SIZE];
@@ -261,10 +261,20 @@ int Smash_handler::Start_process(char *line_size, char **args) {
     time_t start_time;
     time(&start_time);
 
+    if (ExeComp(line_size)==0){
+        args[0]=(char*) "csh";
+        args[1]= (char*)"-f";
+        args[2]= (char*)"-c";
+        args[3]= line_size;
+        for (int i = 4; i <20 ; ++i) {
+            args[i]=NULL;
+        }
+    }
 
     switch (pID = fork()) {
         case -1:
-            perror("fail at creating the child process");
+            //todo writte a good coment
+            cerr<<"fail at creating the child process"<<endl;
 
             return -1;
         case 0 :
@@ -314,7 +324,7 @@ int Smash_handler::jobs() {
         time_t time_running;
         time(&time_running);
         time_running = time_running - _process_running[i]._time;
-        string temp= (_process_running[i].is_stop)?("Stopped)"):("");
+        string temp= (_process_running[i].is_stop)?("(Stopped)"):("");
         cout << "[" << i+1 << "] " << _process_running[i]._process_name\
         << " : " << _process_running[i]._process_id << " "\
         << time_running << " secs " <<temp << endl;
@@ -378,7 +388,7 @@ void Smash_handler::add_process(string Process_name, time_t Start_time, int Proc
         _process_running[_number_of_process]._time = (int) Start_time;
         _process_running[_number_of_process].is_stop=is_stop;
         _number_of_process++;
-        cout<<"the "<<Process_name<<" procces was add: "<<_number_of_process<<endl;
+        //debug cout<<"the "<<Process_name<<" procces was add: "<<_number_of_process<<endl;
     }
 
 }

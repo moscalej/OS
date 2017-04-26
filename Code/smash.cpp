@@ -28,19 +28,13 @@ char lineSize[MAX_LINE_SIZE];
 SignalHandler Smash01_handler;
 
 void func_handler_TSTP(int parameter){
-
 	Smash01_handler.handleSIGTSTP(parameter);
-
 }
 void func_handler_INT(int parameter){
-	cout<<"this is the INT handler"<<endl;
 	Smash01_handler.handleSIGINT(parameter);
-
-
 }
 void func_handler_CHILD(int parameter, siginfo_t *info, void *funtion){
 	Smash01_handler.handleSIGCHLD(parameter,info,funtion);
-
 }
 
 //**************************************************************************************
@@ -94,14 +88,10 @@ int main(int argc, char *argv[])
 		fgets(lineSize, MAX_LINE_SIZE, stdin);
 		strcpy(cmdString, lineSize);    	
 		cmdString[strlen(lineSize)-1]='\0';
-					// perform a complicated Command
-		//if(!ExeComp(lineSize)) continue;
-					// background command	
-	 	//if(!BgCmd(lineSize, jobs)) continue; //todo check if this
-					// built in commands
-            ExeCmd(jobs, lineSize, cmdString, Smash01_handler);
+
+            ExeCmd(lineSize, cmdString, Smash01_handler);
 		
-		/* initialize for next line read*/
+
 		lineSize[0]='\0';
 		cmdString[0]='\0';
 	}

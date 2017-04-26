@@ -35,8 +35,6 @@ public:
     string _process_name;
     int _process_id;
     int _time;
-
-    bool is_waitng;
     bool is_stop;
 
 };
