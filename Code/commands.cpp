@@ -5,7 +5,7 @@
 #include "signals.h"
 
 
-SignalHandler Handler;
+
 
 
 /**
@@ -22,7 +22,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) 
     int i = 0, num_arg = 0;
 
 
-    Handler.jobs_and_history.add_commands(cmdString);
+    Handler.jobs_and_history.add_commands(lineSize);
     bool illegal_cmd = false; // illegal command
     cmd = strtok(lineSize, delimiters);
     if (cmd == NULL)
@@ -35,14 +35,9 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) 
 
     }
 
-/**
-// Built in Commands PLEASE NOTE NOT ALL REQUIRED
-// ARE IN THIS CHAIN OF IF COMMANDS. PLEASE ADD
-// MORE IF STATEMENTS AS REQUIRED
-/*************************************************/
-//todo check what happend when we use cd ..
 
-    if (!strcmp(cmd, "cd")) { //todo need to check the arguments
+
+    if (!strcmp(cmd, "cd")) {
         if (num_arg < 2) {
 
             if (0 == chdir(args[1])) {
@@ -58,7 +53,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) 
 
     }
 
-        /*************************************************/
+
     else if (!strcmp(cmd, "pwd")) {
         if (num_arg == 0) {
             getcwd(pwd, sizeof(pwd));
@@ -68,7 +63,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) 
             illegal_cmd = true;
         }
     }
-//todo also include the arguments
+
     else if (!strcmp(cmd, "history")) {
         if (num_arg == 0) {
             Handler.jobs_and_history.print_history();
@@ -79,7 +74,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) 
 
     }
 
-        /*************************************************/
+
     else if (!strcmp(cmd, "mkdir")) {
 
         if (num_arg < 2) {
@@ -91,7 +86,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) 
             }
         }
     }
-        /*************************************************/
+
         //Todo need to debug and try
     else if (!strcmp(cmd, "jobs")) {
         cout <<"jobs1 with numargs: "<<num_arg<<endl;
@@ -111,7 +106,7 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) 
     }
 
         //Todo need to debug and try
-        /*************************************************/
+
     else if (!strcmp(cmd, "fg")) {
         if (num_arg == 1) {//todo need to check is args[1] is also a number
 
@@ -303,7 +298,7 @@ int Smash_handler::jobs() {
         time(&time_running);
         time_running = time_running - _process_running[i]._time;
 
-        cout << "[" << i << "] " << _process_running[i]._process_name\
+        cout << "[" << i+1 << "] " << _process_running[i]._process_name\
         << " : " << _process_running[i]._process_id << " "\
         << time_running << " secs" << endl;
     }
@@ -311,7 +306,7 @@ int Smash_handler::jobs() {
     return 0;
 }
 
-//todo this functions need to be write i am jus leaving the base structure here
+//todo this functions need to be write i am jus  the base structure here
 int Smash_handler::foreground(int place) {
 
     if (place == (-1)) {
@@ -319,14 +314,16 @@ int Smash_handler::foreground(int place) {
         return -1;
 
 
-    } else if (place <= this->_number_of_commands) {
+    } else if (place <= this->_number_of_process) {
         this->fg_proc = _process_running[place - 1];
 
-        for (int i = place; i < _number_of_commands; ++i) {
+        for (int i = place; i < _number_of_process; ++i) {
             _process_running[i - 1] = _process_running[i];
 
         }
+
         _number_of_process--;
+
         kill(fg_proc._process_id,18);
         return 0;
     }
@@ -422,6 +419,17 @@ Smash_handler::Smash_handler() {
     _iterator=0;
     _number_of_commands=0;
     fg_proc._process_id=0;
+
+}
+
+int Smash_handler::zombie_kill() {
+
+    for (int i = 0; i < _number_of_process; ++i) {
+       if( waitpid(_process_running[i]._process_id, NULL, WNOHANG) != 0){
+           this->process_remover(_process_running[i]._process_id);
+       }
+
+    }
 
 }
 

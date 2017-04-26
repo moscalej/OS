@@ -103,6 +103,12 @@ public:
      */
     void background(int place);
 
+    /**
+     * This method will add a Process to the background  process list
+     * @param Process_name - The name given in the command line
+     * @param Start_time - the time the process was initiate
+     * @param Process_id - The PID of the process
+     */
     void add_process(string Process_name, time_t Start_time, int Process_id);
 
     /**
@@ -129,11 +135,12 @@ public:
      */
     int getPidByIndex(int process_number);
 
+
+
     /**
-     * this class is use to manage the signal
+     * This method will return the number of process running on the background
+
      */
-
-
     int get_number_process();
 
 	Process fg_proc;
@@ -141,7 +148,7 @@ public:
 private:
 
     int child_status(int child_id);
-
+    int zombie_kill();
     Process _process_running[100];
     string  _commands[50];
     int _number_of_commands;

@@ -70,23 +70,32 @@ int SignalHandler::sendSig(int pID, int sigNum) {
 void SignalHandler::handleSIGTSTP(int status)
 {
 
+
 	if (jobs_and_history.fg_proc._process_id==0){
-		sendSig(getpid(),19);
+		//sendSig(getpid(),19);
 		return ;
 	}
 
 
 	sendSig(jobs_and_history.fg_proc._process_id,20);
 	jobs_and_history.fg_proc.is_stop = true;
-	jobs_and_history.add_process(jobs_and_history.fg_proc._process_name, jobs_and_history.fg_proc._time, jobs_and_history.fg_proc._process_id);
-	jobs_and_history.fg_proc._process_id=0;
+	this->jobs_and_history.add_process(this->jobs_and_history.fg_proc._process_name,\
+                                       this->jobs_and_history.fg_proc._time,\
+                                       this->jobs_and_history.fg_proc._process_id);
+
+    jobs_and_history.fg_proc._process_id=0;
 	return ;
 }
 void SignalHandler::handleSIGCHLD(int parammeter, siginfo_t *info, void *function) {
-
+    int result;
     pid_t pID = info->si_pid;
-	pID = (int)pID;
-	jobs_and_history.process_remover(pID);
+    waitpid(pID,&result,WNOHANG);
+    if (0==WTERMSIG(result)){
+        jobs_and_history.process_remover((int)pID);
+
+    }
+
+
 	return;
 }
 

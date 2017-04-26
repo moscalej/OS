@@ -19,7 +19,10 @@ public:
 
 	void handleSIGTSTP(int status);//CTRL Z
 
-	void handleSIGCHLD(int parammeter, siginfo_t *info, void *function);// END OF PROCESS
+    /*todo i think this handler is call every time a child process change his state, if so this could be the bug
+    becouse every time the process change from running to stoped will send a signal to the parent*/
+
+	void handleSIGCHLD(int parammeter, siginfo_t *info, void *function);// END OF PROCESS or change
 
 	void handleSIGINT(int status);//ctrl c
 
