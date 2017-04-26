@@ -344,10 +344,11 @@ int Smash_handler::foreground(int place) {
     } else if (place <= this->_number_of_process) {
         this->fg_proc = _process_running[place - 1];
 
-        this->process_remover(this->getPidByIndex(place));
+        if(this->process_remover(this->getPidByIndex(place))==0);
+        {
 
-        _number_of_process--;
-        cout<<"we got here and send the: "<<fg_proc._process_id<<endl;
+            cout<<"we got here and send the: "<<fg_proc._process_id<<endl;
+        }
         kill(this->fg_proc._process_id,18);
         int status;
         waitpid(fg_proc._process_id, &status, WUNTRACED);
