@@ -120,7 +120,19 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) 
     }
         /*************************************************/
     else if (!strcmp(cmd, "bg")) {
-        Handler.jobs_and_history.background(atoi(args[1]));
+        int result;
+        if (num_arg == 1) {//todo need to check is args[1] is also a number
+
+            Handler.jobs_and_history.background(atoi(args[1]));
+        }
+        else if(num_arg ==0){
+            result = Handler.jobs_and_history.firs_stop_process();
+            if(result != (-1)) {
+                Handler.jobs_and_history.background(result);
+            }
+        }
+
+
 
     }
         /*************************************************/
@@ -326,6 +338,8 @@ int Smash_handler::foreground(int place) {
         _number_of_process--;
         cout<<"we got here and send the: "<<fg_proc._process_id<<endl;
         kill(this->fg_proc._process_id,18);
+        int status;
+        waitpid(fg_proc._process_id, &status, WUNTRACED);
         return 0;
     }
     perror("illegal place");
@@ -334,6 +348,16 @@ int Smash_handler::foreground(int place) {
 
 //todo solve this method
 void Smash_handler::background(int place) {
+    if (place <= 0 || place >this->_number_of_process) {
+        cerr<<"this is an illigal place"<<endl;//todo write a good comment
+
+    } else if (place <= this->_number_of_process ) {
+
+        kill(this->getPidByIndex(place),18);
+        return ;
+    }
+    perror("illegal place");
+
 
 
 }
@@ -431,6 +455,17 @@ int Smash_handler::zombie_kill() {
        }
 
     }
+
+}
+
+int Smash_handler::firs_stop_process() {
+    for (int i = _number_of_process-1; i >=0; --i) {
+        if (this->_process_running[i].is_stop){
+            return i;
+
+        }
+    }
+    return -1;
 
 }
 

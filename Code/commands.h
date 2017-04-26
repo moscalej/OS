@@ -145,8 +145,8 @@ public:
 
 	Process fg_proc;
 
+    int firs_stop_process();
 private:
-
     int child_status(int child_id);
     int zombie_kill();
     Process _process_running[100];
