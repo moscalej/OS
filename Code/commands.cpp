@@ -325,7 +325,7 @@ int Smash_handler::foreground(int place) {
 
         _number_of_process--;
         cout<<"we got here and send the: "<<fg_proc._process_id<<endl;
-        kill(this->fg_proc,18);
+        kill(this->fg_proc._process_id,18);
         return 0;
     }
     perror("illegal place");
