@@ -90,9 +90,11 @@ void SignalHandler::handleSIGCHLD(int parammeter, siginfo_t *info, void *functio
     int result;
     pid_t pID = info->si_pid;
     waitpid(pID,&result,WNOHANG);
-    if (0==WTERMSIG(result)){
+   if (!this->jobs_and_history.fg_proc.is_stop )
+   {
         jobs_and_history.process_remover((int)pID);
         cout<<"the process id: "<<pID<<" was remove"<<endl;
+        return;
 
     }
     cout<<"child handler was call on "<<getpid()<<"for the procees "<<pID<<" but nothing happend"<<endl;
