@@ -109,7 +109,7 @@ public:
      * @param Start_time - the time the process was initiate
      * @param Process_id - The PID of the process
      */
-    void add_process(string Process_name, time_t Start_time, int Process_id);
+    void add_process(string Process_name, time_t Start_time, int Process_id, bool is_stop);
 
     /**
      * This method will remove the process (by process Id) from the jobs list

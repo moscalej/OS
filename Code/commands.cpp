@@ -279,7 +279,7 @@ int Smash_handler::Start_process(char *line_size, char **args) {
         default:
 
             if (BgCmd(line_size) == 0) {
-                add_process(args[0], (int) start_time, pID);
+                add_process(args[0], (int) start_time, pID, false);
 
             } else {
                 int status;
@@ -363,7 +363,7 @@ void Smash_handler::background(int place) {
 
 }
 
-void Smash_handler::add_process(string Process_name, time_t Start_time, int Process_id) {
+void Smash_handler::add_process(string Process_name, time_t Start_time, int Process_id, bool is_stop) {
     if (this->_number_of_process >= 100) {
         for (int i = 0; i < 99; ++i) {
             _process_running[i] = _process_running[i + 1];
@@ -371,12 +371,12 @@ void Smash_handler::add_process(string Process_name, time_t Start_time, int Proc
         _process_running[99]._time = (int) Start_time;
         _process_running[99]._process_id = Process_id;
         _process_running[99]._process_name = Process_name;
-        _process_running[99].is_stop=false;
+        _process_running[99].is_stop=is_stop;
     } else {
         _process_running[_number_of_process]._process_name = Process_name;
         _process_running[_number_of_process]._process_id = Process_id;
         _process_running[_number_of_process]._time = (int) Start_time;
-        _process_running[_number_of_process].is_stop=false;
+        _process_running[_number_of_process].is_stop=is_stop;
         _number_of_process++;
         cout<<"the "<<Process_name<<" procces was add: "<<_number_of_process<<endl;
     }

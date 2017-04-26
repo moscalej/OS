@@ -78,10 +78,10 @@ void SignalHandler::handleSIGTSTP(int status)
 
 
 	sendSig(jobs_and_history.fg_proc._process_id,20);
-	jobs_and_history.fg_proc.is_stop = true;
-	this->jobs_and_history.add_process(this->jobs_and_history.fg_proc._process_name,\
-                                       this->jobs_and_history.fg_proc._time,\
-                                       this->jobs_and_history.fg_proc._process_id);
+
+	this->jobs_and_history.add_process(this->jobs_and_history.fg_proc._process_name,
+									   this->jobs_and_history.fg_proc._time, this->jobs_and_history.fg_proc._process_id,
+									   true);
 
     jobs_and_history.fg_proc._process_id=0;
 	return ;
