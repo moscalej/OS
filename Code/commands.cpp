@@ -112,6 +112,10 @@ int ExeCmd(void *jobs, char *lineSize, char *cmdString, SignalHandler &Handler) 
 
             Handler.jobs_and_history.foreground(atoi(args[1]));
         }
+        else if(num_arg ==0){
+            Handler.jobs_and_history.foreground(Handler.jobs_and_history.get_number_process());
+
+        }
 
     }
         /*************************************************/
@@ -317,14 +321,11 @@ int Smash_handler::foreground(int place) {
     } else if (place <= this->_number_of_process) {
         this->fg_proc = _process_running[place - 1];
 
-        for (int i = place; i < _number_of_process; ++i) {
-            _process_running[i - 1] = _process_running[i];
-
-        }
+        this->process_remover(this->getPidByIndex(place));
 
         _number_of_process--;
-
-        kill(fg_proc._process_id,18);
+        cout<<"we got here and send the: "<<fg_proc._process_id<<endl;
+        kill(this->fg_proc,18);
         return 0;
     }
     perror("illegal place");

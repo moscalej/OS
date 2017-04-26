@@ -40,7 +40,7 @@ void func_handler_INT(int parameter){
 }
 void func_handler_CHILD(int parameter, siginfo_t *info, void *funtion){
 	Smash01_handler.handleSIGCHLD(parameter,info,funtion);
-	cout<<"this is the CHILD handler and this \n will be send when a child finish his process" <<endl;
+
 }
 
 //**************************************************************************************
