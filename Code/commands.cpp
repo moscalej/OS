@@ -351,6 +351,7 @@ int Smash_handler::foreground(int place) {
         {
 
             cout<<"we got here and send the: "<<fg_process._process_id<<"(this is in fg comnadn )"<<endl;
+            this->jobs();
         }
         kill(this->fg_process._process_id,18);
         int status;
