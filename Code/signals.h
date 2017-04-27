@@ -48,8 +48,17 @@ public:
 	 */
 	void handleSIGCHLD(int parammeter, siginfo_t *info, void *function);// END OF PROCESS or change
 
+
+	/**
+	 * This method will handle the Finish signals Control + c
+	 */
 	void handleSIGINT(int status);//ctrl c
 
+	/**
+	 * this will handle the rest of the commands a full
+	 * description is provide on the interface of this
+	 * module
+	 */
 	Smash_handler jobs_and_history;
 private:
 

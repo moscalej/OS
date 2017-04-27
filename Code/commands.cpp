@@ -252,20 +252,12 @@ void Smash_handler::add_commands(string command) {
 
 int Smash_handler::Start_process(char *line_size, char **args) {
     int pID;
+
     time_t start_time;
     time(&start_time);
 
-    if (ExeComp(line_size) == 0) {
-        args[0] = (char *) "csh";
-        args[1] = (char *) "-f";
-        args[2] = (char *) "-c";
-        args[3] = line_size;
-        for (int i = 4; i < 20; ++i) {
-            args[i] = NULL;
 
-        }
-        cerr << "this is use only on exception case" << endl;
-    }
+
 
     switch (pID = fork()) {
         case -1:
@@ -276,9 +268,18 @@ int Smash_handler::Start_process(char *line_size, char **args) {
         case 0 :
             // Child Process
             if (setpgrp() == -1) perror("Fail to set the group id");
+            if (ExeComp(line_size) == 0) {
+                char* csh=strdup("csh");//only way i could not get warnings on const char*
+                char* f=strdup("-f");
+                char* c = strdup("-c");
+                char *arg[] = { csh, f,c, line_size, NULL };
+                execvp(arg[0], arg);
 
-            execv(args[0], args);
 
+            } else {
+
+                execv(args[0], args);
+            }
             perror("Error executing the program");
             return -1;
 
