@@ -11,8 +11,20 @@
 #include "commands.h"
 using namespace std;
 
+/**
+ * This class is in charge of the signal handling and with the help
+ * of the Command Handler it can manage all the external/complicate
+ * commands
+ */
 class SignalHandler {
 public:
+
+    /**
+     * This method will send a signal
+     * @param pID - address of the process
+     * @param sigNum - Number of the signal
+     * @return
+     */
 	int sendSig(int pID, int sigNum);
 
 	string sigNumToName(int signum);

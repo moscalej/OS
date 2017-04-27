@@ -19,7 +19,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
     char *args[MAX_ARG];
     char pwd[MAX_LINE_SIZE];
     char *delimiters = (char *) " \t\n";
-    int i, num_arg = 0;
+    int num_arg = 0;
 
     Handler.jobs_and_history.add_commands(lineSize); //we Add the command to the history
     bool illegal_cmd = false;
@@ -28,7 +28,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
     if (cmd == NULL)
         return 0;
     args[0] = cmd;
-    for (i = 1; i < MAX_ARG; i++) {
+    for (int i = 1; i < MAX_ARG; i++) {
         args[i] = strtok(NULL, delimiters);
         if (args[i] != NULL)
             num_arg++;
@@ -137,7 +137,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
                  << "runing" << endl;
             if (Handler.jobs_and_history.get_number_process() > 0) {
                 for (int j = 0; j < Handler.jobs_and_history.get_number_process(); ++j) {
-                    Handler.sendSig(Handler.jobs_and_history.getPidByIndex(i), 9);
+                    Handler.sendSig(Handler.jobs_and_history.getPidByIndex(j), 9);
 
                 }
             }
