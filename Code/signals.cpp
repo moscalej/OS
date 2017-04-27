@@ -110,6 +110,7 @@ void SignalHandler::handleSIGTSTP(int status) {
     sendSig(jobs_and_history.fg_process._process_id, 20);
     jobs_and_history.fg_process._process_id = 0;
     cout<<"the job was add in sigTSTP"<<endl;
+    this->jobs_and_history.jobs();
 
     return;
 }
