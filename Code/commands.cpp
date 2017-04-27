@@ -181,13 +181,14 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
         if (num_arg == 2) {
             char *sigNum;
             sigNum = strtok(args[1], "-");
-
+            Handler.jobs_and_history.set_setings(atoi(args[2]),false);
             if (Handler.jobs_and_history.get_number_process() < (atoi(args[2]))) {
                 cout << "smash error: > kill job " << args[2] << " job does not exist" << endl;
                 return 0;
             }
 
-            if (!Handler.sendSig(Handler.jobs_and_history.getPidByIndex(atoi(args[2])), atoi(sigNum))) {
+            if (Handler.sendSig(Handler.jobs_and_history.getPidByIndex(atoi(args[2])), atoi(sigNum))) {
+
                 cout << "smash error : > kill job " << args[2] << " cannot send signal" << endl;
                 return 0;
             }
