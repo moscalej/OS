@@ -133,15 +133,13 @@ public:
      */
     int getPidByIndex(int process_number);
 
-
-
     /**
      * This method will return the number of process running on the background
 
      */
     int get_number_process();
 
-	Process fg_proc;
+	Process fg_process;
 
     int firs_stop_process();
 private:

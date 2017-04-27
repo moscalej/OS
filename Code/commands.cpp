@@ -293,10 +293,10 @@ int Smash_handler::Start_process(char *line_size, char **args) {
 
             } else {
                 int status;
-                fg_proc._process_name = args[0];
-                this->fg_proc._process_id = pID;
-                fg_proc._time = (int) start_time;
-                fg_proc.is_stop=false;
+                fg_process._process_name = args[0];
+                this->fg_process._process_id = pID;
+                fg_process._time = (int) start_time;
+                fg_process.is_stop=false;
 
                 int result = waitpid(pID, &status, WUNTRACED);
 
@@ -342,16 +342,16 @@ int Smash_handler::foreground(int place) {
 
 
     } else if (place <= this->_number_of_process) {
-        this->fg_proc = _process_running[place - 1];
+        this->fg_process = _process_running[place - 1];
 
         if(this->process_remover(this->getPidByIndex(place))==0);
         {
 
-            cout<<"we got here and send the: "<<fg_proc._process_id<<endl;
+            cout<<"we got here and send the: "<<fg_process._process_id<<"(this is in fg comnadn )"<<endl;
         }
-        kill(this->fg_proc._process_id,18);
+        kill(this->fg_process._process_id,18);
         int status;
-        waitpid(fg_proc._process_id, &status, WUNTRACED);
+        waitpid(fg_process._process_id, &status, WUNTRACED);
         return 0;
     }
     perror("illegal place");
@@ -457,7 +457,7 @@ Smash_handler::Smash_handler() {
     _number_of_process=0;
     _iterator=0;
     _number_of_commands=0;
-    fg_proc._process_id=0;
+    fg_process._process_id=0;
 
 }
 

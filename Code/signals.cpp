@@ -97,19 +97,19 @@ int SignalHandler::sendSig(int pID, int sigNum) {
 void SignalHandler::handleSIGTSTP(int status) {
 
 
-    if (jobs_and_history.fg_proc._process_id == 0) {
+    if (jobs_and_history.fg_process._process_id == 0) {
         //sendSig(getpid(),19);
         return;
     }
 
 
-    sendSig(jobs_and_history.fg_proc._process_id, 20);
+    sendSig(jobs_and_history.fg_process._process_id, 20);
 
-    this->jobs_and_history.add_process(this->jobs_and_history.fg_proc._process_name,
-                                       this->jobs_and_history.fg_proc._time, this->jobs_and_history.fg_proc._process_id,
+    this->jobs_and_history.add_process(this->jobs_and_history.fg_process._process_name,
+                                       this->jobs_and_history.fg_process._time, this->jobs_and_history.fg_process._process_id,
                                        true);
-
-    jobs_and_history.fg_proc._process_id = 0;
+    cout<<"the job was add in sigTSTP"<<endl;
+    jobs_and_history.fg_process._process_id = 0;
     return;
 }
 
@@ -117,7 +117,7 @@ void SignalHandler::handleSIGCHLD(int parammeter, siginfo_t *info, void *functio
     int result;
     pid_t pID = info->si_pid;
     waitpid(pID, &result, WNOHANG);
-    if (!this->jobs_and_history.fg_proc.is_stop) {
+    if (!this->jobs_and_history.fg_process.is_stop) {
         jobs_and_history.process_remover((int) pID);
 
         return;
@@ -126,10 +126,10 @@ void SignalHandler::handleSIGCHLD(int parammeter, siginfo_t *info, void *functio
 }
 
 void SignalHandler::handleSIGINT(int status) {
-    if (jobs_and_history.fg_proc._process_id == 0) {
+    if (jobs_and_history.fg_process._process_id == 0) {
         return;
     }
-    sendSig(jobs_and_history.fg_proc._process_id, 2);
-    jobs_and_history.fg_proc._process_id = 0;
+    sendSig(jobs_and_history.fg_process._process_id, 2);
+    jobs_and_history.fg_process._process_id = 0;
     return;
 }
