@@ -405,7 +405,7 @@ int Smash_handler::process_remover(int process_id) {
 
         if (process_id == _process_running[i]._process_id) {
 
-            for (int j = i; j < _number_of_process; ++j) {
+            for (int j = i; j < _number_of_process-1; ++j) {
                 _process_running[j] = _process_running[j + 1];
             }
             _number_of_process--;
@@ -425,7 +425,7 @@ int Smash_handler::Process_number(int process_id) {
 }
 
 int Smash_handler::getPidByIndex(int process_number) {
-    if (process_number < _number_of_process - 1 && process_number >= 0)
+    if (process_number < _number_of_process  && process_number >= 0)
         return _process_running[process_number-1]._process_id;
     else
         return -1;
