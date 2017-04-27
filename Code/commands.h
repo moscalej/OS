@@ -48,7 +48,7 @@ public:
 class Smash_handler{
 
 public:
-
+    /** Constructor */
     Smash_handler();
 
     /**
@@ -100,7 +100,7 @@ public:
      * @return 0 -if the process was successfully set
      *         1 - otherwise
      */
-    void background(int place);
+    int background(int place);
 
     /**
      * This method will add a Process to the background  process list
@@ -132,10 +132,6 @@ public:
      */
     int get_number_process();
 
-	Process fg_process;
-
-    int firs_stop_process();
-
     /**
      * This method check if a process on the background is strop
      * @param pid
@@ -144,10 +140,27 @@ public:
      */
     bool is_process_stop(int pid);
 
+    /**
+     * This method will set the process is_stop parameter
+     * @param place - the place on the list jobs
+     * @param is_stop - if the process is stoped
+     */
+    void set_settings(int place, bool is_stop);
 
-    void set_setings( int place, bool is_stop);
+    /**
+     * This is the procces running on the foreground
+     */
+    Process fg_process;
+
+    /**
+     * This Method will search on jobs for the first
+     *  stoped process, use on bg
+     * @return the place of the process
+     */
+    int firs_stop_process();
 
 private:
+
     /**
      * This method will search the process number listed on jobs based on the process id
      * @param process_id - the process identification number
@@ -155,6 +168,7 @@ private:
      *          (-1)  - if the process is not listed on jobs
      */
     int Process_number(int process_id);
+
 
     Process _process_running[100];
     string  _commands[50];

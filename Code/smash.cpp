@@ -22,8 +22,7 @@ main file. This file contains the main function of smash
 #define MAX_LINE_SIZE 80
 #define MAXARGS 20
 
-char* L_Fg_Cmd;//todo do we need this allocation??? also when do release this memory
-void* jobs = NULL; //todo This represents the list of jobs. Please change to a preferred type (e.g array of char*)
+
 char lineSize[MAX_LINE_SIZE];
 SignalHandler Smash01_handler;
 
@@ -73,16 +72,8 @@ int main(int argc, char *argv[])
 	CHLD.sa_sigaction = &func_handler_CHILD;
 	CHLD.sa_flags = SA_SIGINFO;
 	sigaction(SIGCHLD, &CHLD, NULL);
-	// Init globals 
 
-
-	
-	L_Fg_Cmd =(char*)malloc(sizeof(char)*(MAX_LINE_SIZE+1));
-	if (L_Fg_Cmd == NULL) 
-			exit (-1); 
-	L_Fg_Cmd[0] = '\0';
-	
-    	while (1)
+    while (1)
     	{
 	 	printf("smash > ");
 		fgets(lineSize, MAX_LINE_SIZE, stdin);

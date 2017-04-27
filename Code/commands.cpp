@@ -6,9 +6,12 @@
 
 
 /**
-// function name: ExeCmd
-// Description: interperts and executes built-in commands
-// Parameters: pointer to jobs, command string
+// function name: ExeCmd This funtion will be the main command traductor for the smash, also will be in charge
+ //                of doing the basic commands: pwd, cd, showpid and mkdir (it was on the file so we write it)
+//
+// Parameters: Signal handler (this object is the main operator of our shell)
+//                lineSize- is the raw command line
+ //               cmdString - a better commmand string
 // Returns: 0 - success,1 - failure
 //**************************************************************************************/
 int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
@@ -18,8 +21,9 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
     char *delimiters = (char *) " \t\n";
     int i, num_arg = 0;
 
-    Handler.jobs_and_history.add_commands(lineSize);
-    bool illegal_cmd = false; // illegal command
+    Handler.jobs_and_history.add_commands(lineSize); //we Add the command to the history
+    bool illegal_cmd = false;
+
     cmd = strtok(lineSize, delimiters);
     if (cmd == NULL)
         return 0;
@@ -35,8 +39,10 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
             if (0 == chdir(args[1])) {
                 getcwd(pwd, sizeof(pwd));
                 cout << pwd << endl;
+                return 0;
             } else {
-                cout << args[0] << "- path not found" << endl;
+                cerr << args[0] << "Smash> - path not found" << endl;
+                return 1;
             }
         } else {
             illegal_cmd = true;
@@ -45,7 +51,8 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
         if (num_arg == 0) {
             getcwd(pwd, sizeof(pwd));
 
-            cout << pwd << endl;
+            cout <<"Smash> "<< pwd << endl;
+            return 0;
         } else {
             illegal_cmd = true;
         }
@@ -59,7 +66,8 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
         if (num_arg < 2) {
             getcwd(pwd, sizeof(pwd));
             if (0 == mkdir(args[1], S_IRWXU)) {
-                printf("new directory has been create");
+                cout<<"Smash> "<<args[1] <<" directory has been create"<<endl;
+                return 0;
             }
         }
     } else if (!strcmp(cmd, "jobs")) {
@@ -68,27 +76,32 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
         }
     } else if (!strcmp(cmd, "showpid")) {
         if (num_arg == 0) {
-            cout << "smash pid is " << getpid() << endl;
+            cout << "Smash> pid is: " << getpid() << endl;
+            return 0;
         } else {
             illegal_cmd = true;
         }
     } else if (!strcmp(cmd, "fg")) {
         if (num_arg == 1) {
 
-            Handler.jobs_and_history.foreground(atoi(args[1]));
+            return Handler.jobs_and_history.foreground(atoi(args[1]));
         } else if (num_arg == 0) {
-            Handler.jobs_and_history.foreground(Handler.jobs_and_history.get_number_process());
-
+            return Handler.jobs_and_history.foreground(Handler.jobs_and_history.get_number_process());
+        }else{ illegal_cmd = true;
         }
+
     } else if (!strcmp(cmd, "bg")) {
         int result;
-        if (num_arg == 1) {//todo need to check is args[1] is also a number
-            Handler.jobs_and_history.background(atoi(args[1]));
+        if (num_arg == 1) {
+             return Handler.jobs_and_history.background(atoi(args[1]));
+            return 0;
         } else if (num_arg == 0) {
             result = Handler.jobs_and_history.firs_stop_process();
             if (result != (-1)) {
-                Handler.jobs_and_history.background(result);
+               return Handler.jobs_and_history.background(result);
             }
+        }else{
+            illegal_cmd=true;
         }
 
 
@@ -107,7 +120,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
             for (int i = 1; i <= Handler.jobs_and_history.get_number_process(); i++) {
 
                 Handler.sendSig(Handler.jobs_and_history.getPidByIndex(i), 15);
-                Handler.jobs_and_history.set_setings(i, false);
+                Handler.jobs_and_history.set_settings(i, false);
             }
 
             time_t start;
@@ -140,7 +153,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
         if (num_arg == 2) {
             char *sigNum;
             sigNum = strtok(args[1], "-");
-            Handler.jobs_and_history.set_setings(atoi(args[2]), false);
+            Handler.jobs_and_history.set_settings(atoi(args[2]), false);
             if (Handler.jobs_and_history.get_number_process() < (atoi(args[2]))) {
                 cout << "smash error: > kill job " << args[2] << " job does not exist" << endl;
                 return 0;
@@ -157,9 +170,6 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
         }
 
     }
-
-
-        /*************************************************/
     else // external command //
     {
         ExeExternal(cmdString, args, Handler);
@@ -175,8 +185,8 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
 
 //**************************************************************************************
 // function name: ExeExternal
-// Description: executes external command
-// Parameters: external command arguments, external command string
+// Description: executes external command with the help of the Handler
+// Parameters: external command arguments, Handler
 // Returns: void
 //**************************************************************************************
 void ExeExternal(char *cmdString, char *args[20], SignalHandler &Handler) {
@@ -186,15 +196,15 @@ void ExeExternal(char *cmdString, char *args[20], SignalHandler &Handler) {
 
 //**************************************************************************************
 // function name: ExeComp
-// Description: executes complicated command
+// Description: Checks if the external command is an expecial command
 // Parameters: command string
 // Returns: 0- if complicated -1- if not
 //**************************************************************************************
 int ExeComp(char *lineSize) {//todo we need to see the way to use this it only returns -1(late version
-    char ExtCmd[MAX_LINE_SIZE + 2];
-    char *args[MAX_ARG];
+
     if ((strstr(lineSize, "|")) || (strstr(lineSize, "<")) || (strstr(lineSize, ">")) || (strstr(lineSize, "*")) ||
         (strstr(lineSize, "?")) || (strstr(lineSize, ">>")) || (strstr(lineSize, "|&"))) {
+        cout<< "special comand"<<endl;
         return 0;
     }
     return -1;
@@ -208,9 +218,7 @@ int ExeComp(char *lineSize) {//todo we need to see the way to use this it only r
 //**************************************************************************************
 int BgCmd(char *lineSize) {
 
-    char *Command;
-    char *delimiters = (char *) " \t\n";
-    char *args[MAX_ARG];
+
     if (lineSize[strlen(lineSize) - 1] == '&') {
         lineSize[strlen(lineSize) - 1] = '\0';
 
@@ -219,10 +227,11 @@ int BgCmd(char *lineSize) {
     }
     return -1;
 }
-//Todo check if the history save the commands like it should do
 
-/*This function will fill a char array with all the commands use until now
- * we will use this to print the Smash_handler afterwards*/
+/*
+ * we have the description of all this method in the interface
+ */
+
 
 
 void Smash_handler::add_commands(string command) {
@@ -253,13 +262,13 @@ int Smash_handler::Start_process(char *line_size, char **args) {
             args[i] = NULL;
 
         }
-        cerr << "this is use only on exeption case" << endl;
+        cerr << "this is use only on exception case" << endl;
     }
 
     switch (pID = fork()) {
         case -1:
-            //todo writte a good coment
-            cerr << "fail at creating the child process" << endl;
+
+            cerr << "Smash>> Fail at creating the child process" << endl;
 
             return -1;
         case 0 :
@@ -303,7 +312,6 @@ void Smash_handler::print_history() {
     }
 }
 
-//todo need to debug
 int Smash_handler::jobs() {
     cout << "number of process is: " << _number_of_process << endl;
     for (int i = 0; i < _number_of_process; ++i) {
@@ -320,7 +328,6 @@ int Smash_handler::jobs() {
     return 0;
 }
 
-//todo this functions need to be write i am jus  the base structure here
 int Smash_handler::foreground(int place) {
 
     if (place == (-1)) {
@@ -348,19 +355,18 @@ int Smash_handler::foreground(int place) {
 }
 
 //todo solve this method
-void Smash_handler::background(int place) {
+int Smash_handler::background(int place) {
     if (place <= 0 || place > this->_number_of_process) {
-        cerr << "this is an illigal place" << endl;//todo write a good comment
+        cerr << "Smash> This an illegal place" << endl;
+        return -1;
 
     } else if (place <= this->_number_of_process) {
-
         kill(this->getPidByIndex(place), 18);
-        this->set_setings(place, false);
-        return;
+        this->set_settings(place, false);
+        return 0;
     }
 
 }
-
 
 void Smash_handler::add_process(string Process_name, time_t Start_time, int Process_id, bool is_stop) {
     if (this->_number_of_process >= 100) {
@@ -424,7 +430,6 @@ Smash_handler::Smash_handler() {
     fg_process._process_id = 0;
 }
 
-
 int Smash_handler::firs_stop_process() {
     for (int i = _number_of_process - 1; i >= 0; --i) {
         if (this->_process_running[i].is_stop) {
@@ -442,7 +447,7 @@ bool Smash_handler::is_process_stop(int pid) {
 
 }
 
-void Smash_handler::set_setings(int place, bool is_stop) {
+void Smash_handler::set_settings(int place, bool is_stop) {
     if (place <= _number_of_process) {
         _process_running[place - 1].is_stop = is_stop;
     }

@@ -78,7 +78,6 @@ string SignalHandler::sigNumToName(int signum) {
 
 }
 
-
 int SignalHandler::sendSig(int pID, int sigNum) {
     if (kill(pID, sigNum) == 0) {
         string temp;
@@ -90,10 +89,6 @@ int SignalHandler::sendSig(int pID, int sigNum) {
     return 0;
 }
 
-/**
- * this handler is run by the child thats why we didnt have contrl of it
- * @param status
- */
 void SignalHandler::handleSIGTSTP(int status) {
 
 

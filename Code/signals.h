@@ -29,7 +29,7 @@ private:
 };
 
 
-//typedef enum { FALSE , TRUE } bool;
+
 int ExeComp(char* lineSize);
 int BgCmd(char* lineSize, void* jobs);
 int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler);
