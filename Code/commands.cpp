@@ -268,7 +268,9 @@ int Smash_handler::Start_process(char *line_size, char **args) {
         args[3]= line_size;
         for (int i = 4; i <20 ; ++i) {
             args[i]=NULL;
+
         }
+        cerr<<"this is use only on exeption case"<<endl;
     }
 
     switch (pID = fork()) {
@@ -285,11 +287,12 @@ int Smash_handler::Start_process(char *line_size, char **args) {
 
             perror("Error executing the program");
             return -1;
-//todo check this part if bgcmd is -1 have to wait until end
+
         default:
 
             if (BgCmd(line_size) == 0) {
                 add_process(args[0], (int) start_time, pID, false);
+                this->fg_process._process_id=0;
 
             } else {
                 int status;
