@@ -42,6 +42,10 @@ public:
 	 */
 	void handleSIGTSTP(int status);//CTRL Z
 
+	/**
+	 * This method will handle the Child signals
+	 * check their status and their place on the jobs list
+	 */
 	void handleSIGCHLD(int parammeter, siginfo_t *info, void *function);// END OF PROCESS or change
 
 	void handleSIGINT(int status);//ctrl c

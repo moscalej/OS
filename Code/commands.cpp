@@ -127,8 +127,9 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
             time(&start);
             time_t now_time;
             time(&now_time);
+
             while (true) {
-                if (difftime(start, now_time) > 5) break;
+                if ((abs((int)difftime(start, now_time))) > 5) break;
                 if (Handler.jobs_and_history.get_number_process() == 0)break;
                 time(&now_time);
                 usleep(1000);

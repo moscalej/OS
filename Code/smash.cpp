@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	CHLD.sa_flags = SA_SIGINFO;
 	sigaction(SIGCHLD, &CHLD, NULL);
 
-    while (1)
+    	while (1)
     	{
 	 	printf("smash > ");
 		fgets(lineSize, MAX_LINE_SIZE, stdin);
