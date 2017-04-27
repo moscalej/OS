@@ -421,7 +421,7 @@ int Smash_handler::Process_number(int process_id) {
 
 int Smash_handler::getPidByIndex(int process_number) {
     if (process_number < _number_of_process - 1 && process_number >= 0)
-        return _process_running[process_number]._process_id;
+        return _process_running[process_number-1]._process_id;
     else
         return -1;
 
