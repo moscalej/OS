@@ -107,10 +107,10 @@ void SignalHandler::handleSIGTSTP(int status) {
     this->jobs_and_history.add_process(this->jobs_and_history.fg_process._process_name,
                                        this->jobs_and_history.fg_process._time, this->jobs_and_history.fg_process._process_id,
                                        true);
-    jobs_and_history.fg_process._process_id = 0;
     sendSig(jobs_and_history.fg_process._process_id, 20);
-
+    jobs_and_history.fg_process._process_id = 0;
     cout<<"the job was add in sigTSTP"<<endl;
+
     return;
 }
 
