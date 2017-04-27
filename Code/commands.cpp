@@ -95,7 +95,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
         }
 
     }
-        /*************************************************/
+
     else if (!strcmp(cmd, "showpid")) {
         if (num_arg == 0) {
             cout << "smash pid is " << getpid() << endl;
@@ -108,7 +108,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
 
 
     else if (!strcmp(cmd, "fg")) {
-        if (num_arg == 1) {//todo need to check is args[1] is also a number
+        if (num_arg == 1) {
 
             Handler.jobs_and_history.foreground(atoi(args[1]));
         }
@@ -187,7 +187,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
                 return 0;
             }
 
-            if (Handler.sendSig(Handler.jobs_and_history.getPidByIndex(atoi(args[2])), atoi(sigNum))) {
+            if (!Handler.sendSig(Handler.jobs_and_history.getPidByIndex(atoi(args[2])), atoi(sigNum))) {
 
                 cout << "smash error : > kill job " << args[2] << " cannot send signal" << endl;
                 return 0;
@@ -504,7 +504,7 @@ int Smash_handler::zombie_kill() {
 int Smash_handler::firs_stop_process() {
     for (int i = _number_of_process-1; i >=0; --i) {
         if (this->_process_running[i].is_stop){
-            return i;
+            return i +1;
 
         }
     }
