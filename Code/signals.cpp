@@ -98,7 +98,7 @@ void SignalHandler::handleSIGTSTP(int status) {
 
 
     if (jobs_and_history.fg_process._process_id == 0) {
-        //sendSig(getpid(),19);
+
         return;
     }
 
@@ -109,8 +109,8 @@ void SignalHandler::handleSIGTSTP(int status) {
                                        true);
     sendSig(jobs_and_history.fg_process._process_id, 20);
     jobs_and_history.fg_process._process_id = 0;
-    cout<<"the job was add in sigTSTP"<<endl;
-    this->jobs_and_history.jobs();
+
+
 
     return;
 }
@@ -119,7 +119,8 @@ void SignalHandler::handleSIGCHLD(int parammeter, siginfo_t *info, void *functio
     int result;
     pid_t pID = info->si_pid;
     waitpid(pID, &result, WNOHANG);
-    if (!this->jobs_and_history.fg_process.is_stop) {
+
+    if (this->jobs_and_history.is_process_stop((int) pID) == false) {
         jobs_and_history.process_remover((int) pID);
         cerr<<"something is not good"<<endl;
         return;

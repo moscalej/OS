@@ -142,6 +142,15 @@ public:
 	Process fg_process;
 
     int firs_stop_process();
+
+
+    /**
+     * This method check if a process on the background is strop
+     * @param pid
+     * @return True - if is stop
+     *         False - running or zombie
+     */
+    bool is_process_stop(int pid);
 private:
     int child_status(int child_id);
     int zombie_kill();

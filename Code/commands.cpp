@@ -486,4 +486,10 @@ int Smash_handler::firs_stop_process() {
 
 }
 
+bool Smash_handler::is_process_stop(int pid) {
+    int place = this->Process_number(pid);
+    return _process_running[place-1].is_stop;
+
+}
+
 
