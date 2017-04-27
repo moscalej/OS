@@ -28,9 +28,10 @@ public:
 	int sendSig(int pID, int sigNum);
 
     /**
-     * This method
-     * @param signum
-     * @return
+     * This method will translate the signal
+     * number to the Name
+     * @param signum - signal number
+     * @return name of the signal
      */
 	string sigNumToName(int signum);
 
