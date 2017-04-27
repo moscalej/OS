@@ -19,7 +19,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
     char *args[MAX_ARG];
     char pwd[MAX_LINE_SIZE];
     char *delimiters = (char *) " \t\n";
-    int i = 0, num_arg = 0;
+    int i , num_arg = 0;
 
 
     Handler.jobs_and_history.add_commands(lineSize);
@@ -135,16 +135,21 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
 
 
     }
-        /*************************************************/
+
 //todo yonathan is in charge of this
     else if (!strcmp(cmd, "quit")) {
+
+        cout<<"we are in quit with arg[1] = "<<args[1]<<endl;
         if (num_arg == 0) {
             return Handler.sendSig(getpid(), 9);
 
         } else if (num_arg == 1 && args[1] == "kill") {
-            for (int i = 0; i < Handler.jobs_and_history.get_number_process(); i++) {
+
+            cout<<"we have to kill then all "<<endl;
+            for (int i = 1; i <= Handler.jobs_and_history.get_number_process(); i++) {
 
                 Handler.sendSig(Handler.jobs_and_history.getPidByIndex(i), 15);
+                Handler.jobs_and_history.set_setings(i,false);
             }
 
             time_t start;
@@ -154,13 +159,14 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
                 if(difftime(start,now_time)>5) break;
                 if(Handler.jobs_and_history.get_number_process()==0)break;
                 time(&now_time);
+                usleep(1000);
             }
 
-
+            cout << "we pass 5 secs and there are process :"<<Handler.jobs_and_history.get_number_process()<<"runing"<<endl;
             if(Handler.jobs_and_history.get_number_process() >0) {
                 for (int j = 0; j < Handler.jobs_and_history.get_number_process(); ++j) {
                     Handler.sendSig(Handler.jobs_and_history.getPidByIndex(i), 9);
-                    usleep(1000);
+
                 }
             }
 
@@ -172,7 +178,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
         illegal_cmd = true;
 
     } else if (!strcmp(cmd, "kill")) {
-        if (num_arg == 3) {
+        if (num_arg == 2) {
             char *sigNum;
             sigNum = strtok(args[1], "-");
 
@@ -509,6 +515,13 @@ bool Smash_handler::is_process_stop(int pid) {
     int place = this->Process_number(pid);
     if (place == (-1)) return false;
     return _process_running[place-1].is_stop;
+
+}
+
+void Smash_handler::set_setings(int place, bool is_stop) {
+    if (place<= _number_of_process) {
+        _process_running[place - 1].is_stop = is_stop;
+    }
 
 }
 

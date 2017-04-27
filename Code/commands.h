@@ -151,6 +151,8 @@ public:
      *         False - running or zombie
      */
     bool is_process_stop(int pid);
+
+    void set_setings( int place, bool is_stop);
 private:
     int child_status(int child_id);
     int zombie_kill();
