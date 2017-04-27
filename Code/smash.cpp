@@ -40,6 +40,14 @@ void func_handler_CHILD(int parameter, siginfo_t *info, void *funtion){
 // function name: main
 // Description: main function of smash. get command from user and calls command functions
 //**************************************************************************************
+/**
+ * this is the homework wet 1 for Operating systems
+ * this file was made by:
+ * Alejandro Moscoso and Yonathan Haimovich
+ *
+ */
+
+
 int main(int argc, char *argv[])
 {
     char cmdString[MAX_LINE_SIZE]; 	   

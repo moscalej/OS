@@ -1,7 +1,7 @@
 /**
  * this is the homework wet 1 for Operating systems
  * this file was made by:
- * Alejandro Moscoso and Yonathan (dificult last name)
+ * Alejandro Moscoso and Yonathan Haimovich
  *
  */
 

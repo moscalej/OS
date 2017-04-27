@@ -1,3 +1,14 @@
+/**
+ * this is the homework wet 1 for Operating systems
+ * this file was made by:
+ * Alejandro Moscoso and Yonathan Haimovich
+ *
+ */
+
+
+
+
+
 #ifndef _SIGS_H
 #define _SIGS_H
 #include <sys/types.h>

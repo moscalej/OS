@@ -1,7 +1,8 @@
 // signals.c
-// contains signal handler funtions
-// contains the function/s that set the signal handlers
-/*
+/**
+ * this is the homework wet 1 for Operating systems
+ * this file was made by:
+ * Alejandro Moscoso and Yonathan Haimovich
  *
  */
 

@@ -1,5 +1,13 @@
 //		commands.c
 //********************************************
+/**
+ * this is the homework wet 1 for Operating systems
+ * this file was made by:
+ * Alejandro Moscoso and Yonathan Haimovich
+ *
+ */
+
+
 #include <sys/stat.h>
 #include "commands.h"
 #include "signals.h"
@@ -113,13 +121,13 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
 //todo yonathan is in charge of this
     else if (!strcmp(cmd, "quit")) {
 
-        cout << "we are in quit with arg[1] = " << args[1] << endl;
+
         if (num_arg == 0) {
             return Handler.sendSig(getpid(), 9);
 
         } else if (num_arg == 1 && (string)args[1] == "kill") {
 
-            cout << "we have to kill then all " << endl;
+
             for (int i = 1; i <= Handler.jobs_and_history.get_number_process(); i++) {
 
                 Handler.sendSig(Handler.jobs_and_history.getPidByIndex(i), 15);
@@ -138,8 +146,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
                 usleep(1000);
             }
 
-            cout << "we pass 5 secs and there are process :" << Handler.jobs_and_history.get_number_process()
-                 << "runing" << endl;
+
             if (Handler.jobs_and_history.get_number_process() > 0) {
                 for (int j = 0; j < Handler.jobs_and_history.get_number_process(); ++j) {
                     Handler.sendSig(Handler.jobs_and_history.getPidByIndex(j), 9);
@@ -301,7 +308,7 @@ int Smash_handler::Start_process(char *line_size, char **args) {
 
                 int result = waitpid(pID, &status, WUNTRACED);
 
-                //debug cout<<"we got control back"<<status<<endl;
+
                 if (result == -1) {
                     perror("something");
                     return -1;
@@ -336,7 +343,7 @@ int Smash_handler::jobs() {
 int Smash_handler::foreground(int place) {
 
     if (place == (-1)) {
-        perror("this is an illigal place");
+        cerr<<"Smash> not valid input"<<endl;
         return -1;
 
 
@@ -346,7 +353,7 @@ int Smash_handler::foreground(int place) {
         if (this->process_remover(this->getPidByIndex(place)) == 0);
         {
 
-            cout << "we got here and send the: " << fg_process._process_id << "(this is in fg comnadn )" << endl;
+            cout << "Smash> " << fg_process._process_name  << endl;
 
         }
         kill(this->fg_process._process_id, 18);
@@ -355,17 +362,17 @@ int Smash_handler::foreground(int place) {
         waitpid(fg_process._process_id, &status, WUNTRACED);
         return 0;
     }
-    perror("illegal place");
+    cerr<<"Smash> not valid input"<<endl;
     return -1;
 }
 
-
 int Smash_handler::background(int place) {
     if (place <= 0 || place > this->_number_of_process) {
-        cerr << "Smash> This an illegal place" << endl;
+        cerr << "Smash> not valid input" << endl;
         return -1;
 
     } else if (place <= this->_number_of_process) {
+        cout<<this->_process_running[place-1]._process_name<<endl;
         kill(this->getPidByIndex(place), 18);
         this->set_settings(place, false);
         return 0;
@@ -388,7 +395,7 @@ void Smash_handler::add_process(string Process_name, time_t Start_time, int Proc
         _process_running[_number_of_process]._time = (int) Start_time;
         _process_running[_number_of_process].is_stop = is_stop;
         _number_of_process++;
-        //debug cout<<"the "<<Process_name<<" procces was add: "<<_number_of_process<<endl;
+
     }
 
 }
