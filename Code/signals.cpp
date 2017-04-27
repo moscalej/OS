@@ -117,10 +117,10 @@ void SignalHandler::handleSIGTSTP(int status) {
 void SignalHandler::handleSIGCHLD(int parammeter, siginfo_t *info, void *function) {
     int result;
     pid_t pID = info->si_pid;
-    waitpid(pID, &result, WUNTRACED);
+    waitpid(pID, &result, WNOHANG);
     if (!this->jobs_and_history.fg_process.is_stop) {
         jobs_and_history.process_remover((int) pID);
-
+        cerr<<"something is not good"<<endl;
         return;
     }
     return;
