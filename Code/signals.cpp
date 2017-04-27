@@ -84,7 +84,7 @@ int SignalHandler::sendSig(int pID, int sigNum) {
         string temp;
         temp = sigNumToName(sigNum);
         cout << "smash > signal " << temp << " sent to pid " << pID << endl;
-
+        return 1;
     } else
         cerr << "smash error: > signal not sent to pid " << endl;
     return 0;
@@ -122,7 +122,7 @@ void SignalHandler::handleSIGCHLD(int parammeter, siginfo_t *info, void *functio
 
     if (this->jobs_and_history.is_process_stop((int) pID) == false) {
         jobs_and_history.process_remover((int) pID);
-        cerr<<"something is not good"<<endl;
+
         return;
     }
     return;

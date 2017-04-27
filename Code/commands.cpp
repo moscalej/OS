@@ -87,9 +87,9 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
         }
     }
 
-        //Todo need to debug and try
+
     else if (!strcmp(cmd, "jobs")) {
-        cout <<"jobs1 with numargs: "<<num_arg<<endl;
+
         if (num_arg == 0) {
             Handler.jobs_and_history.jobs();
         }
@@ -105,7 +105,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
 
     }
 
-        //Todo need to debug and try
+
 
     else if (!strcmp(cmd, "fg")) {
         if (num_arg == 1) {//todo need to check is args[1] is also a number
@@ -143,36 +143,53 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
 
         } else if (num_arg == 1 && args[1] == "kill") {
             for (int i = 0; i < Handler.jobs_and_history.get_number_process(); i++) {
-                time_t start = time(NULL);
-                while (difftime(time(NULL), start) <= 5 &&
-                       Handler.sendSig(Handler.jobs_and_history.getPidByIndex(i), 15) != 0) {
 
-                    if (difftime(time(NULL), start) > 5) {
-                        Handler.sendSig(Handler.jobs_and_history.getPidByIndex(i), 9);
-                    }
-                }
-                return Handler.sendSig(getpid(), 9);
+                Handler.sendSig(Handler.jobs_and_history.getPidByIndex(i), 15);
+            }
+
+            time_t start;
+            time(&start);
+            time_t  now_time;
+            while (true){
+                if(difftime(start,now_time)>5) break;
+                if(Handler.jobs_and_history.get_number_process()==0)break;
+                time(&now_time);
             }
 
 
-            illegal_cmd = true;
+            if(Handler.jobs_and_history.get_number_process() >0) {
+                for (int j = 0; j < Handler.jobs_and_history.get_number_process(); ++j) {
+                    Handler.sendSig(Handler.jobs_and_history.getPidByIndex(i), 9);
+                    usleep(1000);
+                }
+            }
+
+            return Handler.sendSig(getpid(), 9);
+
+
         }
 
+        illegal_cmd = true;
 
     } else if (!strcmp(cmd, "kill")) {
         if (num_arg == 3) {
             char *sigNum;
             sigNum = strtok(args[1], "-");
-            if (Handler.jobs_and_history.Process_number(atoi(args[2])))
-                if (!Handler.sendSig(Handler.jobs_and_history.getPidByIndex(atoi(args[2])), atoi(sigNum)))
-                    cout << "smash error : > kill job " << args[2] << " cannot send signal" << endl;
-                else
-                    cout << "smash error: > kill job " << args[2] << " job does not exist" << endl;
-            else {
-                cout << "smash error : > kill job " << args[2] << " cannot send signal" << endl;
-                illegal_cmd = true;
+
+            if (Handler.jobs_and_history.get_number_process() < (atoi(args[2]))) {
+                cout << "smash error: > kill job " << args[2] << " job does not exist" << endl;
+                return 0;
             }
-        }
+
+            if (!Handler.sendSig(Handler.jobs_and_history.getPidByIndex(atoi(args[2])), atoi(sigNum))) {
+                cout << "smash error : > kill job " << args[2] << " cannot send signal" << endl;
+                return 0;
+            }
+        }else {
+            illegal_cmd=true;
+
+            }
+
     }
 
 
