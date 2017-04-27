@@ -35,6 +35,11 @@ public:
      */
 	string sigNumToName(int signum);
 
+	/**
+	 * This is the method in charge of handling
+	 * the stop signals coming from Control-Z
+	 * @param status - this parameter is not use;
+	 */
 	void handleSIGTSTP(int status);//CTRL Z
 
 	void handleSIGCHLD(int parammeter, siginfo_t *info, void *function);// END OF PROCESS or change
