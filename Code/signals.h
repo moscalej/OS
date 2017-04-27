@@ -27,6 +27,11 @@ public:
      */
 	int sendSig(int pID, int sigNum);
 
+    /**
+     * This method
+     * @param signum
+     * @return
+     */
 	string sigNumToName(int signum);
 
 	void handleSIGTSTP(int status);//CTRL Z

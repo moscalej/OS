@@ -114,7 +114,7 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
         if (num_arg == 0) {
             return Handler.sendSig(getpid(), 9);
 
-        } else if (num_arg == 1 && args[1] == "kill") {
+        } else if (num_arg == 1 && (string)args[1] == "kill") {
 
             cout << "we have to kill then all " << endl;
             for (int i = 1; i <= Handler.jobs_and_history.get_number_process(); i++) {
