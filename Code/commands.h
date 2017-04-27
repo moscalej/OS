@@ -50,6 +50,7 @@ class Smash_handler{
 public:
 
     Smash_handler();
+
     /**
      * Adds a procces to the background afterwards
      * @param process_name - Name of the process to run
@@ -118,14 +119,6 @@ public:
     int process_remover(int process_id);
 
     /**
-     * This method will search the process number listed on jobs based on the process id
-     * @param process_id - the process identification number
-     * @return  0 - the process number listed on jobs
-     *          (-1)  - if the process is not listed on jobs
-     */
-    int Process_number(int process_id);
-
-    /**
      * This method search the process id if in the jobs list
      * @param process_number - id of the process
      * @return Process id > 0
@@ -143,7 +136,6 @@ public:
 
     int firs_stop_process();
 
-
     /**
      * This method check if a process on the background is strop
      * @param pid
@@ -152,10 +144,18 @@ public:
      */
     bool is_process_stop(int pid);
 
+
     void set_setings( int place, bool is_stop);
+
 private:
-    int child_status(int child_id);
-    int zombie_kill();
+    /**
+     * This method will search the process number listed on jobs based on the process id
+     * @param process_id - the process identification number
+     * @return  0 - the process number listed on jobs
+     *          (-1)  - if the process is not listed on jobs
+     */
+    int Process_number(int process_id);
+
     Process _process_running[100];
     string  _commands[50];
     int _number_of_commands;
