@@ -40,8 +40,11 @@ int ExeCmd(char *lineSize, char *cmdString, SignalHandler &Handler) {
                 getcwd(pwd, sizeof(pwd));
                 cout << pwd << endl;
                 return 0;
+            }else if(args[1]=="-"){
+                cout << pwd << endl;
+
             } else {
-                cerr << args[0] << "Smash> - path not found" << endl;
+                cerr <<"Smash> "<< args[1] << " - path not found" << endl;
                 return 1;
             }
         } else {
@@ -202,11 +205,11 @@ void ExeExternal(char *cmdString, char *args[20], SignalHandler &Handler) {
 // Parameters: command string
 // Returns: 0- if complicated -1- if not
 //**************************************************************************************
-int ExeComp(char *lineSize) {//todo we need to see the way to use this it only returns -1(late version
+int ExeComp(char *lineSize) {
 
     if ((strstr(lineSize, "|")) || (strstr(lineSize, "<")) || (strstr(lineSize, ">")) || (strstr(lineSize, "*")) ||
         (strstr(lineSize, "?")) || (strstr(lineSize, ">>")) || (strstr(lineSize, "|&"))) {
-        cout<< "special comand"<<endl;
+
         return 0;
     }
     return -1;
@@ -269,7 +272,7 @@ int Smash_handler::Start_process(char *line_size, char **args) {
             // Child Process
             if (setpgrp() == -1) perror("Fail to set the group id");
             if (ExeComp(line_size) == 0) {
-                char* csh=strdup("csh");//only way i could not get warnings on const char*
+                char* csh=strdup("csh");
                 char* f=strdup("-f");
                 char* c = strdup("-c");
                 char *arg[] = { csh, f,c, line_size, NULL };
@@ -316,7 +319,6 @@ void Smash_handler::print_history() {
 }
 
 int Smash_handler::jobs() {
-    cout << "number of process is: " << _number_of_process << endl;
     for (int i = 0; i < _number_of_process; ++i) {
 
         time_t time_running;
@@ -357,7 +359,7 @@ int Smash_handler::foreground(int place) {
     return -1;
 }
 
-//todo solve this method
+
 int Smash_handler::background(int place) {
     if (place <= 0 || place > this->_number_of_process) {
         cerr << "Smash> This an illegal place" << endl;
