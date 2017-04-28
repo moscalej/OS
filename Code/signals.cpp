@@ -115,6 +115,7 @@ void SignalHandler::handleSIGCHLD(int parammeter, siginfo_t *info, void *functio
     int result;
     pid_t pID = info->si_pid;
     waitpid(pID, &result, WNOHANG);
+    cout<<"result: "<<result<<endl;
 
     if (!this->jobs_and_history.is_process_stop((int) pID)) {
         jobs_and_history.process_remover((int) pID);
