@@ -5,6 +5,7 @@
 #ifndef HW2_ATM_H
 #define HW2_ATM_H
 
+#include "Account.h"
 
 class Atm {
 public:
