@@ -7,7 +7,13 @@
 #include "Account.h"
 
 class Bank {
+public:
     Bank(int id,string password,int initial_amount);
+
+    /**
+     * This method will make the banck run and perform his task
+     * acordig to the parameters give on the homework
+     */
     void bank_run();
 
 private:
