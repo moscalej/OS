@@ -9,7 +9,7 @@
 
 class Atm {
 public:
-    Atm(int atm_number);
+    
     void do_commands(string path);
 
 private:
@@ -19,7 +19,7 @@ private:
     void check_balance(int id);
 
     void transfer(int source_id, string password, int target_id, int amount);
-    int _atm_number;
+   
 };
 
 
