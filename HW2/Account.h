@@ -18,6 +18,7 @@ class Account {
 
 public:
     Account(int id, string password, int initial_amount);
+    Account( const Account&);
 
     /**
      * This method will check if the password is corret
@@ -48,15 +49,14 @@ public:
      */
     int check_balance(int service_number);
 
-private:
+    int _id;
 
+private:
+    void log_off();
     pthread_mutex_t mutex1;
     bool log_on;
     string _password;
-    int _id;
     int _balance;
-
-    void log_off();
     int _service_number;
 };
 

@@ -6,20 +6,24 @@
 #define HW2_DATA_BASE_ACCOUNTS_H
 
 #include "Account.h"
-#include <vector>
-#include <pthread.h>
 
+#include <pthread.h>
+#include <map>
+
+
+//i dont know if we need copy constrctor because we dont have any pointers on Account may be for the password?
 class AccountDataBase {
+public:
+
     AccountDataBase();
-    bool insert_account(Account *new_account);
+    bool insert_account(int account_id, string password, int initial_ammount);
     Account * search_account(int account_id);
     bool delete_account(int account_id);
 
-
-public:
 private:
+
     pthread_rwlock_t rwlock;
-    vector<Account*> _Accounts;
+    std::map<int,Account*> _Accounts;
 };
 
 
