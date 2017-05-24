@@ -48,15 +48,13 @@ public:
      */
     int check_balance(int service_number);
 
-     pthread_mutex_t mutex1;
-
-    //pthread_mutex_t mutex_balanse = PTHREAD_MUTEX_INITIALIZER;
 private:
+
+    pthread_mutex_t mutex1;
     bool log_on;
     string _password;
     int _id;
     int _balance;
-
 
     void log_off();
     int _service_number;

@@ -14,6 +14,7 @@ public:
     VectorWR();
     virtual ~VectorWR();
 
+    void push_back()
 
 
 };
