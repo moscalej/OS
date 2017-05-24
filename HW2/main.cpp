@@ -21,7 +21,7 @@ void* atm_thread(void* arg) {
 	atm.do_commands(path_file);
 	pthread_exit(NULL);
 }
-void* bank_thread() {
+void* bank_thread(void *) {
     Bank bank(0,"0000",0);
 	bank.bank_run();
 }
@@ -32,7 +32,7 @@ Account acoun2(13,"chao",500);
 
 void * funtion1(void *){
 	acoun2.check_password("chao");
-	acoun2.deposit(125);
+	acoun2.deposit(125, 0);
 }
 
 int main(int argc, char **argv) {
@@ -41,9 +41,9 @@ int main(int argc, char **argv) {
 
 	pthread_create(&newthtread,NULL,funtion1 ,NULL);
 
-	acoun1.deposit(100);
+	acoun1.deposit(100, 0);
 	acoun2.check_password("chao");
-	acoun2.deposit(500);
+	acoun2.deposit(500, 0);
 
 
 /*

@@ -13,8 +13,8 @@ Account::Account(int id, string password, int initial_amount) {
 
 }
 
-bool Account::deposit(int amount) {
-    if(!log_on ) return false;
+bool Account::deposit(int amount, int service_number) {
+    if(!log_on || (this->_service_number != service_number)) return false;
     this->_balance =_balance+amount;
     this->log_on=false;
     this->log_off();
@@ -27,11 +27,14 @@ void Account::log_off() {
     pthread_mutex_unlock(&(this->mutex1));
 }
 
-bool Account::check_password(string try_password) {
-    int i;
+int Account::check_password(string try_password) {
+    int service_number;
     pthread_mutex_lock(&(this->mutex1));
     if(this->_password == try_password){
         this->log_on= true;
+        service_number=rand();
+        this->_service_number = service_number;
+        return  service_number;
     }
-    return false;
+    return -1;
 }
