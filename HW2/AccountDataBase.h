@@ -11,8 +11,9 @@
 
 class AccountDataBase {
     AccountDataBase();
-    bool insert_acount(Account* new_account);
+    bool insert_account(Account *new_account);
     Account * search_account(int account_id);
+    bool delete_account(int account_id);
 
 
 public:

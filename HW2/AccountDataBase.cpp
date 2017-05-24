@@ -4,6 +4,7 @@
 #include "AccountDataBase.h"
 
 AccountDataBase::AccountDataBase() {
+
     this->rwlock=PTHREAD_RWLOCK_INITIALIZER;
 
 }
