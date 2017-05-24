@@ -7,13 +7,13 @@
 #include <pthread.h>
 #include <sys/types.h>
 #include "Account.h"
-#include "Atm.h"
-#include "Bank.h"
-#include <vector>
+//#include "Atm.h"
+//#include "Bank.h"
+//#include <vector>
 
 using namespace std;
 
-vector<Account> accounts;
+/*vector<Account> accounts;
 void* atm_thread(void* arg) {
     string path_file;
 	path_file = *(string*)arg;
@@ -25,9 +25,28 @@ void* bank_thread() {
     Bank bank(0,"0000",0);
 	bank.bank_run();
 }
+*/
+
+Account acoun1(12,"hola",1000);
+Account acoun2(13,"chao",500);
+
+void * funtion1(void *){
+	acoun2.check_password("chao");
+	acoun2.deposit(125);
+}
 
 int main(int argc, char **argv) {
 
+	pthread_t newthtread;
+
+	pthread_create(&newthtread,NULL,funtion1 ,NULL);
+
+	acoun1.deposit(100);
+	acoun2.check_password("chao");
+	acoun2.deposit(500);
+
+
+/*
 if (argc < 3) {
 	fprintf(stderr, "Usage: %s #atm paths", argv[0]);
 	exit(1);
@@ -43,6 +62,6 @@ if (argc < 3) {
 	for (int i = 1; i < N + 1; i++) {
 		pthread_join(threads[i], NULL);
 	}
-
+*/
 	return 0;
 }

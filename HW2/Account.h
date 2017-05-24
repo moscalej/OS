@@ -47,16 +47,19 @@ public:
      */
     int check_balance();
 
-    sem_t lock_write;
-    sem_t lock_read;
+     pthread_mutex_t mutex1;
 
-
+    //pthread_mutex_t mutex_balanse = PTHREAD_MUTEX_INITIALIZER;
 private:
+    bool log_on;
     string _password;
     int _id;
     int _balance;
 
 
+    void log_off();
 };
+
+
 
 #endif
