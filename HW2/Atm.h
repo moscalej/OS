@@ -5,11 +5,12 @@
 #ifndef HW2_ATM_H
 #define HW2_ATM_H
 
-#include "Account.h"
+#include "AccountDataBase.h"
 
 class Atm {
 public:
-    Atm(int atm_number);
+
+    Atm(int atm_number, AccountDataBase * ADT);
 
     /**
      * This method will run the Atm:
@@ -69,6 +70,7 @@ private:
      */
     bool transfer(int source_id, string password, int target_id, int amount);
     int _atm_number;
+    AccountDataBase * _ADT;
 };
 
 
