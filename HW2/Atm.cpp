@@ -13,7 +13,44 @@ Atm::Atm(int atm_number, AccountDataBase * ADT) {
 }
 
 void Atm::do_commands(string path) {
-    string temp[4] ;
+    FILE *fp=fopen(path,"r");
+    if (fp == 0) {
+        fprintf(stderr, "cannot open trace file\n");
+        exit(2);
+    }
+    char line[1024];
+    while (fgets(line, 256, fp) != NULL) {
+        if (line[0] == '\n')
+            break;
+
+        char *instruction[5];
+        int i = 0;
+        instruction[0] = strtok_r(line, " ");
+        for (i = 1; i < 5; ++i) {
+            instruction[i] = strtok_r(NULL, " \n");
+        }
+
+        switch (instruction[0]) {
+            case "O": {
+                this->account(instruction[1], instruction[2], instruction[3]);
+            }
+            case "D": {
+                this->deposit(instruction[1], instruction[2], instruction[3]);
+            }
+            case "W": {
+                this->withdraw(instruction[1], instruction[2], instruction[3]);
+            }
+            case "B": {
+                this->check_balance(instruction[1], instruction[2]);
+            }
+            case "C": {
+                this->close_account(instruction[1], instruction[2]);
+            }
+            case "T": {
+                this->transfer(instruction[1], instruction[2], instruction[3], instruction[4]);
+            }
+        }
+    }
 
 
 }

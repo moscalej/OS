@@ -29,12 +29,14 @@ void Bank::print() {
 
 void Bank::charge_comission() {
     for (it = _ADT->_Accounts.begin() ;it!=_ADT->_Accounts.end(); ++it) {
+
         pthread_mutex_lock(&this->_ADT->db_read_lock);
         this->_ADT->rd_count++;
         if (this->_ADT->rd_count == 1)
             pthread_mutex_lock(&this->_ADT->db_write_lock);
         pthread_mutex_unlock(&this->_ADT->db_read_lock);
         pthread_mutex_lock(&it->second->write_lock);
+
         int amount;
         amount = int(it->second->_balance * this->_commission_rate);
         if (it->second->withdraw(amount)) {
