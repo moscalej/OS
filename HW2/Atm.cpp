@@ -6,8 +6,8 @@
 #include <memory.h>
 #include "Atm.h"
 
-Atm::Atm(int atm_number, AccountDataBase * ADT) {
-
+Atm::Atm(int atm_number, AccountDataBase *ADT, IOThreadSave *IOTS) {
+    this-> IOTS = IOTS;
     this->_atm_number=atm_number;
     this->_ADT=ADT; // the idea is that all the atm will have acces to the same ADT
 
@@ -80,7 +80,9 @@ void Atm::deposit(int id, string password, int amount) {
     Account * temp = this->_ADT->search_account(id);
     if (temp == NULL)
     {
-        cout << "Error " <<this->_atm_number<<" Your transaction failed - account "<<id<<" does not exist" <<endl;
+
+        string to_print= "Error "+ to_string(this->_atm_number)+" Your transaction failed - account "+to_string(id)+" does not exist\n" ;
+        this->IOTS->save_to_log(to_print);
 
     }else {
 

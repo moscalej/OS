@@ -7,14 +7,14 @@
 
 #include "Atm.h"
 #include <elf.h>
-
+#include "AccountDataBase.h"
 class IOThreadSave {
 public:
-    void print_console(string to_print );
-    void save_to_log( string to_write_doc);
+
+    void save_to_log(string to_write_doc);
 
 private:
-    pthread_mutex_t mutex_print;
+
     pthread_mutex_t mutex_log;
 };
 

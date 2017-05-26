@@ -5,7 +5,7 @@
 #ifndef HW2_ATM_H
 #define HW2_ATM_H
 
-#include "AccountDataBase.h"
+#include "IOThreadSave.h"
 
 
 
@@ -13,7 +13,7 @@
 class Atm {
 public:
 
-    Atm(int atm_number, AccountDataBase * ADT);
+    Atm(int atm_number, AccountDataBase *ADT, IOThreadSave *IOTS);
 
     /**
      * This method will run the Atm:
@@ -76,6 +76,8 @@ private:
     void transfer(int source_id, string password, int target_id, int amount);
     int _atm_number;
     AccountDataBase * _ADT;
+    IOThreadSave * IOTS;
+
 };
 
 

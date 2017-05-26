@@ -19,7 +19,7 @@ void* atm_thread(void* arg) {
     string path_file;
 	path_file = (string)*arg;
 	atm_num++;
-	Atm ATM(atm_num,&ADB);
+	Atm ATM(atm_num, &ADB, nullptr);
 	ATM.do_commands(path_file);
 	pthread_exit(NULL);
 }
