@@ -19,14 +19,14 @@ public:
 
 private:
     void charge_comission();
-    vector<Account *> get_acounts();
+    vector<Account *> get_accounts();
     void print();
     int _account_id;
     string _password;
     int _balance;
     AccountDataBase * _ADT;
-
-    float _tax_revenew;
+    std::map<int,Account*>::iterator it;
+    float _commission_rate;
 };
 
 

@@ -5,13 +5,14 @@
 #include "Bank.h"
 #include <time.h>
 
-vector<Account *> Bank::get_acounts() {
+vector<Account *> Bank::get_accounts() {
     vector<Account *> temp = this->_ADT->get_accounts();
     return temp;
 }
 //Todo: change the balance of the accounts we need a better way to take money an read the balance
 
 void Bank::print() {
+    pthread_mutex_lock(&this->_ADT->db_write_lock);
     vector<Account *> temp = this->_ADT->get_accounts();
 
     string pre_print = "";
@@ -20,20 +21,37 @@ void Bank::print() {
         pre_print.append("Account " + to_string(temp[i]->_id) + ": Balance -" + to_string(temp[i]->_balance)
                          + " $ , Account Password - " + temp[i]->_password + "\n");
     }
+    pthread_mutex_unlock(&this->_ADT->db_write_lock);
     cout << "Current Bank Status" << endl;
     cout << pre_print << end;
     cout << "The Bank has " << this->_balance << " $" << endl;
 }
 
 void Bank::charge_comission() {
-    vector<Account *> temp = this->_ADT->get_accounts();
-    float amount;
-    for (int i = 0; i < temp.size(); ++i) {
-        if (temp[i] == NULL) continue;
-        amount = (temp[i]->_balance * this->_tax_revenew);
-        temp[i]->_balance = int(temp[i]->_balance - amount);
-        this->_balance += int(amount);
+    for (it = _ADT->_Accounts.begin() ;it!=_ADT->_Accounts.end(); ++it) {
+        pthread_mutex_lock(&this->_ADT->db_read_lock);
+        this->_ADT->rd_count++;
+        if (this->_ADT->rd_count == 1)
+            pthread_mutex_lock(&this->_ADT->db_write_lock);
+        pthread_mutex_unlock(&this->_ADT->db_read_lock);
+        pthread_mutex_lock(&it->second->write_lock);
+        int amount;
+        amount = int(it->second->_balance * this->_commission_rate);
+        if (it->second->withdraw(amount)) {
+            this->_balance += int(amount);/// todo print message
+        }
+        pthread_mutex_unlock(&it->second->write_lock);
+
+        pthread_mutex_lock(&this->_ADT->db_read_lock);
+        this->_ADT->rd_count--;
+        if (this->_ADT->rd_count == 0)
+            pthread_mutex_unlock(&this->_ADT->db_write_lock);
+        pthread_mutex_unlock(&this->_ADT->db_read_lock);
     }
+    return;
+
+
+
 }
 
 void Bank::bank_run() {
@@ -42,7 +60,7 @@ void Bank::bank_run() {
     int timer_change_interest=0;
 
     if (timer_change_interest> 100){
-        this->_tax_revenew = float(rand() % 100 + 300)/100;
+        this->_commission_rate = float(rand() % 100 + 300)/10000;
     }
     if(timer_print>500) this->print();
     if (timer_charge>1000) this->charge_comission();

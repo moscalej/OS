@@ -7,6 +7,9 @@
 
 #include "AccountDataBase.h"
 
+
+
+
 class Atm {
 public:
 
@@ -59,6 +62,7 @@ private:
      * @return the balance in the account
      */
     void check_balance(int id, string password);
+    void close_account(int id, string password);
 
     /**
      * This method will made a transaction from user source to user target
@@ -68,6 +72,7 @@ private:
      * @param amount : amount of the deposit
      * @return if the transaction was made
      */
+
     void transfer(int source_id, string password, int target_id, int amount);
     int _atm_number;
     AccountDataBase * _ADT;
