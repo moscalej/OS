@@ -21,7 +21,7 @@ void* atm_thread(void* arg) {
 	atm.do_commands(path_file);
 	pthread_exit(NULL);
 }
-void* bank_thread(void *) {
+void* bank_thread(void * arg) {
     Bank bank(0,"0000",0);
 	bank.bank_run();
 }

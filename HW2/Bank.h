@@ -5,6 +5,7 @@
 #ifndef HW2_BANK_H
 #define HW2_BANK_H
 #include "Account.h"
+#include "AccountDataBase.h"
 
 class Bank {
 public:
@@ -18,11 +19,14 @@ public:
 
 private:
     void charge_comission();
+    vector<Account *> get_acounts();
     void print();
     int _account_id;
     string _password;
     int _balance;
+    AccountDataBase * _ADT;
 
+    float _tax_revenew;
 };
 
 
