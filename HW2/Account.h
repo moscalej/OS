@@ -25,14 +25,14 @@ public:
      * @param try_password : password to compare
      * @return true if the passwords match false if not
      */
-    int check_password(string try_password);
+    bool check_password(string try_password);
 
     /**
     * This method will make a deposit to the source account
     *
     * @param amount : amount of the deposit
     */
-    bool deposit(int amount, int service_number);
+    void deposit(int amount, int service_number);
 
     /**
      * This method will withdraw money from the user account
@@ -50,14 +50,13 @@ public:
     int check_balance(int service_number);
 
     int _id;
-
+    pthread_mutex_t write_lock;
+    pthread_mutex_t read_lock;
+    int rd_count;
 private:
-    void log_off();
-    pthread_mutex_t mutex1;
-    bool log_on;
+
     string _password;
     int _balance;
-    int _service_number;
 };
 
 

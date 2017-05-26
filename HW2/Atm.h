@@ -28,7 +28,7 @@ private:
      * @param password The password corresponding to the id
      * @param initial_amount The accound initial id
      */
-    bool account(int id,string password, int initial_amount);
+    void account(int id,string password, int initial_amount);
 
     /**
      * This method will make a deposit to the source account
@@ -38,7 +38,7 @@ private:
      * @param password  :user password
      * @param amount : amount of the deposit
      */
-    bool deposit(int id,string password, int amount);
+    void deposit(int id,string password, int amount);
 
     /**
      * This method will withdraw money from the user account
@@ -48,7 +48,7 @@ private:
      * @param password  :user password
      * @param amount : amount of the deposit
      */
-    bool withdraw(int id,string password, int amount);
+    void withdraw(int id,string password, int amount);
 
     /**
      * This method will check the balance on the target id
@@ -58,7 +58,7 @@ private:
      * @param password  :user password
      * @return the balance in the account
      */
-    int check_balance(int id, string password);
+    void check_balance(int id, string password);
 
     /**
      * This method will made a transaction from user source to user target
@@ -68,7 +68,7 @@ private:
      * @param amount : amount of the deposit
      * @return if the transaction was made
      */
-    bool transfer(int source_id, string password, int target_id, int amount);
+    void transfer(int source_id, string password, int target_id, int amount);
     int _atm_number;
     AccountDataBase * _ADT;
 };
