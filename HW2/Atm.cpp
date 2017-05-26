@@ -20,8 +20,10 @@ void Atm::do_commands(string path) {
     }
     char line[1024];
     while (fgets(line, 256, fp) != NULL) {
-        if (line[0] == '\n')
+        if (line[0] == '\n') {
+            fclose(fp);
             break;
+        }
 
         char *instruction[5];
         int i = 0;
