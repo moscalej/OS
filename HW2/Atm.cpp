@@ -20,6 +20,7 @@ void Atm::do_commands(string path) {
         fprintf(stderr, "cannot open trace file\n");
         exit(2);
     }
+
     char line[1024];
     while (fgets(line, 256, fp) != NULL) {
         if (line[0] == '\n') {
@@ -29,7 +30,7 @@ void Atm::do_commands(string path) {
 
         char *instruction[5];
         int i = 0;
-        instruction[0] = strtok_r(line, " ");
+        instruction[0] = strtok_r(line, " ",&line);
         for (i = 1; i < 5; ++i) {
             instruction[i] = strtok_r(NULL, " \n");
         }

@@ -17,7 +17,7 @@ AccountDataBase ADB;
 int atm_num=0;
 void* atm_thread(void* arg) {
     string path_file;
-	path_file = (string)*arg;
+	path_file = (string)(((char *) (arg)));
 	atm_num++;
 	Atm ATM(atm_num, &ADB, nullptr);
 	ATM.do_commands(path_file);
@@ -41,9 +41,10 @@ if (argc < 3) {
 	for (int i=0; i<N; i++) {
 		paths[i] = (string) argv[i + 2];/// input arg maybe more
 	}
-	pthread_create(threads[0], NULL, bank_thread, NULL);
-	for (int i = 1; i <= N + 1; i++);
-		pthread_create(threads[i], NULL,atm_thread, &path[i-1]);
+	pthread_create(&threads[0], NULL, bank_thread, NULL);
+	for (int i = 1; i <= N + 1; i++) {
+		pthread_create(&threads[i], NULL, atm_thread, &paths[i - 1]);
+	}
 	for (int i = 1; i < N + 1; i++) {
 		pthread_join(threads[i], NULL);
 	}
