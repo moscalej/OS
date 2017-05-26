@@ -11,11 +11,16 @@
 class IOThreadSave {
 public:
 
+    IOThreadSave(string path_to_print);
+
     void save_to_log(string to_write_doc);
+
+    virtual ~IOThreadSave();
 
 private:
 
     pthread_mutex_t mutex_log;
+    string _path_to_print;
 };
 
 

@@ -10,6 +10,7 @@
 class Bank {
 public:
     //TODO: finish the run function
+    //TODO: finish the print function, only format the output
     Bank(int id,string password,int initial_amount);
 
     /**

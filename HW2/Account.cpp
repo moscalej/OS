@@ -6,7 +6,7 @@
 
 Account::Account(int id, string password, int initial_amount) {
     this->write_lock = PTHREAD_MUTEX_INITIALIZER;
-    this->read_lock_lock = PTHREAD_MUTEX_INITIALIZER;
+    this->read_lock = PTHREAD_MUTEX_INITIALIZER;
     this->_id = id;
     this->_password = password;
     this->_balance = initial_amount;
@@ -17,10 +17,7 @@ Account::Account(int id, string password, int initial_amount) {
 
 
 bool Account::check_password(string try_password) {
-    if (this->_password == try_password)
-        return true;
-    else
-        return false;
+    return this->_password == try_password;
 }
 
 void Account::deposit(int amount) {

@@ -41,7 +41,7 @@ void Bank::charge_comission() {
         int amount;
         amount = int(it->second->_balance * this->_commission_rate);
         if (it->second->withdraw(amount)) {
-            this->_balance += int(amount);/// todo print message
+            this->_balance += amount;/// todo print message
         }
         pthread_mutex_unlock(&it->second->write_lock);
 
