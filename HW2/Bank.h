@@ -9,6 +9,7 @@
 
 class Bank {
 public:
+    //TODO: finish the run function
     Bank(int id,string password,int initial_amount);
 
     /**
