@@ -22,6 +22,7 @@ void Bank::print() {
                          + " $ , Account Password - " + temp[i]->_password + "\n");
     }
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
+
     cout << "Current Bank Status" << endl;
     cout << pre_print << end;
     cout << "The Bank has " << this->_balance << " $" << endl;
@@ -57,17 +58,19 @@ void Bank::charge_comission() {
 }
 
 void Bank::bank_run() {
-    int timer_print=0;
-    int timer_charge=0;
-    int timer_change_interest=0;
+    while (true) {
+        int timer_print = 0;
+        int timer_charge = 0;
+        int timer_change_interest = 0;
 
-    if (timer_change_interest> 100){
-        this->_commission_rate = float(rand() % 100 + 300)/10000;
+
+        if (timer_change_interest > 3000) {
+            this->_commission_rate = float(rand() % 100 + 300) / 10000;
+            this->charge_comission();
+        }
+        if (timer_print > 500) this->print();
+
+
     }
-    if(timer_print>500) this->print();
-    if (timer_charge>1000) this->charge_comission();
-
-    time()
-
 
 }

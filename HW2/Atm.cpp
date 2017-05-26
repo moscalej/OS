@@ -3,6 +3,7 @@
 //
 
 #include <unistd.h>
+#include <memory.h>
 #include "Atm.h"
 
 Atm::Atm(int atm_number, AccountDataBase * ADT) {
@@ -13,6 +14,7 @@ Atm::Atm(int atm_number, AccountDataBase * ADT) {
 }
 
 void Atm::do_commands(string path) {
+
     FILE *fp=fopen(path,"r");
     if (fp == 0) {
         fprintf(stderr, "cannot open trace file\n");

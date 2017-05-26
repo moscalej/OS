@@ -4,8 +4,8 @@
 
 #ifndef HW2_BANK_H
 #define HW2_BANK_H
-#include "Account.h"
-#include "AccountDataBase.h"
+
+#include "IOThreadSave.h"
 
 class Bank {
 public:
@@ -27,6 +27,7 @@ private:
     AccountDataBase * _ADT;
     std::map<int,Account*>::iterator it;
     float _commission_rate;
+
 };
 
 
