@@ -39,10 +39,8 @@ bool AccountDataBase::delete_account(int account_id) {
 
 vector<Account *> AccountDataBase::get_accounts() {
     vector<Account*> temp;
-    pthread_rwlock_rdlock(&(this->rwlock));
     for (this->it = this->_Accounts.begin() ;it!=_Accounts.end(); ++it) {
         temp.push_back(it->second);
     }
-    pthread_rwlock_unlock(&(this->rwlock));
     return vector<Account *>();
 }
