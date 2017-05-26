@@ -1,16 +1,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <iostream>
-#include <pthread.h>
-#include <sys/types.h>
-#include "Account.h"
-//#include "Atm.h"
-//#include "Bank.h"
-//#include <vector>
 
+#include <iostream>
+
+#include "Account.h"
+
+//TODO: creat a destructor for all the class witch will destroy the relevant locks
 using namespace std;
 
 AccountDataBase ADB;
@@ -23,9 +19,10 @@ void* atm_thread(void* arg) {
 	ATM.do_commands(path_file);
 	pthread_exit(NULL);
 }
-void* bank_thread(void * arg) {
+void* bank_thread(void * ) {
     Bank bank(0,"0000",0);
 	bank.bank_run();
+	pthread_exit(NULL);
 }
 
 int main(int argc, char **argv) {
@@ -48,6 +45,6 @@ if (argc < 3) {
 	for (int i = 1; i < N + 1; i++) {
 		pthread_join(threads[i], NULL);
 	}
-	exit(NULL);//for bank ,check usage
+//	exit(NULL);//for bank ,check usage
 	return 0;
 }

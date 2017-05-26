@@ -18,18 +18,21 @@ public:
      * acordig to the parameters give on the homework
      */
     void bank_run();
+    void bank_close();
+
 
 private:
-    void charge_comission();
+    void charge_commission();
     vector<Account *> get_accounts();
     void print();
-    int _account_id;
-    string _password;
     int _balance;
     AccountDataBase * _ADT;
     std::map<int,Account*>::iterator it;
     float _commission_rate;
 
+    pthread_rwlock_t mutex1;
+
+    bool close;
 };
 
 

@@ -15,7 +15,6 @@ void IOThreadSave::save_to_log(string to_write_doc) {
         fclose (p_file);
     }
     pthread_mutex_unlock(&(this->mutex_log));
-
 }
 
 IOThreadSave::IOThreadSave(string path_to_print) : _path_to_print(path_to_print) {

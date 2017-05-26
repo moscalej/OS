@@ -12,13 +12,13 @@
 #include <map>
 
 
-//i dont know if we need copy constrctor because we dont have any pointers on Account may be for the password?
+//i don't know if we need copy constructor because we don't have any pointers on Account may be for the password?
 class AccountDataBase {
     friend class Bank;
 public:
 
     AccountDataBase();
-    bool insert_account(int account_id, string password, int initial_ammount);
+    bool insert_account(int account_id, string password, int initial_amount);
     Account * search_account(int account_id);
     bool delete_account(int account_id);
     pthread_mutex_t db_write_lock;
