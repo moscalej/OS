@@ -16,12 +16,14 @@ void IOThreadSave::save_to_log(string to_write_doc) {
     pthread_mutex_unlock(&(this->mutex_log));
 }
 
-IOThreadSave::IOThreadSave(string path_to_print) : _path_to_print(path_to_print) {
-    mutex_log = PTHREAD_MUTEX_INITIALIZER;
+IOThreadSave::IOThreadSave(string path_to_print)   {
+    _path_to_print=path_to_print;
     FILE * pfile = fopen(path_to_print.c_str(), "w+");
     fclose(pfile);
+    mutex_log = PTHREAD_MUTEX_INITIALIZER;
 }
 
 IOThreadSave::~IOThreadSave() {
-    pthread_mutex_destroy(&(this->mutex_log));
+
+
 }

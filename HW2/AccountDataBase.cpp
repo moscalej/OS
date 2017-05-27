@@ -43,7 +43,14 @@ bool AccountDataBase::delete_account(int account_id) {
 
 vector<Account *> AccountDataBase::get_accounts() {
     vector<Account*> temp;
-    for (this->it = this->_Accounts.begin() ;it!=_Accounts.end(); ++it) {
+    if(_Accounts.empty())
+        return vector<Account *>();
+    this->it = this->_Accounts.begin();
+
+    for (it ;it!=_Accounts.end(); ++it) {
+
+        Account * temp1 = it->second;
+
         temp.push_back(it->second);
     }
     return vector<Account *>();

@@ -12,7 +12,7 @@ class Bank {
 public:
     //TODO: finish the run function
     //TODO: finish the print function, only format the output
-    Bank(int id,string password,int initial_amount);
+    Bank(int id, string password, int initial_amount, AccountDataBase *ADB, IOThreadSave *IOTS);
 
     /**
      * This method will make the banck run and perform his task
@@ -34,6 +34,7 @@ private:
     pthread_rwlock_t mutex1;
 
     bool close;
+    IOThreadSave *_IOTS;
 };
 
 
