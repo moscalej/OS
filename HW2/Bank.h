@@ -12,7 +12,8 @@ class Bank {
 public:
     //TODO: finish the run function
     //TODO: finish the print function, only format the output
-    Bank(int id, string password, int initial_amount, AccountDataBase *ADB, IOThreadSave *IOTS);
+    Bank(){};
+
 
     /**
      * This method will make the banck run and perform his task
@@ -22,6 +23,7 @@ public:
     void bank_close();
 
 
+    void set( int initial_amount, AccountDataBase *ADB, IOThreadSave *IOTS);
 private:
     void charge_commission();
     vector<Account *> get_accounts();

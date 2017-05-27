@@ -35,7 +35,7 @@ void Atm::do_commands(string path) {
         string instruction[5];
         int i = 0;
        do{
-            iss >> instruction[i] ; //Todo cheack whtat happends when string gets char *
+            iss >> instruction[i] ;
            i++;
         }while (iss);
 

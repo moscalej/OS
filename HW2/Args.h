@@ -6,18 +6,16 @@
 #define HW2_ARGS_H
 
 #include "Atm.h"
-#include "IOThreadSave.h"
 #include "Bank.h"
 
 class Args {
 public:
-    Args(AccountDataBase *accountDataBase, IOThreadSave *ioThreadSave, char *text, int Atm_number) : accountDataBase(
-            accountDataBase),
-                                                                                                     ioThreadSave(
-                                                                                                             ioThreadSave),
-                                                                                                     text(text),
-                                                                                                     Atm_number(
-                                                                                                             Atm_number) {}
+    Args(AccountDataBase *accountDataBase, IOThreadSave *ioThreadSave, char *text, int Atm_number) {
+        this->accountDataBase = accountDataBase;
+        this->ioThreadSave = ioThreadSave;
+        this->text = text;
+        this->Atm_number = Atm_number;
+    }
 
     Args() {}
 
@@ -33,7 +31,6 @@ void *atm_thread(void *arg) {
     string path_file = string(temp->text);
 
     printf((char *) arg);
-    //(*temp->Atm_number)++;
     Atm ATM(temp->Atm_number, temp->accountDataBase, temp->ioThreadSave);
     ATM.do_commands(path_file);
     pthread_exit(NULL);
@@ -41,7 +38,8 @@ void *atm_thread(void *arg) {
 
 void *bank_thread(void *args) {
     Args *temp = (Args *) args;
-    Bank bank1(0, "0000", 0, temp->accountDataBase, temp->ioThreadSave);
+    Bank bank1;
+    bank1.set(0, temp->accountDataBase, temp->ioThreadSave);
     bank1.bank_run();
     pthread_exit(NULL);
 }
