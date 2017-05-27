@@ -7,7 +7,7 @@
 #include "Atm.h"
 #include "Bank.h"
 
-//TODO: creat a destructor for all the class witch will destroy the relevant locks
+//TODO: create a destructor for all the class witch will destroy the relevant locks
 using namespace std;
 
 AccountDataBase ADB;

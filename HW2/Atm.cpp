@@ -5,7 +5,8 @@
 #include <unistd.h>
 #include <memory.h>
 #include "Atm.h"
-
+#include <fstream>
+using namespace std;
 Atm::Atm(int atm_number, AccountDataBase *ADT, IOThreadSave *IOTS) {
     this-> IOTS = IOTS;
     this->_atm_number=atm_number;
@@ -15,24 +16,26 @@ Atm::Atm(int atm_number, AccountDataBase *ADT, IOThreadSave *IOTS) {
 
 void Atm::do_commands(string path) {
 
-    FILE *fp=fopen(path.c_str(),"r");
-    if (fp == 0) {
+    ifstream file(path);
+    if (!file.is_open()) {
         fprintf(stderr, "cannot open trace file\n");
         exit(2);
     }
 
-    char * line=NULL;
-    while (fgets(line, 256, fp) != NULL) {
+
+    while (getline(file,line)) {
         if (line  == "\n") {
-            fclose(fp);
+            file.close();
             break;
         }
         usleep(10000);
+        istringstream iss(line);
         string instruction[5];
         int i = 0;
-        for (i = 0; i < 5; ++i) {
-            instruction[i] = string(strtok_r(line, " ",&line)); //Todo cheack whtat happends when string gets char *
-        }
+       do{
+            iss >> instruction[i] ; //Todo cheack whtat happends when string gets char *
+           i++;
+        }while (iss);
 
 
         if(instruction[0] == "O") {
