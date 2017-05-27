@@ -22,8 +22,9 @@ void Bank::print() {
                          + " $ , Account Password - " + temp[i]->_password + "\n");
     }
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
-
-//    cout << "Current Bank Status" << endl;
+    printf("\033[2j");
+    printf("\033[1:1h");
+    cout << "Current Bank Status" << endl;
 //    cout << pre_print << end;
 //    cout << "The Bank has " << this->_balance << " $" << endl;
 }

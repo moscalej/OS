@@ -1,0 +1,4 @@
+1 New account id is 12347 with password 0144 and initial balance 50
+1 account 12347 new balance is 1250 after 1200was deposited
+Error 1 Your transaction failed - password for account 12347 is incorrect
+1 account 12347 new balance is 750 after 500was withdrew

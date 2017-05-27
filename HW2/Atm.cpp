@@ -6,6 +6,8 @@
 #include <memory.h>
 #include "Atm.h"
 #include <fstream>
+#include <sstream>
+
 using namespace std;
 Atm::Atm(int atm_number, AccountDataBase *ADT, IOThreadSave *IOTS) {
     this-> IOTS = IOTS;
@@ -21,7 +23,7 @@ void Atm::do_commands(string path) {
         fprintf(stderr, "cannot open trace file\n");
         exit(2);
     }
-
+    string line;
 
     while (getline(file,line)) {
         if (line  == "\n") {
@@ -64,8 +66,10 @@ void Atm::do_commands(string path) {
 
 void Atm::account(int id, string password, int initial_amount) {
     string to_print;
+
     pthread_mutex_lock(&this->_ADT->db_write_lock);
-     if (this->_ADT->insert_account(id,password,initial_amount))//todo check if insert to map check duplicity
+
+    if (this->_ADT->insert_account(id,password,initial_amount))//todo check if insert to map check duplicity
     {
          to_print= to_string(_atm_number)+" New account id is "+to_string(id)+" with password "+password+" and initial balance "+to_string(initial_amount)+"\n";
     }
