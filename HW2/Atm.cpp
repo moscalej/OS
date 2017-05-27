@@ -15,7 +15,7 @@ Atm::Atm(int atm_number, AccountDataBase *ADT, IOThreadSave *IOTS) {
 
 void Atm::do_commands(string path) {
 
-    FILE *fp=fopen(path,"r");
+    FILE *fp=fopen(path.c_str(),"r");
     if (fp == 0) {
         fprintf(stderr, "cannot open trace file\n");
         exit(2);
@@ -36,22 +36,22 @@ void Atm::do_commands(string path) {
 
 
         if(instruction[0] == "O") {
-            this->account(atoi(instruction[1]), instruction[2], atoi(instruction[3]));
+            this->account(atoi(instruction[1].c_str()), instruction[2], atoi(instruction[3].c_str()));
         }
         if(instruction[0] == "D") {
-            this->deposit(atoi(instruction[1]), instruction[2], atoi(instruction[3]));
+            this->deposit(atoi(instruction[1].c_str()), instruction[2], atoi(instruction[3].c_str()));
         }
         if(instruction[0] == "W") {
-            this->withdraw(atoi(instruction[1]), instruction[2], atoi(instruction[3]));
+            this->withdraw(atoi(instruction[1].c_str()), instruction[2], atoi(instruction[3].c_str()));
         }
         if(instruction[0] == "B") {
-            this->check_balance(atoi(instruction[1]), instruction[2]);
+            this->check_balance(atoi(instruction[1].c_str()), instruction[2]);
         }
         if(instruction[0] == "C") {
-            this->close_account(atoi(instruction[1]), instruction[2]);
+            this->close_account(atoi(instruction[1].c_str()), instruction[2]);
         }
         if(instruction[0] == "T") {
-            this->transfer(atoi(instruction[1]), instruction[2], atoi(instruction[3]), atoi(instruction[4]));
+            this->transfer(atoi(instruction[1].c_str()), instruction[2], atoi(instruction[3].c_str()), atoi(instruction[4].c_str()));
         }
 
     }

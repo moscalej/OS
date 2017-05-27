@@ -23,13 +23,13 @@ void Bank::print() {
     }
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
 
-    cout << "Current Bank Status" << endl;
-    cout << pre_print << end;
-    cout << "The Bank has " << this->_balance << " $" << endl;
+//    cout << "Current Bank Status" << endl;
+//    cout << pre_print << end;
+//    cout << "The Bank has " << this->_balance << " $" << endl;
 }
 
 void Bank::charge_commission() {
-    for (it = _ADT->_Accounts.begin() ;it!=_ADT->_Accounts.end(); ++it) {
+    for (it = _ADT->_Accounts.begin(); it != _ADT->_Accounts.end(); ++it) {
 
         pthread_mutex_lock(&this->_ADT->db_read_lock);
         this->_ADT->rd_count++;
@@ -54,22 +54,19 @@ void Bank::charge_commission() {
     return;
 
 
-
 }
 
 void Bank::bank_run() {
     while (true) {
         int timer_print = 0;
         int timer_change_interest = 0;
-
-
         if (timer_change_interest > 3000) {
             this->_commission_rate = float(rand() % 100 + 300) / 10000;
             this->charge_commission();
         }
         if (timer_print > 500) this->print();
         pthread_rwlock_rdlock(&(this->mutex1));
-        if(this->close)break;
+        if (this->close)break;
         pthread_rwlock_unlock(&(this->mutex1));
 
     }
@@ -77,7 +74,7 @@ void Bank::bank_run() {
 }
 
 void Bank::bank_close() {
-    pthread_rwlock_wrlock( &(this->mutex1));
+    pthread_rwlock_wrlock(&(this->mutex1));
     this->close = true;
     pthread_rwlock_unlock(&(this->mutex1));
 
@@ -85,6 +82,5 @@ void Bank::bank_close() {
 
 Bank::Bank(int id, string password, int initial_amount) {
     this->mutex1 = PTHREAD_RWLOCK_INITIALIZER;
-    _balance=initial_amount;
-
+    _balance = initial_amount;
 }

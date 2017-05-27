@@ -5,7 +5,7 @@
 #ifndef HW2_IOTHREADSAVE_H
 #define HW2_IOTHREADSAVE_H
 
-#include "Atm.h"
+
 #include <elf.h>
 #include "AccountDataBase.h"
 class IOThreadSave {
