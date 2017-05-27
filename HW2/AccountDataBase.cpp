@@ -14,8 +14,11 @@ AccountDataBase::AccountDataBase() {
 
 bool AccountDataBase::insert_account(int account_id, string password, int initial_amount) {
      Account * temp = new Account(account_id,password,initial_amount);
-    
+    if (temp != NULL){
+
         this->_Accounts[account_id]=temp;
+        return true;
+    }
     return false;
 }
 

@@ -15,7 +15,8 @@ IOThreadSave IOTS("./log.txt");
 int atm_num=0;
 void* atm_thread(void* arg) {
     string path_file;
-	path_file = (string)(((char *) (arg)));
+	path_file = string( (char*) arg);
+	printf((char *) arg);
 	atm_num++;
 	Atm ATM(atm_num, &ADB, &IOTS);
 	ATM.do_commands(path_file);
@@ -36,13 +37,14 @@ int main(int argc, char **argv) {
 //}
 	int N = 1; /// supposed to be input arg
 	pthread_t threads[N + 1];
-	string paths[N];
+	void * paths[N];
 	for (int i=0; i<N; i++) {
-		paths[i] = string(argv[i + 1]);/// input arg maybe more
+		paths[i] = argv[i + 1];/// input arg maybe more
 	}
 	pthread_create(&threads[0], NULL, bank_thread, NULL);
-	for (int i = 1; i <= N + 1; i++) {
-		pthread_create(&threads[i], NULL, atm_thread, &paths[i - 1]);
+
+	for (int i = 1; i < N + 1; i++) {
+		pthread_create(&threads[i], NULL, atm_thread, paths[i - 1]);
 	}
 	for (int i = 1; i < N + 1; i++) {
 		pthread_join(threads[i], NULL);

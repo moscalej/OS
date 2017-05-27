@@ -21,8 +21,19 @@ void Atm::do_commands(string path) {
         exit(2);
     }
 
-    char * line=NULL;
-    while (fgets(line, 256, fp) != NULL) {
+
+    char * line =NULL;
+
+    char* state= fgets(line, 256, fp);
+    while (true) {
+        if(state == NULL){
+            fclose(fp);
+            break;
+
+        }
+        char * instruction_for_strock;
+        strcpy(instruction_for_strock,line);
+        string  read = string(line);
         if (line  == "\n") {
             fclose(fp);
             break;
@@ -31,7 +42,8 @@ void Atm::do_commands(string path) {
         string instruction[5];
         int i = 0;
         for (i = 0; i < 5; ++i) {
-            instruction[i] = string(strtok_r(line, " ",&line)); //Todo cheack whtat happends when string gets char *
+            instruction[i] = string(strtok_r(instruction_for_strock, " ",&instruction_for_strock)); //Todo cheack whtat happends when string gets char *
+            if(instruction[i].find("\n")!= string::npos) break;
         }
 
 
@@ -84,12 +96,8 @@ void Atm::deposit(int id, string password, int amount) {
     Account * temp = this->_ADT->search_account(id);
     if (temp == NULL)
     {
-
          to_print= "Error "+ to_string(this->_atm_number)+" Your transaction failed - account "+to_string(id)+" does not exist\n" ;
-
-
     }else {
-
         if (temp->check_password(password)) {
             pthread_mutex_lock(&temp->write_lock);
             sleep(1);
