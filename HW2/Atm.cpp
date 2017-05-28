@@ -7,6 +7,8 @@
 #include "Atm.h"
 #include <fstream>
 #include <sstream>
+#include <cstdlib>
+
 
 using namespace std;
 Atm::Atm(int atm_number, AccountDataBase *ADT, IOThreadSave *IOTS) {
@@ -18,7 +20,7 @@ Atm::Atm(int atm_number, AccountDataBase *ADT, IOThreadSave *IOTS) {
 
 void Atm::do_commands(string path) {
 
-    ifstream file(path);
+    ifstream file(path.c_str());
     if (!file.is_open()) {
         fprintf(stderr, "cannot open trace file\n");
         exit(2);
@@ -71,7 +73,10 @@ void Atm::account(int id, string password, int initial_amount) {
 
     if (this->_ADT->insert_account(id,password,initial_amount))//todo check if insert to map check duplicity
     {
-         to_print= to_string(_atm_number)+": New account id is "+to_string(id)+" with password "+password+" and initial balance "+to_string(initial_amount)+"\n";
+        char * number;
+        char
+        itoa(_atm_number,number,10);
+         to_print= string(number)+": New account id is "+to_string(id)+" with password "+password+" and initial balance "+to_string(initial_amount)+"\n";
     }
     else
           to_print= to_string(_atm_number)+": Your transaction failed - account with same id exists\n";
