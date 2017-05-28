@@ -10,20 +10,19 @@ vector<Account *> Bank::get_accounts() {
     vector<Account *> temp = this->_ADT->get_accounts();
     return temp;
 }
-//Todo: change the balance of the accounts we need a better way to take money an read the balance
+
 //Todo: finish the print, check for destruck mutex on destructor, change the bank run to work with number of cycles;
 //Todo: print on charge conditions on the HW format
 
 void Bank::print() {
     pthread_mutex_lock(&this->_ADT->db_write_lock);
     //Todo remove the vector work, direct from the data base
-    vector<Account *> temp = this->_ADT->get_accounts();
 
     string pre_print = "";
-    for (int i = 0; i < temp.size(); ++i) {
-        if (temp[i] == NULL) continue;
-        pre_print.append("Account " + to_string(temp[i]->_id) + ": Balance -" + to_string(temp[i]->_balance)
-                         + " $ , Account Password - " + temp[i]->_password + "\n");
+    for (it = _ADT->_Accounts.begin(); it != _ADT->_Accounts.end(); ++it) {
+
+        pre_print.append("Account " + to_string(it->second->_id) + ": Balance -" + to_string(it->second->_balance)
+                         + " $ , Account Password - " + it->second->_password + "\n");
     }
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
     printf("\033[2j");
@@ -45,15 +44,11 @@ void Bank::charge_commission() {
 
         int amount;
         amount = int(it->second->_balance * this->_commission_rate);
+        id = int(it->second->_id);
         float de_comi=this->_commission_rate;
         if (it->second->withdraw(amount)) {
-            this->_balance += amount;// todo print message
-             to_print =to_string(de_comi)+"  ";
-        }
-
-
-
-
+            this->_balance += amount;//// todo print message
+             to_print ="Bank: Commission of "+to_string(_commission_rate*100)+" % were charged, the bank gained "+to_string(amount)+" $ from account "+to_string(id);
 
         pthread_mutex_unlock(&it->second->write_lock);
 
@@ -65,6 +60,7 @@ void Bank::charge_commission() {
         pthread_mutex_unlock(&this->_ADT->db_read_lock);
         this->_IOTS->save_to_log(to_print);
     }
+
     return;
 
 
