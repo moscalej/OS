@@ -16,20 +16,25 @@ vector<Account *> Bank::get_accounts() {
 
 void Bank::print() {
     pthread_mutex_lock(&this->_ADT->db_write_lock);
-    //Todo remove the vector work, direct from the data base
-
     string pre_print = "";
     for (it = _ADT->_Accounts.begin(); it != _ADT->_Accounts.end(); ++it) {
-
-        pre_print.append("Account " + to_string(it->second->_id) + ": Balance -" + to_string(it->second->_balance)
+        int id=it->second->_id;
+        char* balance_string;
+        itoa(it->second->_balance,balance_string,10);
+        char* amount_string;
+        itoa(amount,amount_string,10);
+        char* id_string;
+        itoa(id,id_string,10);
+        pre_print.append("Account " + string(id_string) + ": Balance -" + string(balance_string)
                          + " $ , Account Password - " + it->second->_password + "\n");
     }
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
     printf("\033[2j");
     printf("\033[1:1h");
+
     cout << "Current Bank Status" << endl;
-//    cout << pre_print << end;
-//    cout << "The Bank has " << this->_balance << " $" << endl;
+    cout << pre_print << end;
+     cout << "The Bank has " << this->_balance << " $" << endl;
 }
 
 void Bank::charge_commission() {
@@ -48,7 +53,13 @@ void Bank::charge_commission() {
         float de_comi=this->_commission_rate;
         if (it->second->withdraw(amount)) {
             this->_balance += amount;//// todo print message
-             to_print ="Bank: Commission of "+to_string(_commission_rate*100)+" % were charged, the bank gained "+to_string(amount)+" $ from account "+to_string(id);
+            char* commission_rate_string;
+            itoa(_commission_rate*100,commission_rate_string,10);
+            char* amount_string;
+            itoa(amount,amount_string,10);
+            char* id_string;
+            itoa(id,id_string,10);
+             to_print ="Bank: Commission of "+string(commission_rate_string)+" % were charged, the bank gained "+string(amount_string)+" $ from account "+to_string(id_string);
 
         pthread_mutex_unlock(&it->second->write_lock);
 
