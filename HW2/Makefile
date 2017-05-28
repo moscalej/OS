@@ -1,19 +1,23 @@
-# Makefile for the smash program
+# Makefile for the Bank
 CC = g++
 CFLAGS = -g -Wall
 CCLINK = $(CC)
-OBJS = Account.o AccountDataBase.o Atm.o Bank.o IOThreadSave.o
+OBJS = main.o Bank.o Account.o Atm.o IOThreadSave.o AccountDataBase.o
 RM = rm -f
+TARGET=Bank
 # Creating the  executable
-Bank_sys: $(OBJS)
-	$(CCLINK) -o main Args.h $(OBJS)
+Bank: $(OBJS)
+	$(CCLINK) -o Bank $(OBJS) -lpthread
 # Creating the object files
+account.o: account.c account.h mytypes.h
+main.o: main.cpp Args.h
 Atm.o: Atm.cpp Atm.h
-Account.o: Account.cpp Account.h
-AccountDataBase.o: AccountDataBase.cpp AccountDataBase.h
 Bank.o: Bank.cpp Bank.h
+AccountDataBase.o AccountDataBase.cpp
 IOThreadSave.o: IOThreadSave.cpp IOThreadSave.h
+
+
 # Cleaning old files before new make
 clean:
-	$(RM) $(TARGET) *.o *~ "#"* Bank_sys.*
+	$(RM) $(TARGET) *.o *~ "#"* Bank.*
 
