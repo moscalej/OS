@@ -1,7 +1,5 @@
 
 #include <stdio.h>
-
-
 #include <iostream>
 #include "Args.h"
 

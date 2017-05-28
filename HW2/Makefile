@@ -1,8 +1,8 @@
 # Makefile for the Bank
-CC = g++
+CC = gxx
 CFLAGS = -g -Wall
 CCLINK = $(CC)
-OBJS = main.o Bank.o Account.o Atm.o IOThreadSave.o AccountDataBase.o
+OBJS =  Account.o main.o AccountDataBase.o Bank.o Atm.o IOThreadSave.o
 RM = rm -f
 TARGET=Bank
 # Creating the  executable
