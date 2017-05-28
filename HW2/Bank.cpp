@@ -21,6 +21,7 @@ void Bank::print() {
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
     printf("\033[2j");
     printf("\033[1:1h");
+
     cout << "Current Bank Status" << endl;
     cout << pre_print << end;
      cout << "The Bank has " << this->_balance << " $" << endl;
