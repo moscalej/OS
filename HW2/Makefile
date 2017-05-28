@@ -1,6 +1,6 @@
 # Makefile for the Bank
-CC = gxx
-CFLAGS = -g -Wall
+CC = g++
+CFLAGS = -std=c++0x -g -Wall
 CCLINK = $(CC)
 OBJS =  Account.o main.o AccountDataBase.o Bank.o Atm.o IOThreadSave.o
 RM = rm -f
@@ -9,7 +9,7 @@ TARGET=Bank1
 Bank1: $(OBJS)
 	$(CCLINK) -o Bank1 $(OBJS) -lpthread
 # Creating the object files
-account.o: Account.c Account.h
+Account.o: Account.c Account.h
 main.o: main.cpp Args.h
 Atm.o: Atm.cpp Atm.h
 Bank.o: Bank.cpp Bank.h

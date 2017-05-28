@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include <pthread.h>
-#include <string.h>
+
 
 using namespace std;
 
@@ -13,7 +13,6 @@ class Account {
 friend class Bank;
 public:
     Account(int id, string password, int initial_amount);
-    //Account( const Account&);
 
     /**
      * This method will check if the password is corret

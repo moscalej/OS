@@ -5,8 +5,9 @@
 #ifndef HW2_BANK_H
 #define HW2_BANK_H
 
-
+#include <string>
 #include "AccountDataBase.h"
+
 
 class Bank {
 public:
