@@ -43,5 +43,10 @@ int Account::check_balance() {
     return _balance;
 }
 
+Account::~Account() {
+    pthread_mutex_destroy(&(this->write_lock));
+    pthread_mutex_destroy(&(this->read_lock));
+}
+
 
 

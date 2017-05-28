@@ -6,7 +6,7 @@
 #define HW2_IOTHREADSAVE_H
 
 
-#include <elf.h>
+
 #include "AccountDataBase.h"
 class IOThreadSave {
 public:
@@ -16,6 +16,8 @@ public:
     void save_to_log(string to_write_doc);
 
     virtual ~IOThreadSave();
+
+
 
 private:
 

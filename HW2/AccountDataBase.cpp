@@ -1,7 +1,7 @@
 //
 // Created by amoscoso on 5/21/2017.
 //
-#include <algorithm>
+
 #include "AccountDataBase.h"
 
 
@@ -41,17 +41,9 @@ bool AccountDataBase::delete_account(int account_id) {
     return false;
 }
 
-vector<Account *> AccountDataBase::get_accounts() {
-    vector<Account*> temp;
-    if(_Accounts.empty())
-        return vector<Account *>();
-    this->it = this->_Accounts.begin();
+AccountDataBase::~AccountDataBase() {
+    pthread_mutex_destroy(&(this->db_read_lock));
+    pthread_mutex_destroy(&(this->db_write_lock));
 
-    for (it ;it!=_Accounts.end(); ++it) {
-
-        Account * temp1 = it->second;
-
-        temp.push_back(it->second);
-    }
-    return vector<Account *>();
 }
+

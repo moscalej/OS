@@ -5,12 +5,6 @@
 
 #include <iostream>
 #include <pthread.h>
-#include <sys/types.h>
-#include <sys/sem.h>
-#include <semaphore.h>
-#include <mutex>
-#include <random>
-
 
 
 using namespace std;
@@ -19,7 +13,6 @@ class Account {
 friend class Bank;
 public:
     Account(int id, string password, int initial_amount);
-    //Account( const Account&);
 
     /**
      * This method will check if the password is corret
@@ -49,6 +42,8 @@ public:
      * @return the balance in the account
      */
     int check_balance();
+
+    virtual ~Account();
 
     int _id;
     pthread_mutex_t write_lock;

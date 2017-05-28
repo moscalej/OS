@@ -23,7 +23,8 @@ IOThreadSave::IOThreadSave(string path_to_print)   {
     mutex_log = PTHREAD_MUTEX_INITIALIZER;
 }
 
-IOThreadSave::~IOThreadSave() {
 
+IOThreadSave::~IOThreadSave() {
+    pthread_mutex_destroy(&(this->mutex_log));
 
 }
