@@ -17,6 +17,8 @@ public:
 
     virtual ~IOThreadSave();
 
+    virtual ~IOThreadSave();
+
 private:
 
     pthread_mutex_t mutex_log;

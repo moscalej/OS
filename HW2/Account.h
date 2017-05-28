@@ -50,6 +50,8 @@ public:
      */
     int check_balance();
 
+    virtual ~Account();
+
     int _id;
     pthread_mutex_t write_lock;
     pthread_mutex_t read_lock;

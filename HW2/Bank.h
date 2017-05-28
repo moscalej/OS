@@ -26,7 +26,11 @@ public:
     void set( int initial_amount, AccountDataBase *ADB, IOThreadSave *IOTS);
 private:
     void charge_commission();
-    vector<Account *> get_accounts();
+
+public:
+    virtual ~Bank();
+
+private:
     void print();
     int _balance;
     AccountDataBase * _ADT;

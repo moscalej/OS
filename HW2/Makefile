@@ -9,11 +9,11 @@ TARGET=Bank
 Bank: $(OBJS)
 	$(CCLINK) -o Bank $(OBJS) -lpthread
 # Creating the object files
-account.o: account.c account.h mytypes.h
+account.o: Account.c Account.h
 main.o: main.cpp Args.h
 Atm.o: Atm.cpp Atm.h
 Bank.o: Bank.cpp Bank.h
-AccountDataBase.o AccountDataBase.cpp
+AccountDataBase.o: AccountDataBase.cpp AccountDataBase.h
 IOThreadSave.o: IOThreadSave.cpp IOThreadSave.h
 
 

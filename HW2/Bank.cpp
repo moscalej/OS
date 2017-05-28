@@ -113,3 +113,9 @@ void Bank::set(int initial_amount, AccountDataBase *ADB, IOThreadSave *IOTS) {
     _balance = initial_amount;
 
 }
+
+Bank::~Bank() {
+    pthread_rwlock_destroy(&(this->mutex1));
+
+
+}

@@ -21,15 +21,14 @@ public:
     bool insert_account(int account_id, string password, int initial_amount);
     Account * search_account(int account_id);
     bool delete_account(int account_id);
+
+    virtual ~AccountDataBase();
+
     pthread_mutex_t db_write_lock;
     pthread_mutex_t db_read_lock;
     int rd_count;
 
 private:
-
-    vector<Account *> get_accounts();
-
-
     std::map<int,Account*> _Accounts;
     std::map<int,Account*>::iterator it;
 };

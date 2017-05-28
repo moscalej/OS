@@ -41,6 +41,12 @@ bool AccountDataBase::delete_account(int account_id) {
     return false;
 }
 
+AccountDataBase::~AccountDataBase() {
+    pthread_mutex_destroy(&(this->db_read_lock));
+    pthread_mutex_destroy(&(this->db_write_lock));
+
+}
+
 vector<Account *> AccountDataBase::get_accounts() {
     vector<Account*> temp;
     if(_Accounts.empty())

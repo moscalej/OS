@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
         pthread_join(threads[i], NULL);
     }
 
-    pthread_exit(bank_thread_hello);
+    pthread_exit((void*)bank_thread_hello);
 
 //	exit(NULL);//for bank ,check usage
     return 0;
