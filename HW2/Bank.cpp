@@ -3,11 +3,13 @@
 //
 
 
+#include <string>
 #include "Bank.h"
 
-
+using namespace std;
 //Todo: finish the print, check for destruck mutex on destructor, change the bank run to work with number of cycles;
 //Todo: print on charge conditions on the HW format
+
 
 void Bank::print() {
     pthread_mutex_lock(&this->_ADT->db_write_lock);
@@ -18,6 +20,7 @@ void Bank::print() {
 
         pre_print.append("Account " + to_string(it->second->_id) + ": Balance -" + to_string(it->second->_balance)
                          + " $ , Account Password - " + it->second->_password + "\n");
+
     }
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
     printf("\033[2j");
