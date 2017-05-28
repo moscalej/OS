@@ -6,7 +6,7 @@ OBJS = main.o Bank.o Account.o Atm.o IOThreadSave.o AccountDataBase.o
 RM = rm -f
 TARGET=Bank
 # Creating the  executable
-Bank: $(OBJS)
+Bank1: $(OBJS)
 	$(CCLINK) -o Bank $(OBJS) -lpthread
 # Creating the object files
 account.o: Account.c Account.h
@@ -19,5 +19,5 @@ IOThreadSave.o: IOThreadSave.cpp IOThreadSave.h
 
 # Cleaning old files before new make
 clean:
-	$(RM) $(TARGET) *.o *~ "#"* Bank.*
+	$(RM) $(TARGET) *.o *~ "#"* Bank1.*
 
