@@ -20,9 +20,8 @@ void Bank::print() {
     for (it = _ADT->_Accounts.begin(); it != _ADT->_Accounts.end(); ++it) {
         int id=it->second->_id;
         char* balance_string;
-        itoa(it->second->_balance,balance_string,10);
+        itoa(it->second->_balance, balance_string,10);
         char* amount_string;
-
         char* id_string;
         itoa(id,id_string,10);
         pre_print.append("Account " + string(id_string) + ": Balance -" + string(balance_string)

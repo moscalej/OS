@@ -105,12 +105,12 @@ void Atm::deposit(int id, string password, int amount) {
     char* initial_amount_char;
     char* new_balance_string;
     char* amount_string;
-    
+    itoa(id,id_char,10);
+    itoa(_atm_number,number_char,10);
+    itoa(amount,initial_amount_char,10);
+
     if (temp == NULL)
     {
-        itoa(id,id_char,10);
-        itoa(_atm_number,number_char,10);
-        itoa(initial_amount,initial_amount_char,10);
 
          to_print= "Error "+ string(number_char)+": Your transaction failed - account "+string(id_char)+" does not exist\n" ;
 
@@ -125,10 +125,10 @@ void Atm::deposit(int id, string password, int amount) {
 
             itoa(id,id_char,10);
             itoa(_atm_number,number_char,10);
-            new_balance=temp->check_balance();
+            int new_balance=temp->check_balance();
             itoa(new_balance,new_balance_string,10);
             itoa(amount,amount_string,10);
-             to_print= string(number_char)+ ": Account "+ string(id_char) + " new balance is " +to_string(new_balanace_string) + " after "
+             to_print= string(number_char)+ ": Account "+ string(id_char) + " new balance is " +string(new_balance_string) + " after "
                  + string(amount_string) + " $ was deposited" +"\n";
             pthread_mutex_unlock(&temp->write_lock);
         } else
@@ -173,7 +173,7 @@ void Atm::withdraw(int id, string password, int amount) {
             pthread_mutex_lock(&temp->write_lock);
             sleep(1);
             if (temp->withdraw(amount)) {
-                new_balance=temp->check_balance();
+                int new_balance=temp->check_balance();
                 itoa(new_balance,new_balance_string,10);
                 to_print= string(number_char)+ ": Account "+ string(id_char) + " new balance is " +string(new_balance_string) + " after "
                                              + string(amount_string) + " $ was withdrew" +"\n";
@@ -224,7 +224,7 @@ void Atm::check_balance(int id, string password){
             if (temp->rd_count == 1)
                 pthread_mutex_lock(&temp->write_lock);
             pthread_mutex_unlock(&temp->read_lock);
-            new_balance=temp->check_balance();
+            int new_balance=temp->check_balance();
             itoa(new_balance,new_balance_string,10);
             to_print= string(number_char)+ ": Account "+ string(id_char)+ " balance is " +string(new_balance_string) +"\n";
             pthread_mutex_lock(&temp->read_lock);
@@ -233,7 +233,7 @@ void Atm::check_balance(int id, string password){
                 pthread_mutex_unlock(&temp->write_lock);
             pthread_mutex_unlock(&temp->read_lock);
         } else
-            to_print= "Error " +string( _atm_number) + ": Your transaction failed - password for account " + string(id_char)
+            to_print= "Error " +string( number_char) + ": Your transaction failed - password for account " + string(id_char)
                              + " is incorrect" +"\n";
     }
     pthread_mutex_lock(&this->_ADT->db_read_lock);
@@ -277,6 +277,8 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
     char * number_char;
     char *source_id_char;
     char *target_id_char;
+    char * amount_string;
+    itoa(amount,amount_string,10);
     itoa(source_id,source_id_char,10);
     itoa(target_id,target_id_char,10);
     itoa(_atm_number,number_char,10);
@@ -314,16 +316,22 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
             sleep(1);
             if (temp1->withdraw(amount)) {
                 temp2->deposit(amount);
-                to_print= string(number_char)+ ": Transfer from account " +to_string(source_id)  +" to account " +to_string(target_id)
+                int new_balance=temp1->check_balance();
+                int new_balance2 = temp2->check_balance();
+                char * new_balance_string_2;
+                char * new_balance_string;
+                itoa(new_balance,new_balance_string,10);
+                itoa(new_balance2,new_balance_string_2,10);
+                to_print= string(number_char)+ ": Transfer from account " +string(source_id_char)  +" to account " +string(target_id_char)
                      + " new account balance is  "
-                      +to_string(temp1->check_balance()) + " $ new target account balance is " + to_string(temp2->check_balance()) +" $ \n";
+                      +string(new_balance_string) + " $ new target account balance is " + string(new_balance_string_2) +" $ \n";
             } else
-                to_print= "Error " +string(number_char) + ": Your transaction failed - account " + to_string(source_id)
-                     + " balance is lower than " + to_string(amount) +"\n";
+                to_print= "Error " +string(number_char) + ": Your transaction failed - account " + string(source_id_char)
+                     + " balance is lower than " + string(amount_string) +"\n";
             pthread_mutex_unlock(&temp2->write_lock);
             pthread_mutex_unlock(&temp1->write_lock);
         } else
-            to_print= "Error " +to_string( this->_atm_number) + ": Your transaction failed - password for account " + to_string(source_id)
+            to_print= "Error " +string( number_char) + ": Your transaction failed - password for account " + string(source_id_char)
                              + " is incorrect" +"\n";
     }
     pthread_mutex_lock(&this->_ADT->db_read_lock);
