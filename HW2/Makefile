@@ -7,7 +7,7 @@ RM = rm -f
 TARGET=Bank1
 # Creating the  executable
 Bank1: $(OBJS)
-	$(CCLINK) -o Bank1 $(OBJS) -lpthread
+	$(CCLINK) $(CFLAGS) -o Bank1 $(OBJS) -lpthread
 # Creating the object files
 Account.o: Account.c Account.h
 main.o: main.cpp Args.h
