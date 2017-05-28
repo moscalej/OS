@@ -3,13 +3,13 @@
 //
 
 #include <unistd.h>
+#include <stdlib.h>
+#include <cstdio>
 #include "Bank.h"
 
 
-vector<Account *> Bank::get_accounts() {
-    vector<Account *> temp = this->_ADT->get_accounts();
-    return temp;
-}
+
+
 
 //Todo: finish the print, check for destruck mutex on destructor, change the bank run to work with number of cycles;
 //Todo: print on charge conditions on the HW format
@@ -22,7 +22,7 @@ void Bank::print() {
         char* balance_string;
         itoa(it->second->_balance,balance_string,10);
         char* amount_string;
-        itoa(amount,amount_string,10);
+
         char* id_string;
         itoa(id,id_string,10);
         pre_print.append("Account " + string(id_string) + ": Balance -" + string(balance_string)
@@ -33,7 +33,7 @@ void Bank::print() {
     printf("\033[1:1h");
 
     cout << "Current Bank Status" << endl;
-    cout << pre_print << end;
+    cout << pre_print << endl;
      cout << "The Bank has " << this->_balance << " $" << endl;
 }
 
@@ -49,7 +49,7 @@ void Bank::charge_commission() {
 
         int amount;
         amount = int(it->second->_balance * this->_commission_rate);
-        id = int(it->second->_id);
+        int id = (it->second->_id);
         float de_comi=this->_commission_rate;
         if (it->second->withdraw(amount)) {
             this->_balance += amount;//// todo print message
@@ -59,7 +59,7 @@ void Bank::charge_commission() {
             itoa(amount,amount_string,10);
             char* id_string;
             itoa(id,id_string,10);
-             to_print ="Bank: Commission of "+string(commission_rate_string)+" % were charged, the bank gained "+string(amount_string)+" $ from account "+to_string(id_string);
+             to_print ="Bank: Commission of "+string(commission_rate_string)+" % were charged, the bank gained "+string(amount_string)+" $ from account "+string(id_string);
 
         pthread_mutex_unlock(&it->second->write_lock);
 
@@ -75,6 +75,7 @@ void Bank::charge_commission() {
     return;
 
 
+    }
 }
 
 void Bank::bank_run() {
