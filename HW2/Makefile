@@ -4,10 +4,10 @@ CFLAGS = -g -Wall
 CCLINK = $(CC)
 OBJS =  Account.o main.o AccountDataBase.o Bank.o Atm.o IOThreadSave.o
 RM = rm -f
-TARGET=Bank
+TARGET=Bank1
 # Creating the  executable
 Bank1: $(OBJS)
-	$(CCLINK) -o Bank $(OBJS) -lpthread
+	$(CCLINK) -o Bank1 $(OBJS) -lpthread
 # Creating the object files
 account.o: Account.c Account.h
 main.o: main.cpp Args.h

@@ -6,7 +6,7 @@
 #define HW2_IOTHREADSAVE_H
 
 
-#include <elf.h>
+
 #include "AccountDataBase.h"
 class IOThreadSave {
 public:

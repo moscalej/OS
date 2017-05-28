@@ -5,13 +5,7 @@
 
 #include <iostream>
 #include <pthread.h>
-#include <sys/types.h>
-#include <sys/sem.h>
-#include <semaphore.h>
-#include <mutex>
-#include <random>
-
-
+#include <string.h>
 
 using namespace std;
 
