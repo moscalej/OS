@@ -6,11 +6,6 @@
 #include "Bank.h"
 
 
-vector<Account *> Bank::get_accounts() {
-    vector<Account *> temp = this->_ADT->get_accounts();
-    return temp;
-}
-
 //Todo: finish the print, check for destruck mutex on destructor, change the bank run to work with number of cycles;
 //Todo: print on charge conditions on the HW format
 

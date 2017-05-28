@@ -47,17 +47,3 @@ AccountDataBase::~AccountDataBase() {
 
 }
 
-vector<Account *> AccountDataBase::get_accounts() {
-    vector<Account*> temp;
-    if(_Accounts.empty())
-        return vector<Account *>();
-    this->it = this->_Accounts.begin();
-
-    for (it ;it!=_Accounts.end(); ++it) {
-
-        Account * temp1 = it->second;
-
-        temp.push_back(it->second);
-    }
-    return vector<Account *>();
-}

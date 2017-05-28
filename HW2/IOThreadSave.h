@@ -17,7 +17,7 @@ public:
 
     virtual ~IOThreadSave();
 
-    virtual ~IOThreadSave();
+
 
 private:
 
