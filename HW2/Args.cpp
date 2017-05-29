@@ -19,10 +19,10 @@ void * bank_print(void * arg){
         pthread_mutex_lock(&temp->accountDataBase->db_write_lock);
 
         for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
-            it->second->readers_lock();
+
             cout<<"Account " <<it->second->_id<< ": Balance -"<<it->second->_balance <<
                 " $ , Account Password - " << it->second->_password << endl;
-            it->second->readers_unlock();
+
         }
         cout<<"The Bank has "<<temp->accountDataBase->_balance<<" $"<<endl;
         pthread_mutex_unlock(&(temp->accountDataBase->db_write_lock));
@@ -47,11 +47,9 @@ void * bank_charge(void * arg){
         float interest = (rand() % 100 + 300) / 10000;
         for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
             temp->accountDataBase->readers_lock();
-            pthread_mutex_lock(&(it->second->write_lock));
             amount = (int) (it->second->_balance * interest);
             it->second->withdraw(amount);
             temp->accountDataBase->_balance += amount;
-            pthread_mutex_unlock(&(it->second->write_lock));
             temp->accountDataBase->readers_unlock();
             temp->ioThreadSave->Bank_to_Log(interest, amount, it->first);
         }

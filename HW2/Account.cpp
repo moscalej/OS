@@ -53,7 +53,7 @@ Account::~Account() {
     pthread_mutex_destroy(&(this->read_lock));
 }
 void Account::readers_lock() {
-    pthread_mutex_lock(&this->write_lock);
+    pthread_mutex_lock(&this->read_lock);
     this->rd_count++;
     if (this->rd_count == 1)
         pthread_mutex_lock(&this->write_lock);
