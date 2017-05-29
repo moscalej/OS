@@ -5,8 +5,7 @@
 #include <unistd.h>
 #include <memory.h>
 #include "Atm.h"
-#include <fstream>
-#include <sstream>
+
 #include <cstdlib>
 
 
@@ -87,7 +86,7 @@ void Atm::account(int id, string password, int initial_amount) {
           to_print= string(number)+": Your transaction failed - account with same id exists\n";
 
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
-    this->IOTS->save_to_log(to_print);
+    this->IOTS->save_to_log(to_print, 0, 0, std::string(), 0, 0, 0);
     return;
 }
 
@@ -142,7 +141,7 @@ void Atm::deposit(int id, string password, int amount) {
     if (this->_ADT->rd_count==0)
         pthread_mutex_unlock(&this->_ADT->db_write_lock);
     pthread_mutex_unlock(&this->_ADT->db_read_lock);
-    this->IOTS->save_to_log(to_print);
+    this->IOTS->save_to_log(to_print, 0, 0, std::string(), 0, 0, 0);
     return;
 
 
@@ -194,7 +193,7 @@ void Atm::withdraw(int id, string password, int amount) {
         pthread_mutex_unlock(&this->_ADT->db_write_lock);
     }
     pthread_mutex_unlock(&this->_ADT->db_read_lock);
-    this->IOTS->save_to_log(to_print);
+    this->IOTS->save_to_log(to_print, 0, 0, std::string(), 0, 0, 0);
     return;
 }
 
@@ -241,7 +240,7 @@ void Atm::check_balance(int id, string password){
     if (this->_ADT->rd_count==0)
         pthread_mutex_unlock(&this->_ADT->db_write_lock);
     pthread_mutex_unlock(&this->_ADT->db_read_lock);
-    this->IOTS->save_to_log(to_print);
+    this->IOTS->save_to_log(to_print, 0, 0, std::string(), 0, 0, 0);
     return;
 
 }
@@ -268,7 +267,7 @@ void Atm::close_account(int id, string password){
 
     }
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
-    this->IOTS->save_to_log(to_print);
+    this->IOTS->save_to_log(to_print, 0, 0, std::string(), 0, 0, 0);
     return;
 
 }
@@ -339,6 +338,6 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
     if (this->_ADT->rd_count==0)
         pthread_mutex_unlock(&this->_ADT->db_write_lock);
     pthread_mutex_unlock(&this->_ADT->db_read_lock);
-    this->IOTS->save_to_log(to_print);
+    this->IOTS->save_to_log(to_print, 0, 0, std::string(), 0, 0, 0);
     return;
 }
