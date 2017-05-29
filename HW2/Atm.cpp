@@ -221,7 +221,11 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
             if (source_id < target_id) {
                 pthread_mutex_lock(&temp1->write_lock);
                 pthread_mutex_lock(&temp2->write_lock);
-            } else {
+            } else if (source_id==target_id){
+                pthread_mutex_lock(&temp1->write_lock);
+            }
+            else
+            {
                 pthread_mutex_lock(&temp2->write_lock);
                 pthread_mutex_lock(&temp1->write_lock);
             }
@@ -233,8 +237,9 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
                 target_new_balance=temp2->check_balance();
             } else
                 msg=insufficient;
-            pthread_mutex_unlock(&temp2->write_lock);
             pthread_mutex_unlock(&temp1->write_lock);
+            if (source_id!=target_id)
+                pthread_mutex_unlock(&temp2->write_lock);
         } else
             msg=badPassword;
     }
