@@ -51,11 +51,12 @@ void IOThreadSave::save_to_log(printMsg msg, int atm_num, int id, string passwor
 IOThreadSave::~IOThreadSave() {
 
     pthread_mutex_destroy(&(mutex_log));
+    logFile.close();
 
 }
 
 IOThreadSave::IOThreadSave(){
-    ofstream logFile.open("log.txt");
+    logFile.open("log.txt");
     mutex_log = PTHREAD_MUTEX_INITIALIZER;
 
 }

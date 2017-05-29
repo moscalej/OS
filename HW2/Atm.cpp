@@ -72,10 +72,10 @@ void Atm::account(int id, string password, int initial_amount) {
 
     if (this->_ADT->insert_account(id,password,initial_amount))//todo check if insert to map check duplicity
     {
-         to_print= to_string(_atm_number)+": New account id is "+to_string(id)+" with password "+password+" and initial balance "+to_string(initial_amount)+"\n";
+
     }
     else
-          to_print= to_string(_atm_number)+": Your transaction failed - account with same id exists\n";
+
 
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
     this->IOTS->save_to_log(to_print);
