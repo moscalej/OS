@@ -14,6 +14,8 @@ void * bank_print(void * arg){
     Args * temp = (Args *) arg;
     std::map<int,Account*>::iterator it;
     while (true){
+        printf("\033[2J");
+        printf("\033[1;1H");
         cout<<"Current Bank status"<<endl;
 
         pthread_mutex_lock(&temp->accountDataBase->db_write_lock);
