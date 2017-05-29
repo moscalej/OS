@@ -12,13 +12,13 @@ int main(int argc, char **argv) {
 
     IOThreadSave IOTS;
     AccountDataBase ADB;
-    pthread_rwlock_t thread_finish;
+   // pthread_rwlock_t thread_finish;
     bool finish=false;
-    thread_finish =PTHREAD_RWLOCK_INITIALIZER;
+  //  thread_finish =PTHREAD_RWLOCK_INITIALIZER;
 
     int N = 1; /// supposed to be input arg
 
-    Args bank_arguments(&ADB, &IOTS, NULL, 0, &thread_finish, &finish);
+    Args bank_arguments(&ADB, &IOTS, NULL, 0, NULL, &finish);
     Args Atm_arguments[N];
 
     pthread_t threads[N];
@@ -41,9 +41,9 @@ int main(int argc, char **argv) {
     for (int i = 0; i < N ; i++) {
         pthread_join(threads[i], NULL);
     }
-    pthread_rwlock_wrlock(&thread_finish);
+ //   pthread_rwlock_wrlock(&thread_finish);
     finish=true;
-    pthread_rwlock_unlock(&thread_finish);
+ //   pthread_rwlock_unlock(&thread_finish);
 
     pthread_join(bank_charge_thread,NULL);
     pthread_join(bank_print_thread,NULL);
