@@ -46,7 +46,7 @@ void * bank_charge(void * arg){
     while (true) {
         sleep(3);
         int amount = 0;
-        float interest = (rand() % 100 + 300) / 10000;
+        float interest = (rand() % 100 + 300) / (float)10000;
         for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
             temp->accountDataBase->readers_lock();
             amount = (int) (it->second->_balance * interest);
