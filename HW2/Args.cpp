@@ -14,7 +14,7 @@ void * bank_print(void * arg){
     Args * temp = (Args *) arg;
     std::map<int,Account*>::iterator it;
     while (true){
-        cout<<""
+        cout<<"Current Bank status"<<endl;
 
         pthread_mutex_lock(&temp->accountDataBase->db_write_lock);
 
@@ -24,6 +24,7 @@ void * bank_print(void * arg){
                 " $ , Account Password - " << it->second->_password << endl;
             it->second->readers_unlock();
         }
+        cout<<"The Bank has "<<temp->accountDataBase->_balance<<" $"<<endl;
         pthread_mutex_unlock(&(temp->accountDataBase->db_write_lock));
 
         pthread_rwlock_rdlock(temp->finish_thread);// this check if is time to finish :D
