@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     pthread_t bank_charge_thread;
 
     for (int i = 0; i < N; i++) {
-        Atm_arguments[i].Atm_number = i;
+        Atm_arguments[i].Atm_number = i+1;
         Atm_arguments[i].ioThreadSave = &IOTS;
         Atm_arguments[i].accountDataBase = &ADB;
         Atm_arguments[i].text = argv[i + 1];/// input arg maybe more

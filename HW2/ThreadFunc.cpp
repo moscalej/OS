@@ -69,8 +69,6 @@ void * bank_charge(void * arg){
 void *atm_thread(void *arg) {
     Args *temp = (Args *) arg;
     string path_file = string(temp->text);
-
-    printf((char *) arg);
     Atm ATM(temp->Atm_number, temp->accountDataBase, temp->ioThreadSave);
     ATM.do_commands(path_file);
     pthread_exit(NULL);

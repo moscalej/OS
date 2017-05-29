@@ -15,20 +15,20 @@ void IOThreadSave::save_to_log(printMsg msg, int atm_num, int id, string passwor
                     << " and initial balance " << amount << endl;
             break;
         case accountExists :
-            logFile << atm_num << ": Your transaction failed - account with same id exists" << endl;
+            logFile <<"Error "<< atm_num << ": Your transaction failed - account with same id exists" << endl;
             break;
         case doesntExist:
-            logFile << atm_num << ": Your transaction failed - account id " << id << " does not exist" << endl;
+            logFile <<"Error " <<atm_num << ": Your transaction failed - account id " << id << " does not exist" << endl;
             break;
         case badPassword :
-            logFile << atm_num << ": Your transaction failed - password for " << id << " is incorrect" << endl;
+            logFile <<"Error " <<atm_num << ": Your transaction failed - password for " << id << " is incorrect" << endl;
             break;
         case success_deposit:
             logFile << atm_num << ": Account " << id << " new balance is " << balance << " after " << amount
                     << " was deposited" << endl;
             break;
         case insufficient:
-            logFile << atm_num << ": Your transaction failed - account id " << id << " balance is lower than " << amount
+            logFile <<"Error " <<atm_num << ": Your transaction failed - account id " << id << " balance is lower than " << amount
                     << endl;
             break;
         case success_withdraw:
@@ -67,7 +67,7 @@ IOThreadSave::IOThreadSave(){
 
 void IOThreadSave::Bank_to_Log(float rate, int amount, int id) {
     pthread_mutex_lock(&(this->mutex_log));
-    logFile<< "Bank: commissions of " << (rate * 100) << " % were charged, the bank gained " << amount << " from account " << id << endl;
+    logFile<< "Bank: commissions of " << int(rate * 100) << " % were charged, the bank gained " << amount << " from account " << id << endl;
     pthread_mutex_unlock(&(this->mutex_log));
 }
 
