@@ -43,15 +43,30 @@ public:
      * @return the balance in the account
      */
     int check_balance();
-    friend void * bank_print(void * arg);
 
+    /**
+     * The next to methods are the ones use by the bank threads
+     * we made then friend so the bank can access the private arguments
+     * of the Accounts
+     * @param arg
+     * @return
+     */
+    friend void * bank_print(void * arg);
     friend void * bank_charge(void * arg);
+
+    /**
+     *These methods and rd_count are the readers code for the ReadWrithe problem on
+     * we also use pthread_rwlock_t on parts of our code to keep the things simple
+     * but in these case we made it by hand :D
+     */
     void readers_lock();
     void readers_unlock();
-    int _id;
     pthread_mutex_t write_lock;
     pthread_mutex_t read_lock;
     int rd_count;
+
+
+    int _id;
 private:
 
     string _password;
