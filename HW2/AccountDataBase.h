@@ -29,7 +29,6 @@ public:
 
     void readers_lock();
     void readers_unlock();
-
     pthread_mutex_t db_write_lock;
     pthread_mutex_t db_read_lock;
     int rd_count;

@@ -22,7 +22,7 @@ void * bank_print(void * arg){
 
         for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
 
-            cout<<"Account " <<it->second->_id<< ": Balance -"<<it->second->_balance <<
+            cout<<"Account " <<it->second->_id<< ": Balance - "<<it->second->_balance <<
                 " $ , Account Password - " << it->second->_password << endl;
 
         }
@@ -42,7 +42,7 @@ void * bank_print(void * arg){
 void * bank_charge(void * arg){
 
     Args *temp = (Args *) arg;
-    std::map<int, Account *>::iterator it;
+    map<int, Account *>::iterator it;
     while (true) {
 
         int amount = 0;
