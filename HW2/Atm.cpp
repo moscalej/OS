@@ -97,12 +97,10 @@ void Atm::deposit(int id, string password, int amount) {
     }else {
 
         if (temp->check_password(password)) {
-            pthread_mutex_lock(&temp->write_lock);
-            sleep(1);
             temp->deposit(amount);
              msg=success_deposit;
             account_balance=temp->check_balance();
-            pthread_mutex_unlock(&temp->write_lock);
+
         } else
              msg=badPassword;
     }
@@ -124,8 +122,6 @@ void Atm::withdraw(int id, string password, int amount) {
     }
     else {
         if (temp->check_password(password)) {
-            pthread_mutex_lock(&temp->write_lock);
-            sleep(1);
             if (temp->withdraw(amount)) {
                 msg=success_withdraw;
                 account_balance=temp->check_balance();
@@ -133,12 +129,11 @@ void Atm::withdraw(int id, string password, int amount) {
             else {
                 msg=insufficient;
             }
-            pthread_mutex_unlock(&temp->write_lock);
         } else {
             msg=badPassword;
         }
     }
-    _ADT->readers_lock();
+    _ADT->readers_unlock();
     this->IOTS->save_to_log(msg,this->_atm_number,id,password,amount,account_balance,0,0);
     return;
 }
@@ -155,16 +150,12 @@ void Atm::check_balance(int id, string password){
     }
     else {
         if (temp->check_password(password)) {
-            pthread_mutex_lock(&temp->read_lock);
-            sleep(1);
-            temp->readers_lock();
             account_balance=temp->check_balance();
             msg=balance;
-            temp->readers_unlock();
         } else
             msg=badPassword;
     }
-    _ADT->readers_lock();
+    _ADT->readers_unlock();
     this->IOTS->save_to_log(msg,this->_atm_number,id,password,0,account_balance,0,0);
     return;
 
@@ -198,7 +189,7 @@ void Atm::close_account(int id, string password){
 void Atm::transfer(int source_id, string password, int target_id, int amount) {
     printMsg msg;
     bool target_err=false;
-    int source_newbalance=0;
+    int source_new_balance=0;
     int target_new_balance=0;
     _ADT->readers_lock();
     Account *temp1 = this->_ADT->search_account(source_id);
@@ -219,34 +210,43 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
     else {
         if (temp1->check_password(password)) {
             if (source_id < target_id) {
-                pthread_mutex_lock(&temp1->write_lock);
-                pthread_mutex_lock(&temp2->write_lock);
-            } else if (source_id==target_id){
-                pthread_mutex_lock(&temp1->write_lock);
+                if (temp1->withdraw(amount)) {
+                    temp2->deposit(amount);
+                    msg = success_transfer;
+                    source_new_balance = temp1->check_balance();
+                    target_new_balance = temp2->check_balance();
+                } else
+                    msg = insufficient;
+            }
+
+            else if (source_id==target_id){
+                    msg=success_transfer;
+                    source_new_balance=temp1->check_balance();
+                    target_new_balance=temp2->check_balance();
+
             }
             else
             {
-                pthread_mutex_lock(&temp2->write_lock);
-                pthread_mutex_lock(&temp1->write_lock);
-            }
-            sleep(1);
-            if (temp1->withdraw(amount)) {
                 temp2->deposit(amount);
-                msg=success_transfer;
-                source_newbalance=temp1->check_balance();
-                target_new_balance=temp2->check_balance();
-            } else
-                msg=insufficient;
-            pthread_mutex_unlock(&temp1->write_lock);
-            if (source_id!=target_id)
-                pthread_mutex_unlock(&temp2->write_lock);
+                if (temp1->withdraw(amount)){
+                    msg = success_transfer;
+                    source_new_balance = temp1->check_balance();
+                    target_new_balance = temp2->check_balance();
+                } else
+                {
+                    temp2->withdraw(amount);
+                    msg = insufficient;
+
+                }
+            }
+
         } else
             msg=badPassword;
     }
-    _ADT->readers_lock();
+    _ADT->readers_unlock();
     if (target_err)
         this->IOTS->save_to_log(msg,this->_atm_number,target_id,password,amount,0,0,0);
     else
-        this->IOTS->save_to_log(msg,this->_atm_number,source_id,password,amount,source_newbalance,target_id,target_new_balance);
+        this->IOTS->save_to_log(msg,this->_atm_number,source_id,password,amount,source_new_balance,target_id,target_new_balance);
     return;
 }

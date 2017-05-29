@@ -21,26 +21,31 @@ bool Account::check_password(string try_password) {
 }
 
 void Account::deposit(int amount) {
-
+    pthread_mutex_lock(&write_lock);
     this->_balance = _balance + amount;
+    pthread_mutex_unlock(&write_lock);
     return;
 
 }
 
 bool Account::withdraw(int amount) {
-
+    pthread_mutex_lock(&write_lock);
     if (this->_balance < amount)
         return false;
     else {
 
         this->_balance = _balance - amount;
+
     }
+    pthread_mutex_unlock(&write_lock);
    return true;
 }
 
 int Account::check_balance() {
-
-    return _balance;
+    readers_lock();
+    int balance= _balance;
+    readers_unlock();
+    return balance;
 }
 
 Account::~Account() {
