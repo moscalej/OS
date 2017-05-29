@@ -8,7 +8,7 @@
 
 void IOThreadSave::save_to_log(printMsg msg, int atm_num, int id, string password, int amount, int source_balance,
                                int target_id, int target_balance) {
-    //newAccount, accountExists, doesntExist, badPassword, success_deposit, insufficient, success_withdraw, balance, success_transfer
+    //newAccount, accountExists, doesntExist, badPassword, success_deposit, insufficient, success_withdraw, balance, close, success_transfer
     switch (msg) {
         case newAccount :
             logFile << atm_num << ": New account id is " << id << " with password " << password
@@ -37,6 +37,9 @@ void IOThreadSave::save_to_log(printMsg msg, int atm_num, int id, string passwor
             break;
         case balance:
             logFile << atm_num << ": Account " << id << " balance is " << balance << endl;
+            break;
+        case close:
+            logFile << atm_num << ": Account " << id << " is now closed. balance was" << balance << endl;
             break;
         case success_transfer:
             logFile << atm_num << ": Transfer " << amount << " from account " << id << " to account " << target_id
