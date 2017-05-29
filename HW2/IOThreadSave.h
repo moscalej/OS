@@ -14,7 +14,7 @@ public:
     IOThreadSave();
     void save_to_log(printMsg msg, int atm_num, int id, string password, int amount, int source_balance,
                      int target_id, int target_balance);
-    void Bank_to_Log(int rate, int amt, account_num_type acctNum);
+    void Bank_to_Log(int rate, int amount, int id);
     virtual ~IOThreadSave();
 
 
