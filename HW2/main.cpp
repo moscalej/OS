@@ -1,5 +1,4 @@
-
-#include <stdio.h>
+#include <pthread.h>
 #include <iostream>
 #include "ThreadFunc.h"
 
