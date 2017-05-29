@@ -174,7 +174,7 @@ void Atm::close_account(int id, string password){
         if (temp->check_password(password))
         {
             this->_ADT->delete_account(id);
-            msg=close;
+            msg=success_close;
         }
         else
             msg=badPassword;
