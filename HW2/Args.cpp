@@ -3,36 +3,48 @@
 //
 
 #include <unistd.h>
+#include <cstdlib>
 #include "Args.h"
 using namespace std;
 void * bank_print(void * arg){
-    Args * temp = (Args *) arg;
-    pthread_mutex_lock(&temp->accountDataBase->db_write_lock);
-    std::map<int,Account*>::iterator it;
+    
+    while (true){
 
-    for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
+        Args * temp = (Args *) arg;
+        std::map<int,Account*>::iterator it;
+        pthread_mutex_lock(&temp->accountDataBase->db_write_lock);
 
-        cout<<"Account " <<it->second->_id<< ": Balance -"<<it->second->check_balance() <<
-              " $ , Account Password - " << it->second->_password << endl;
+        for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
+            it->second->readers_lock();
+            cout<<"Account " <<it->second->_id<< ": Balance -"<<it->second->_balance <<
+                " $ , Account Password - " << it->second->_password << endl;
+            it->second->readers_unlock();
+        }
+        pthread_mutex_unlock(&(temp->accountDataBase->db_write_lock));
+        usleep(500000);
     }
-    pthread_mutex_unlock(&(temp->accountDataBase->db_write_lock));
-    usleep(500000);
 }
 
 void * bank_charge(void * arg){
-    Args * temp = (Args *) arg;
 
-    pthread_mutex_lock(&temp->accountDataBase->db_read_lock);
-    std::map<int,Account*>::iterator it;
+    while (true) {
+        
+        Args *temp = (Args *) arg;
+        std::map<int, Account *>::iterator it;
+        int amount = 0;
+        float interest = (rand() % 100 + 300) / 10000;
+        for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
+            temp->accountDataBase->readers_lock();
+            pthread_mutex_lock(&(it->second->write_lock));
+            amount = (int) (it->second->_balance * interest);
+            it->second->_balance -= amount;
+            pthread_mutex_unlock(&(it->second->write_lock));
+            temp->accountDataBase->readers_unlock();
+            temp->ioThreadSave->Bank_to_Log(interest, amount, it->first);
+        }
 
-    for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
-        pthread_mutex_lock(&(it->second->write_lock));
-
+        sleep(3);
     }
-
-    pthread_mutex_unlock(&(temp->accountDataBase->db_read_lock));
-
-    usleep(500000);
 }
 
 
