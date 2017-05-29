@@ -58,6 +58,7 @@ void * bank_charge(void * arg){
         //pthread_rwlock_rdlock(temp->finish_thread); // this check if is time to finish :D
         if(*temp->finish_bool==2) break;
         //pthread_rwlock_unlock(temp->finish_thread);
+        sleep(3);
 
     }
    // pthread_rwlock_unlock(temp->finish_thread);
