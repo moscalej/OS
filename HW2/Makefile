@@ -1,6 +1,6 @@
 # Makefile for the Bank
 CC = g++
-CFLAGS =  -g -Wall
+CFLAGS =  -g -std=c++0x -Wall
 CCLINK = $(CC)
 OBJS =  Account.o main.o AccountDataBase.o Atm.o IOThreadSave.o ThreadFunc.o
 RM = rm -f
