@@ -5,14 +5,14 @@
 #include <cstdio>
 #include "IOThreadSave.h"
 
-void IOThreadSave::save_to_log(printMsg msg, int atm_num, int id, string password, int amount, int source_balance,
+void IOThreadSave::save_to_log(printMsg msg, int atm_num, int id, string password, int amount, int balance,
                                int target_id, int target_balance) {
-    //newAccount, accountExists, doesntExist, badPassword, success_deposit, insufficient, success_withdraw, balance, success_close, success_transfer
+    //newAccount, accountExists, doesntExist, badPassword, success_deposit, insufficient, success_withdraw, success_balance, success_close, success_transfer
     pthread_mutex_lock(&(this->mutex_log));
     switch (msg) {
         case newAccount :
             logFile << atm_num << ": New account id is " << id << " with password " << password
-                    << " and initial balance " << balance << endl;
+                    << " and initial balance " << amount << endl;
             break;
         case accountExists :
             logFile << atm_num << ": Your transaction failed - account with same id exists" << endl;
@@ -35,7 +35,7 @@ void IOThreadSave::save_to_log(printMsg msg, int atm_num, int id, string passwor
             logFile << atm_num << ": Account " << id << " new balance is " << balance << " after " << amount
                     << " was withdrew" << endl;
             break;
-        case balance:
+        case success_balance:
             logFile << atm_num << ": Account " << id << " balance is " << balance << endl;
             break;
         case success_close:
@@ -46,8 +46,9 @@ void IOThreadSave::save_to_log(printMsg msg, int atm_num, int id, string passwor
                     << " new account balance is " << balance
                     << " new target account balance is " << target_balance << endl;
             break;
-            pthread_mutex_unlock(&(this->mutex_log));
     }
+            pthread_mutex_unlock(&(this->mutex_log));
+
 }
 
 
@@ -59,7 +60,7 @@ IOThreadSave::~IOThreadSave() {
 }
 
 IOThreadSave::IOThreadSave(){
-    logFile.open("log.txt");
+    logFile.open("../log.txt");
     mutex_log = PTHREAD_MUTEX_INITIALIZER;
 
 }

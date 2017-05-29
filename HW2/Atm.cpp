@@ -31,7 +31,7 @@ void Atm::do_commands(string path) {
             file.close();
             break;
         }
-        usleep(10000);
+
         istringstream iss(line);
         string instruction[5];
         int i = 0;
@@ -151,7 +151,7 @@ void Atm::check_balance(int id, string password){
     else {
         if (temp->check_password(password)) {
             account_balance=temp->check_balance();
-            msg=balance;
+            msg=success_balance;
         } else
             msg=badPassword;
     }

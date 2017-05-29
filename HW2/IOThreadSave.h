@@ -7,7 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include "AccountDataBase.h"
-typedef enum printMsg {newAccount, accountExists, doesntExist, badPassword, success_deposit, insufficient, success_withdraw, balance,success_close, success_transfer} printMsg;
+typedef enum printMsg {newAccount, accountExists, doesntExist, badPassword, success_deposit, insufficient, success_withdraw, success_balance,success_close, success_transfer} printMsg;
 class IOThreadSave {
 public:
 

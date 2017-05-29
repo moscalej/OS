@@ -7,6 +7,7 @@
 
 AccountDataBase::AccountDataBase() {
     rd_count=0;
+    _balance=0;
     this->db_write_lock=PTHREAD_MUTEX_INITIALIZER;
     this->db_read_lock=PTHREAD_MUTEX_INITIALIZER;
 
@@ -14,10 +15,10 @@ AccountDataBase::AccountDataBase() {
 
 bool AccountDataBase::insert_account(int account_id, string password, int initial_amount) {
      Account * temp = new Account(account_id,password,initial_amount);
-//    if (temp != NULL){
-//        this->_Accounts[account_id]=temp;
-//        return true;
-//    }
+    if (temp != NULL){
+        this->_Accounts[account_id]=temp;
+        return true;
+    }
     return false;
 }
 void AccountDataBase::readers_lock() {
