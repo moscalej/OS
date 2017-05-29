@@ -35,7 +35,7 @@ public:
 
 private:
     std::map<int,Account*> _Accounts;
-    std::map<int,Account*>::iterator it;
+    int _balance;
 };
 
 
