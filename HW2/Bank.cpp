@@ -2,12 +2,10 @@
 // Created by amoscoso on 5/21/2017.
 //
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <cstdio>
+
 #include "Bank.h"
 
-using namespace std;
+
 //Todo: finish the print, check for destruck mutex on destructor, change the bank run to work with number of cycles;
 //Todo: print on charge conditions on the HW format
 
@@ -25,8 +23,8 @@ void Bank::print() {
     printf("\033[2j");
     printf("\033[1:1h");
     cout << "Current Bank Status" << endl;
-    cout << pre_print << end;
-     cout << "The Bank has " << this->_balance << " $" << endl;
+//    cout << pre_print << end;
+//    cout << "The Bank has " << this->_balance << " $" << endl;
 }
 
 void Bank::charge_commission() {
@@ -41,7 +39,7 @@ void Bank::charge_commission() {
 
         int amount;
         amount = int(it->second->_balance * this->_commission_rate);
-        id = int(it->second->_id);
+        int id = int(it->second->_id);
         float de_comi = this->_commission_rate;
         if (it->second->withdraw(amount)) {
             this->_balance += amount;//// todo print message
@@ -49,16 +47,16 @@ void Bank::charge_commission() {
                     "Bank: Commission of " + to_string(_commission_rate * 100) + " % were charged, the bank gained " +
                     to_string(amount) + " $ from account " + to_string(id);
 
-        pthread_mutex_unlock(&it->second->write_lock);
+            pthread_mutex_unlock(&it->second->write_lock);
 
-        pthread_mutex_lock(&this->_ADT->db_read_lock);
-        this->_ADT->rd_count--;
-        if (this->_ADT->rd_count == 0) {
-            pthread_mutex_unlock(&this->_ADT->db_write_lock);
+            pthread_mutex_lock(&this->_ADT->db_read_lock);
+            this->_ADT->rd_count--;
+            if (this->_ADT->rd_count == 0) {
+                pthread_mutex_unlock(&this->_ADT->db_write_lock);
+            }
+            pthread_mutex_unlock(&this->_ADT->db_read_lock);
+            this->_IOTS->save_to_log(to_print);
         }
-        pthread_mutex_unlock(&this->_ADT->db_read_lock);
-        this->_IOTS->save_to_log(to_print);
-    }
 
         return;
 
@@ -66,15 +64,25 @@ void Bank::charge_commission() {
     }
 }
 void Bank::bank_run() {
+    clock_t timer = clock();
+    clock_t timer_print = timer;
+    clock_t timer_charge = timer;
+    const clock_t print_c = (clock_t)(0.09 * CLOCKS_PER_SEC);
+    const clock_t charge_c = (clock_t)(0.5 * CLOCKS_PER_SEC);
 
 while (true){
-    for (int i = 0; i < 6; ++i) {
+
+    timer = clock();
+    if (timer - timer_print> print_c) {
         this->print();
-        usleep(500000);
-        printf("printed%d \n",i);
+        timer_print = timer;
     }
-    this->_commission_rate = float(rand() % 100 + 300) / 10000;
-    this->charge_commission();
+    if(timer-timer_charge>charge_c){
+
+        this->_commission_rate = float(rand() % 100 + 300) / 10000;
+        this->charge_commission();
+        timer_charge = timer;
+    }
     pthread_rwlock_rdlock(&(this->mutex1));
         if (this->close)break;
     pthread_rwlock_unlock(&(this->mutex1));
