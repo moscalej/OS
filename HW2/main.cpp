@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 
     pthread_join(bank_print_thread,NULL);
     pthread_join(bank_charge_thread,NULL);
-
+//coment
 //	exit(NULL);//for bank ,check usage
     return 0;
 }
