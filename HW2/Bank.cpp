@@ -2,8 +2,9 @@
 // Created by amoscoso on 5/21/2017.
 //
 
-
-#include <string>
+#include <unistd.h>
+#include <stdlib.h>
+#include <cstdio>
 #include "Bank.h"
 
 using namespace std;
@@ -12,6 +13,8 @@ using namespace std;
 
 void Bank::print() {
     pthread_mutex_lock(&this->_ADT->db_write_lock);
+    //Todo remove the vector work, direct from the data base
+
     string pre_print = "";
     for (it = _ADT->_Accounts.begin(); it != _ADT->_Accounts.end(); ++it) {
 
@@ -21,7 +24,6 @@ void Bank::print() {
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
     printf("\033[2j");
     printf("\033[1:1h");
-
     cout << "Current Bank Status" << endl;
     cout << pre_print << end;
      cout << "The Bank has " << this->_balance << " $" << endl;
@@ -47,23 +49,22 @@ void Bank::charge_commission() {
                     "Bank: Commission of " + to_string(_commission_rate * 100) + " % were charged, the bank gained " +
                     to_string(amount) + " $ from account " + to_string(id);
 
-            pthread_mutex_unlock(&it->second->write_lock);
+        pthread_mutex_unlock(&it->second->write_lock);
 
-            pthread_mutex_lock(&this->_ADT->db_read_lock);
-            this->_ADT->rd_count--;
-            if (this->_ADT->rd_count == 0) {
-                pthread_mutex_unlock(&this->_ADT->db_write_lock);
-            }
-            pthread_mutex_unlock(&this->_ADT->db_read_lock);
-            this->_IOTS->save_to_log(to_print);
+        pthread_mutex_lock(&this->_ADT->db_read_lock);
+        this->_ADT->rd_count--;
+        if (this->_ADT->rd_count == 0) {
+            pthread_mutex_unlock(&this->_ADT->db_write_lock);
         }
+        pthread_mutex_unlock(&this->_ADT->db_read_lock);
+        this->_IOTS->save_to_log(to_print);
+    }
 
         return;
 
 
     }
 }
-
 void Bank::bank_run() {
 
 while (true){
@@ -99,7 +100,6 @@ void Bank::set(int initial_amount, AccountDataBase *ADB, IOThreadSave *IOTS) {
     _balance = initial_amount;
 
 }
-
 
 Bank::~Bank() {
     pthread_rwlock_destroy(&(this->mutex1));
