@@ -39,10 +39,12 @@ void Bank::charge_commission() {
         int amount;
         amount = int(it->second->_balance * this->_commission_rate);
         id = int(it->second->_id);
-        float de_comi=this->_commission_rate;
+        float de_comi = this->_commission_rate;
         if (it->second->withdraw(amount)) {
             this->_balance += amount;//// todo print message
-             to_print ="Bank: Commission of "+to_string(_commission_rate*100)+" % were charged, the bank gained "+to_string(amount)+" $ from account "+to_string(id);
+            to_print =
+                    "Bank: Commission of " + to_string(_commission_rate * 100) + " % were charged, the bank gained " +
+                    to_string(amount) + " $ from account " + to_string(id);
 
             pthread_mutex_unlock(&it->second->write_lock);
 
@@ -58,6 +60,7 @@ void Bank::charge_commission() {
         return;
 
 
+    }
 }
 
 void Bank::bank_run() {
@@ -95,6 +98,7 @@ void Bank::set(int initial_amount, AccountDataBase *ADB, IOThreadSave *IOTS) {
     _balance = initial_amount;
 
 }
+
 
 Bank::~Bank() {
     pthread_rwlock_destroy(&(this->mutex1));
