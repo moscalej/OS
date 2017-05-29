@@ -14,12 +14,12 @@ void * bank_print(void * arg){
     Args * temp = (Args *) arg;
     std::map<int,Account*>::iterator it;
     while (true){
+
+
+        pthread_mutex_lock(&temp->accountDataBase->db_write_lock);
         printf("\033[2J");
         printf("\033[1;1H");
         cout<<"Current Bank status"<<endl;
-
-        pthread_mutex_lock(&temp->accountDataBase->db_write_lock);
-
         for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
 
             cout<<"Account " <<it->second->_id<< ": Balance - "<<it->second->_balance <<
