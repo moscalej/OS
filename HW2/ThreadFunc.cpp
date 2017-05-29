@@ -44,7 +44,7 @@ void * bank_charge(void * arg){
     Args *temp = (Args *) arg;
     map<int, Account *>::iterator it;
     while (true) {
-        sleep(3);
+
         int amount = 0;
         float interest = (rand() % 3 + 2) / (float)100;
         for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
