@@ -46,6 +46,8 @@ public:
     friend void * bank_print(void * arg);
 
     friend void * bank_charge(void * arg);
+    void readers_lock();
+    void readers_unlock();
     int _id;
     pthread_mutex_t write_lock;
     pthread_mutex_t read_lock;

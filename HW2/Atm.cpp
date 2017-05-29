@@ -67,6 +67,7 @@ void Atm::do_commands(string path) {
 
 void Atm::account(int id, string password, int initial_amount) {
     printMsg msg;
+
     //newAccount, accountExists, doesntExist, badPassword, success_deposit, insufficient, success_withdraw, balance, success_transfer
     pthread_mutex_lock(&this->_ADT->db_write_lock);
 
@@ -84,11 +85,8 @@ void Atm::account(int id, string password, int initial_amount) {
 
 void Atm::deposit(int id, string password, int amount) {
     printMsg msg;
-    pthread_mutex_lock(&this->_ADT->db_read_lock);
-    this->_ADT->rd_count++;
-    if (this->_ADT->rd_count==1)
-        pthread_mutex_lock(&this->_ADT->db_write_lock);
-    pthread_mutex_unlock(&this->_ADT->db_read_lock);
+    int account_balance=0;
+    _ADT->readers_lock();
     Account * temp = this->_ADT->search_account(id);
     if (temp == NULL)
     {
@@ -103,16 +101,13 @@ void Atm::deposit(int id, string password, int amount) {
             sleep(1);
             temp->deposit(amount);
              msg=success_deposit;
+            account_balance=temp->check_balance();
             pthread_mutex_unlock(&temp->write_lock);
         } else
              msg=badPassword;
     }
-    pthread_mutex_lock(&this->_ADT->db_read_lock);
-    this->_ADT->rd_count--;
-    if (this->_ADT->rd_count==0)
-        pthread_mutex_unlock(&this->_ADT->db_write_lock);
-    pthread_mutex_unlock(&this->_ADT->db_read_lock);
-    this->IOTS->save_to_log(msg,this->_atm_number,id,password,amount,0,0,0);
+  _ADT->readers_unlock();
+    this->IOTS->save_to_log(msg,this->_atm_number,id,password,amount,account_balance,0,0);
     return;
 
 
@@ -120,12 +115,8 @@ void Atm::deposit(int id, string password, int amount) {
 
 void Atm::withdraw(int id, string password, int amount) {
     printMsg msg;
-    pthread_mutex_lock(&this->_ADT->db_read_lock);
-    this->_ADT->rd_count++;
-    if (this->_ADT->rd_count==1) {
-        pthread_mutex_lock(&this->_ADT->db_write_lock);
-    }
-    pthread_mutex_unlock(&this->_ADT->db_read_lock);
+    int account_balance;
+    _ADT->readers_lock();
     Account *temp = this->_ADT->search_account(id);
 
     if (temp == NULL) {
@@ -137,6 +128,7 @@ void Atm::withdraw(int id, string password, int amount) {
             sleep(1);
             if (temp->withdraw(amount)) {
                 msg=success_withdraw;
+                account_balance=temp->check_balance();
             }
             else {
                 msg=insufficient;
@@ -146,23 +138,15 @@ void Atm::withdraw(int id, string password, int amount) {
             msg=badPassword;
         }
     }
-    pthread_mutex_lock(&this->_ADT->db_read_lock);
-    this->_ADT->rd_count--;
-    if (this->_ADT->rd_count==0) {
-        pthread_mutex_unlock(&this->_ADT->db_write_lock);
-    }
-    pthread_mutex_unlock(&this->_ADT->db_read_lock);
-    this->IOTS->save_to_log(msg,this->_atm_number,id,password,amount,0,0,0);
+    _ADT->readers_lock();
+    this->IOTS->save_to_log(msg,this->_atm_number,id,password,amount,account_balance,0,0);
     return;
 }
 
 void Atm::check_balance(int id, string password){
     printMsg msg;
-    pthread_mutex_lock(&this->_ADT->db_read_lock);
-    this->_ADT->rd_count++;
-    if (this->_ADT->rd_count==1)
-        pthread_mutex_lock(&this->_ADT->db_write_lock);
-    pthread_mutex_unlock(&this->_ADT->db_read_lock);
+    _ADT->readers_lock();
+    int account_balance=0;
     Account *temp = this->_ADT->search_account(id);
 
     if (temp == NULL) {
@@ -173,25 +157,15 @@ void Atm::check_balance(int id, string password){
         if (temp->check_password(password)) {
             pthread_mutex_lock(&temp->read_lock);
             sleep(1);
-            temp->rd_count++;
-            if (temp->rd_count == 1)
-                pthread_mutex_lock(&temp->write_lock);
-            pthread_mutex_unlock(&temp->read_lock);
+            temp->readers_lock();
+            account_balance=temp->check_balance();
             msg=balance;
-            pthread_mutex_lock(&temp->read_lock);
-            temp->rd_count--;
-            if (temp->rd_count == 0)
-                pthread_mutex_unlock(&temp->write_lock);
-            pthread_mutex_unlock(&temp->read_lock);
+            temp->readers_unlock();
         } else
             msg=badPassword;
     }
-    pthread_mutex_lock(&this->_ADT->db_read_lock);
-    this->_ADT->rd_count--;
-    if (this->_ADT->rd_count==0)
-        pthread_mutex_unlock(&this->_ADT->db_write_lock);
-    pthread_mutex_unlock(&this->_ADT->db_read_lock);
-    this->IOTS->save_to_log(msg,this->_atm_number,id,password,0,0,0,0);
+    _ADT->readers_lock();
+    this->IOTS->save_to_log(msg,this->_atm_number,id,password,0,account_balance,0,0);
     return;
 
 }
@@ -226,12 +200,7 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
     bool target_err=false;
     int source_newbalance=0;
     int target_new_balance=0;
-    pthread_mutex_lock(&this->_ADT->db_read_lock);
-    this->_ADT->rd_count++;
-    if (this->_ADT->rd_count==1)
-        pthread_mutex_lock(&this->_ADT->db_write_lock);
-
-    pthread_mutex_unlock(&this->_ADT->db_read_lock);
+    _ADT->readers_lock();
     Account *temp1 = this->_ADT->search_account(source_id);
     Account *temp2 = this->_ADT->search_account(target_id);
 
@@ -269,11 +238,7 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
         } else
             msg=badPassword;
     }
-    pthread_mutex_lock(&this->_ADT->db_read_lock);
-    this->_ADT->rd_count--;
-    if (this->_ADT->rd_count==0)
-        pthread_mutex_unlock(&this->_ADT->db_write_lock);
-    pthread_mutex_unlock(&this->_ADT->db_read_lock);
+    _ADT->readers_lock();
     if (target_err)
         this->IOTS->save_to_log(msg,this->_atm_number,target_id,password,amount,0,0,0);
     else
