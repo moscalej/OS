@@ -46,15 +46,15 @@ void * bank_charge(void * arg){
     while (true) {
         sleep(3);
         int amount = 0;
-        float interest = (rand() % 100 + 300) / (float)10000;
+        float interest = (rand() % 3 + 2) / (float)100;
         for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
             temp->accountDataBase->readers_lock();
-            amount = (int) (it->second->_balance * interest);
-            it->second->withdraw(amount);
+            amount=it->second->charge_commission(interest);
             temp->accountDataBase->_balance += amount;
             temp->accountDataBase->readers_unlock();
             temp->ioThreadSave->Bank_to_Log(interest, amount, it->first);
         }
+
         pthread_rwlock_rdlock(temp->finish_thread); // this check if is time to finish :D
         if(*temp->finish_bool) break;
         pthread_rwlock_unlock(temp->finish_thread);

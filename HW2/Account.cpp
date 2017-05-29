@@ -43,6 +43,13 @@ int Account::withdraw(int amount) {
     pthread_mutex_unlock(&write_lock);
    return _balance;
 }
+int Account::charge_commission(double rate) {
+    pthread_mutex_lock(&write_lock);
+    int amount = (int) (_balance * rate);
+    this->_balance = _balance - amount;
+    pthread_mutex_unlock(&write_lock);
+    return amount;
+}
 
 int Account::check_balance() {
     readers_lock();

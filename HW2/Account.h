@@ -37,7 +37,7 @@ public:
      *          false- if there is not enough money to take
      */
     int withdraw(int amount);
-
+    int charge_commission(double rate);
     /**
      * This method will check the balance on the target id
      * @return the balance in the account
