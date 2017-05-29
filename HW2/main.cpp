@@ -30,8 +30,7 @@ int main(int argc, char **argv) {
         Atm_arguments[i].ioThreadSave = &IOTS;
         Atm_arguments[i].accountDataBase = &ADB;
         Atm_arguments[i].text = argv[i + 1];/// input arg maybe more
-        Atm_arguments[i].finish_thread=NULL;
-        Atm_arguments[i].finish_bool=NULL;
+
     }
 
     pthread_create(&bank_print_thread, NULL, &bank_print, (void *) &bank_arguments);

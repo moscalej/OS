@@ -43,7 +43,7 @@ public:
  * update the state every 0.5 sec
  * @param arg - Class Args
  */
-
+void * bank_print(void * arg);
 
 void * bank_charge(void * arg);
 
