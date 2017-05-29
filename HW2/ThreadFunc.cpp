@@ -44,7 +44,7 @@ void * bank_charge(void * arg){
     Args *temp = (Args *) arg;
     map<int, Account *>::iterator it;
     while (true) {
-
+        sleep(3);
         int amount = 0;
         float interest = (rand() % 100 + 300) / 10000;
         for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
@@ -56,9 +56,9 @@ void * bank_charge(void * arg){
             temp->ioThreadSave->Bank_to_Log(interest, amount, it->first);
         }
         pthread_rwlock_rdlock(temp->finish_thread); // this check if is time to finish :D
-        if(temp->finish_bool) break;
+        if(*temp->finish_bool) break;
         pthread_rwlock_unlock(temp->finish_thread);
-        sleep(3);
+
     }
     pthread_rwlock_unlock(temp->finish_thread);
     pthread_exit(NULL);

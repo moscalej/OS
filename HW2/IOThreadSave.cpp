@@ -67,7 +67,7 @@ IOThreadSave::IOThreadSave(){
 
 void IOThreadSave::Bank_to_Log(float rate, int amount, int id) {
     pthread_mutex_lock(&(this->mutex_log));
-    logFile<< "Bank: commisions of " << (rate * 100) << " % were charged, the bank gained " << amount << " from account " << id << endl;
+    logFile<< "Bank: commissions of " << (rate * 100) << " % were charged, the bank gained " << amount << " from account " << id << endl;
     pthread_mutex_unlock(&(this->mutex_log));
 }
 
