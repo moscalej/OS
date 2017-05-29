@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <iostream>
-#include "Args.h"
+#include "ThreadFunc.h"
 
 using namespace std;
 

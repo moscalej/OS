@@ -4,7 +4,7 @@
 
 #include <unistd.h>
 #include <cstdlib>
-#include "Args.h"
+#include "ThreadFunc.h"
 using namespace std;
 
 
