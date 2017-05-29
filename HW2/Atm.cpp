@@ -66,24 +66,24 @@ void Atm::do_commands(string path) {
 }
 
 void Atm::account(int id, string password, int initial_amount) {
-    string to_print;
-
+    printMsg msg;
+    //newAccount, accountExists, doesntExist, badPassword, success_deposit, insufficient, success_withdraw, balance, success_transfer
     pthread_mutex_lock(&this->_ADT->db_write_lock);
 
     if (this->_ADT->insert_account(id,password,initial_amount))//todo check if insert to map check duplicity
     {
-
+        msg=newAccount;
     }
     else
-
+        msg=accountExists;
 
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
-    this->IOTS->save_to_log(to_print);
+    this->IOTS->save_to_log(msg,this->_atm_number,id,password,initial_amount,0,0,0);
     return;
 }
 
 void Atm::deposit(int id, string password, int amount) {
-    string to_print;
+    printMsg msg;
     pthread_mutex_lock(&this->_ADT->db_read_lock);
     this->_ADT->rd_count++;
     if (this->_ADT->rd_count==1)
@@ -93,7 +93,7 @@ void Atm::deposit(int id, string password, int amount) {
     if (temp == NULL)
     {
 
-         to_print= "Error "+ to_string(this->_atm_number)+": Your transaction failed - account "+to_string(id)+" does not exist\n" ;
+        msg=doesntExist;
 
 
     }else {
@@ -102,26 +102,24 @@ void Atm::deposit(int id, string password, int amount) {
             pthread_mutex_lock(&temp->write_lock);
             sleep(1);
             temp->deposit(amount);
-             to_print= to_string(_atm_number)+ ": Account "+ to_string(id) + " new balance is " +to_string(temp->check_balance()) + " after "
-                 + to_string(amount) + " $ was deposited" +"\n";
+             msg=success_deposit;
             pthread_mutex_unlock(&temp->write_lock);
         } else
-             to_print= "Error " +to_string( this->_atm_number) + ": Your transaction failed - password for account " + to_string(id)
-                 + " is incorrect" +"\n";
+             msg=badPassword;
     }
     pthread_mutex_lock(&this->_ADT->db_read_lock);
     this->_ADT->rd_count--;
     if (this->_ADT->rd_count==0)
         pthread_mutex_unlock(&this->_ADT->db_write_lock);
     pthread_mutex_unlock(&this->_ADT->db_read_lock);
-    this->IOTS->save_to_log(to_print, 0, 0, std::string(), 0, 0, 0);
+    this->IOTS->save_to_log(msg,this->_atm_number,id,password,amount,0,0,0);
     return;
 
 
 }
 
 void Atm::withdraw(int id, string password, int amount) {
-    string to_print;
+    printMsg msg;
     pthread_mutex_lock(&this->_ADT->db_read_lock);
     this->_ADT->rd_count++;
     if (this->_ADT->rd_count==1) {
@@ -131,24 +129,21 @@ void Atm::withdraw(int id, string password, int amount) {
     Account *temp = this->_ADT->search_account(id);
 
     if (temp == NULL) {
-        to_print="Error "+to_string(this->_atm_number) + ": Your transaction failed - account "+to_string(id) + " does not exist" +"\n";
+        msg=doesntExist;
     }
     else {
         if (temp->check_password(password)) {
             pthread_mutex_lock(&temp->write_lock);
             sleep(1);
             if (temp->withdraw(amount)) {
-                to_print= to_string(_atm_number)+ ": Account "+ to_string(id) + " new balance is " +to_string(temp->check_balance()) + " after "
-                                             + to_string(amount) + " $ was withdrew" +"\n";
+                msg=success_withdraw;
             }
             else {
-                to_print= "Error " +to_string(this->_atm_number) + ": Your transaction failed - account " + to_string(id)
-                                 + " balance is lower than " + to_string(amount) +"\n";
+                msg=insufficient;
             }
             pthread_mutex_unlock(&temp->write_lock);
         } else {
-            to_print= "Error " +to_string( this->_atm_number) + ": Your transaction failed - password for account " + to_string(id)
-                                     + " is incorrect" +"\n";
+            msg=badPassword;
         }
     }
     pthread_mutex_lock(&this->_ADT->db_read_lock);
@@ -157,12 +152,12 @@ void Atm::withdraw(int id, string password, int amount) {
         pthread_mutex_unlock(&this->_ADT->db_write_lock);
     }
     pthread_mutex_unlock(&this->_ADT->db_read_lock);
-    this->IOTS->save_to_log(to_print, 0, 0, std::string(), 0, 0, 0);
+    this->IOTS->save_to_log(msg,this->_atm_number,id,password,amount,0,0,0);
     return;
 }
 
 void Atm::check_balance(int id, string password){
-    string to_print;
+    printMsg msg;
     pthread_mutex_lock(&this->_ADT->db_read_lock);
     this->_ADT->rd_count++;
     if (this->_ADT->rd_count==1)
@@ -171,7 +166,7 @@ void Atm::check_balance(int id, string password){
     Account *temp = this->_ADT->search_account(id);
 
     if (temp == NULL) {
-        to_print="Error "+to_string(this->_atm_number) + ": Your transaction failed - account "+to_string(id) + " does not exist" +"\n";
+        msg=doesntExist;
 
     }
     else {
@@ -182,51 +177,55 @@ void Atm::check_balance(int id, string password){
             if (temp->rd_count == 1)
                 pthread_mutex_lock(&temp->write_lock);
             pthread_mutex_unlock(&temp->read_lock);
-            to_print= to_string(_atm_number)+ ": Account "+ to_string(id)+ " balance is " +to_string(temp->check_balance()) +"\n";
+            msg=balance;
             pthread_mutex_lock(&temp->read_lock);
             temp->rd_count--;
             if (temp->rd_count == 0)
                 pthread_mutex_unlock(&temp->write_lock);
             pthread_mutex_unlock(&temp->read_lock);
         } else
-            to_print= "Error " +to_string( this->_atm_number) + ": Your transaction failed - password for account " + to_string(id)
-                             + " is incorrect" +"\n";
+            msg=badPassword;
     }
     pthread_mutex_lock(&this->_ADT->db_read_lock);
     this->_ADT->rd_count--;
     if (this->_ADT->rd_count==0)
         pthread_mutex_unlock(&this->_ADT->db_write_lock);
     pthread_mutex_unlock(&this->_ADT->db_read_lock);
-    this->IOTS->save_to_log(to_print, 0, 0, std::string(), 0, 0, 0);
+    this->IOTS->save_to_log(msg,this->_atm_number,id,password,0,0,0,0);
     return;
 
 }
 
 void Atm::close_account(int id, string password){
-    string to_print;
+    printMsg msg;
     pthread_mutex_lock(&this->_ADT->db_write_lock);
     sleep(1);
     Account *temp = this->_ADT->search_account(id);
     if (temp == NULL) {
-        to_print="Error "+to_string(this->_atm_number) + ": Your transaction failed - account "+to_string(id) + " does not exist" +"\n";
+        msg=doesntExist;
 
     }
     else {
         if (temp->check_password(password))
+        {
             this->_ADT->delete_account(id);
+            msg=close;
+        }
         else
-            to_print= "Error " +to_string( this->_atm_number) + ": Your transaction failed - password for account " + to_string(id)
-                             + " is incorrect" +"\n";
+            msg=badPassword;
 
     }
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
-    this->IOTS->save_to_log(to_print, 0, 0, std::string(), 0, 0, 0);
+    this->IOTS->save_to_log(msg,this->_atm_number,id,"",0,0,0,0);
     return;
 
 }
 
 void Atm::transfer(int source_id, string password, int target_id, int amount) {
-    string to_print;
+    printMsg msg;
+    bool target_err=false;
+    int source_newbalance=0;
+    int target_new_balance=0;
     pthread_mutex_lock(&this->_ADT->db_read_lock);
     this->_ADT->rd_count++;
     if (this->_ADT->rd_count==1)
@@ -239,14 +238,14 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
 
 
     if (temp1 == NULL ) {
-        to_print="Error "+to_string(this->_atm_number) + ": Your transaction failed - account "+to_string(source_id) + " does not exist"
-                        +"\n";
+         msg=doesntExist;
+        target_err=true;
+
 
     }
     else
     if (temp2 == NULL ) {
-        to_print="Error "+to_string(this->_atm_number) + " Your transaction failed - account "+to_string(target_id) + " does not exist"
-             +"\n";
+      msg=doesntExist;
     }
     else {
         if (temp1->check_password(password)) {
@@ -260,23 +259,24 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
             sleep(1);
             if (temp1->withdraw(amount)) {
                 temp2->deposit(amount);
-                to_print= to_string(_atm_number)+ ": Transfer from account " +to_string(source_id)  +" to account " +to_string(target_id)
-                     + " new account balance is  "
-                      +to_string(temp1->check_balance()) + " $ new target account balance is " + to_string(temp2->check_balance()) +" $ \n";
+                msg=success_transfer;
+                source_newbalance=temp1->check_balance();
+                target_new_balance=temp2->check_balance();
             } else
-                to_print= "Error " +to_string(this->_atm_number) + ": Your transaction failed - account " + to_string(source_id)
-                     + " balance is lower than " + to_string(amount) +"\n";
+                msg=insufficient;
             pthread_mutex_unlock(&temp2->write_lock);
             pthread_mutex_unlock(&temp1->write_lock);
         } else
-            to_print= "Error " +to_string( this->_atm_number) + ": Your transaction failed - password for account " + to_string(source_id)
-                             + " is incorrect" +"\n";
+            msg=badPassword;
     }
     pthread_mutex_lock(&this->_ADT->db_read_lock);
     this->_ADT->rd_count--;
     if (this->_ADT->rd_count==0)
         pthread_mutex_unlock(&this->_ADT->db_write_lock);
     pthread_mutex_unlock(&this->_ADT->db_read_lock);
-    this->IOTS->save_to_log(to_print, 0, 0, std::string(), 0, 0, 0);
+    if (target_err)
+        this->IOTS->save_to_log(msg,this->_atm_number,target_id,password,amount,0,0,0);
+    else
+        this->IOTS->save_to_log(msg,this->_atm_number,source_id,password,amount,source_newbalance,target_id,target_new_balance);
     return;
 }
