@@ -31,7 +31,6 @@ void Atm::do_commands(string path) {
             file.close();
             break;
         }
-
         istringstream iss(line);
         string instruction[5];
         int i = 0;

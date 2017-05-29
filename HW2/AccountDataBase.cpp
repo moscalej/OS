@@ -15,11 +15,14 @@ AccountDataBase::AccountDataBase() {
 
 bool AccountDataBase::insert_account(int account_id, string password, int initial_amount) {
      Account * temp = new Account(account_id,password,initial_amount);
-    if (temp != NULL){
-        this->_Accounts[account_id]=temp;
-        return true;
+    if (temp == NULL){
+        return false;
     }
-    return false;
+    std::pair<std::map<int,Account *>::iterator,bool> ret;
+    ret = this->_Accounts.insert ( std::pair<int,Account*>(account_id,temp) );
+    if (!ret.second) {
+        return false;
+    }
 }
 void AccountDataBase::readers_lock() {
     pthread_mutex_lock(&this->db_read_lock);
