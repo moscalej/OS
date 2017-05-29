@@ -69,7 +69,7 @@ void Atm::account(int id, string password, int initial_amount) {
 
     //newAccount, accountExists, doesntExist, badPassword, success_deposit, insufficient, success_withdraw, balance, success_transfer
     pthread_mutex_lock(&this->_ADT->db_write_lock);
-
+    sleep(1);
     if (this->_ADT->insert_account(id,password,initial_amount))//todo check if insert to map check duplicity
     {
         msg=newAccount;
@@ -96,9 +96,9 @@ void Atm::deposit(int id, string password, int amount) {
     }else {
 
         if (temp->check_password(password)) {
-            temp->deposit(amount);
+            account_balance= temp->deposit(amount);
              msg=success_deposit;
-            account_balance=temp->check_balance();
+
 
         } else
              msg=badPassword;
@@ -121,9 +121,9 @@ void Atm::withdraw(int id, string password, int amount) {
     }
     else {
         if (temp->check_password(password)) {
-            if (temp->withdraw(amount)) {
+            account_balance=temp->withdraw(amount);
+            if (account_balance) {
                 msg=success_withdraw;
-                account_balance=temp->check_balance();
             }
             else {
                 msg=insufficient;

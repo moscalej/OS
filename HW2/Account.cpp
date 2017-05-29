@@ -2,6 +2,7 @@
 // Created by alejandro on 5/23/2017.
 //
 
+#include <unistd.h>
 #include "Account.h"
 
 Account::Account(int id, string password, int initial_amount) {
@@ -20,29 +21,32 @@ bool Account::check_password(string try_password) {
     return this->_password == try_password;
 }
 
-void Account::deposit(int amount) {
+int Account::deposit(int amount) {
     pthread_mutex_lock(&write_lock);
+    sleep(1);
     this->_balance = _balance + amount;
     pthread_mutex_unlock(&write_lock);
-    return;
+    return _balance;
 
 }
 
-bool Account::withdraw(int amount) {
+int Account::withdraw(int amount) {
     pthread_mutex_lock(&write_lock);
+    sleep(1);
     if (this->_balance < amount)
-        return false;
+        return -1;
     else {
 
         this->_balance = _balance - amount;
 
     }
     pthread_mutex_unlock(&write_lock);
-   return true;
+   return _balance;
 }
 
 int Account::check_balance() {
     readers_lock();
+    sleep(1);
     int balance= _balance;
     readers_unlock();
     return balance;

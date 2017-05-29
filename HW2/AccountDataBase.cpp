@@ -23,6 +23,7 @@ bool AccountDataBase::insert_account(int account_id, string password, int initia
     if (!ret.second) {
         return false;
     }
+    return true;
 }
 void AccountDataBase::readers_lock() {
     pthread_mutex_lock(&this->db_read_lock);

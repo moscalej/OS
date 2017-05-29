@@ -27,7 +27,7 @@ public:
     *
     * @param amount : amount of the deposit
     */
-    void deposit(int amount);
+    int deposit(int amount);
 
     /**
      * This method will withdraw money from the user account
@@ -36,7 +36,7 @@ public:
      * @return true - if the windraw was made
      *          false- if there is not enough money to take
      */
-    bool withdraw(int amount);
+    int withdraw(int amount);
 
     /**
      * This method will check the balance on the target id
