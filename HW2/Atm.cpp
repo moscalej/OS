@@ -199,13 +199,11 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
 
     if (temp1 == NULL ) {
          msg=doesntExist;
-        target_err=true;
-
-
     }
     else
     if (temp2 == NULL ) {
       msg=doesntExist;
+        target_err=true;
     }
     else {
         if (temp1->check_password(password)) {
@@ -243,6 +241,7 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
         } else
             msg=badPassword;
     }
+
     _ADT->readers_unlock();
     if (target_err)
         this->IOTS->save_to_log(msg,this->_atm_number,target_id,password,amount,0,0,0);
