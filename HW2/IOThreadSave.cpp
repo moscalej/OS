@@ -61,7 +61,7 @@ IOThreadSave::~IOThreadSave() {
 
 IOThreadSave::IOThreadSave(){
     logFile.open("../log.txt");
-    mutex_log = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_init(&mutex_log , NULL);
 
 }
 

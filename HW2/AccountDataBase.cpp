@@ -8,8 +8,8 @@
 AccountDataBase::AccountDataBase() {
     rd_count=0;
     _balance=0;
-    this->db_write_lock=PTHREAD_MUTEX_INITIALIZER;
-    this->db_read_lock=PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_init(&this->db_write_lock, NULL);
+    pthread_mutex_init(&this->db_read_lock, NULL);
 
 }
 

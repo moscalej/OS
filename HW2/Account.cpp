@@ -6,8 +6,9 @@
 #include "Account.h"
 
 Account::Account(int id, string password, int initial_amount) {
-    this->write_lock = PTHREAD_MUTEX_INITIALIZER;
-    this->read_lock = PTHREAD_MUTEX_INITIALIZER;
+
+    pthread_mutex_init(&this->write_lock,NULL);
+    pthread_mutex_init(&this->read_lock,NULL);
     this->_id = id;
     this->_password = password;
     this->_balance = initial_amount;
