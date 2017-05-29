@@ -30,7 +30,7 @@ void * bank_print(void * arg){
         pthread_mutex_unlock(&(temp->accountDataBase->db_write_lock));
 
        // pthread_rwlock_rdlock(temp->finish_thread);// this check if is time to finish :D
-        if(*temp->finish_bool) break;
+        if(*temp->finish_bool==1) break;
        // pthread_rwlock_unlock(temp->finish_thread);
         usleep(500000);
 
@@ -56,7 +56,7 @@ void * bank_charge(void * arg){
         }
 
         //pthread_rwlock_rdlock(temp->finish_thread); // this check if is time to finish :D
-        if(*temp->finish_bool) break;
+        if(*temp->finish_bool==2) break;
         //pthread_rwlock_unlock(temp->finish_thread);
 
     }
@@ -75,7 +75,7 @@ void *atm_thread(void *arg) {
 }
 
 Args::Args(AccountDataBase *accountDataBase, IOThreadSave *ioThreadSave, char *text, int Atm_number,
-           pthread_rwlock_t * finish_lock, bool *finish_bool) {
+           pthread_rwlock_t * finish_lock, int *finish_bool) {
     this->finish_bool =finish_bool;
     this->finish_thread =finish_lock;
     this->accountDataBase = accountDataBase;

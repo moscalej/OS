@@ -22,7 +22,7 @@
 class Args {
 public:
     Args(AccountDataBase *accountDataBase, IOThreadSave *ioThreadSave, char *text, int Atm_number,
-             pthread_rwlock_t *finish_lock, bool *finish_bool);
+             pthread_rwlock_t *finish_lock, int *finish_bool);
 
     Args() {}
 
@@ -31,7 +31,7 @@ public:
     IOThreadSave * ioThreadSave;
     char *text;
     pthread_rwlock_t * finish_thread;
-    bool * finish_bool;
+    int * finish_bool;
 
 };
 

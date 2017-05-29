@@ -112,7 +112,7 @@ void Atm::deposit(int id, string password, int amount) {
 
 void Atm::withdraw(int id, string password, int amount) {
     printMsg msg;
-    int account_balance;
+    int account_balance=0;
     _ADT->readers_lock();
     Account *temp = this->_ADT->search_account(id);
 
