@@ -19,7 +19,7 @@ void * bank_print(void * arg){
         pthread_mutex_lock(&temp->accountDataBase->db_write_lock);
         printf("\033[2J");
         printf("\033[1;1H");
-        cout<<"Current Bank status"<<endl;
+        cout<<"Current Bank status"<<endl;git
         for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
 
             cout<<"Account " <<it->second->_id<< ": Balance - "<<it->second->_balance <<
