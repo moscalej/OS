@@ -9,6 +9,7 @@
 void IOThreadSave::save_to_log(printMsg msg, int atm_num, int id, string password, int amount, int source_balance,
                                int target_id, int target_balance) {
     //newAccount, accountExists, doesntExist, badPassword, success_deposit, insufficient, success_withdraw, balance, close, success_transfer
+    pthread_mutex_lock(&(this->mutex_log));
     switch (msg) {
         case newAccount :
             logFile << atm_num << ": New account id is " << id << " with password " << password
@@ -62,6 +63,12 @@ IOThreadSave::IOThreadSave(){
     logFile.open("log.txt");
     mutex_log = PTHREAD_MUTEX_INITIALIZER;
 
+}
+
+void IOThreadSave::Bank_to_Log(int rate, int amount, int id) {
+    pthread_mutex_lock(&(this->mutex_log));
+    logFile<< "Bank: commisions of " << (rate * 100) << " % were charged, the bank gained " << amount << " from account " << id << endl;
+    pthread_mutex_unlock(&(this->mutex_log));
 }
 
 
