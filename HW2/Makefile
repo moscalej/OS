@@ -10,7 +10,7 @@ Bank: $(OBJS)
 	$(CCLINK) $(CFLAGS) -o Bank $(OBJS)
 # Creating the object files
 Account.o: Account.cpp Account.h
-main.o: main.cpp
+main.o: main.cpp ThreadFunc.h
 Atm.o: Atm.cpp Atm.h
 AccountDataBase.o: AccountDataBase.cpp AccountDataBase.h
 IOThreadSave.o: IOThreadSave.cpp IOThreadSave.h
