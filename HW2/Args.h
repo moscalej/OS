@@ -10,12 +10,7 @@
 
 class Args {
 public:
-    Args(AccountDataBase *accountDataBase, IOThreadSave *ioThreadSave, char *text, int Atm_number) {
-        this->accountDataBase = accountDataBase;
-        this->ioThreadSave = ioThreadSave;
-        this->text = text;
-        this->Atm_number = Atm_number;
-    }
+    Args(AccountDataBase *accountDataBase, IOThreadSave *ioThreadSave, char *text, int Atm_number) ;
 
     Args() {}
 
@@ -26,23 +21,13 @@ public:
 
 };
 
-void *atm_thread(void *arg) {
-    Args *temp = (Args *) arg;
-    string path_file = string(temp->text);
+void * bank_print(void * arg);
 
-    printf((char *) arg);
-    Atm ATM(temp->Atm_number, temp->accountDataBase, temp->ioThreadSave);
-    ATM.do_commands(path_file);
-    pthread_exit(NULL);
-}
+void * bank_charge(void * arg);
 
-void *bank_thread(void *args) {
-    Args *temp = (Args *) args;
-    Bank bank1;
-    bank1.set(0, temp->accountDataBase, temp->ioThreadSave);
-    bank1.bank_run();
-    pthread_exit(NULL);
-}
+void *atm_thread(void *arg) ;
+
+
 
 
 

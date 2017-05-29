@@ -10,8 +10,9 @@
 using namespace std;
 
 class Account {
-friend class Bank;
+
 public:
+    virtual ~Account();
     Account(int id, string password, int initial_amount);
 
     /**
@@ -42,9 +43,9 @@ public:
      * @return the balance in the account
      */
     int check_balance();
+    friend void * bank_print(void * arg);
 
-    virtual ~Account();
-
+    friend void * bank_charge(void * arg);
     int _id;
     pthread_mutex_t write_lock;
     pthread_mutex_t read_lock;
