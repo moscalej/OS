@@ -6,7 +6,7 @@
 #define HW2_ARGS_H
 
 #include "Atm.h"
-#include "Bank.h"
+
 
 class Args {
 public:
@@ -17,7 +17,7 @@ public:
 
     int Atm_number;
     AccountDataBase *accountDataBase;
-    IOThreadSave *ioThreadSave;
+    IOThreadSave * ioThreadSave;
     char *text;
     pthread_rwlock_t * finish_thread;
     bool * finish_bool;

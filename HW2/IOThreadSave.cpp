@@ -3,7 +3,6 @@
 //
 
 #include <cstdio>
-#include <w32api/wsman.h>
 #include "IOThreadSave.h"
 
 void IOThreadSave::save_to_log(printMsg msg, int atm_num, int id, string password, int amount, int source_balance,

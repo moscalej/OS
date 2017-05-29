@@ -10,7 +10,7 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-    IOThreadSave IOTS("./log.txt");
+    IOThreadSave IOTS;
     AccountDataBase ADB;
     pthread_rwlock_t thread_finish;
     bool finish=false;
@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 
     int N = 1; /// supposed to be input arg
 
-    Args bank_arguments(&ADB, &IOTS, NULL, 0, &thread_finish, NULL);
+    Args bank_arguments(&ADB, &IOTS, NULL, 0, &thread_finish, &finish);
     Args Atm_arguments[N];
 
     pthread_t threads[N];
