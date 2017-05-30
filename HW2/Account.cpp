@@ -7,16 +7,13 @@
 
 Account::Account(int id, string password, int initial_amount) {
 
-    pthread_mutex_init(&this->write_lock,NULL);
-    pthread_mutex_init(&this->read_lock,NULL);
+    pthread_mutex_init(&this->write_lock, NULL);
+    pthread_mutex_init(&this->read_lock, NULL);
     this->_id = id;
     this->_password = password;
     this->_balance = initial_amount;
-    rd_count=0;
+    rd_count = 0;
 }
-
-
-
 
 bool Account::check_password(string try_password) {
     return this->_password == try_password;
@@ -39,11 +36,11 @@ int Account::withdraw(int amount) {
     else {
 
         this->_balance = _balance - amount;
-
     }
     pthread_mutex_unlock(&write_lock);
-   return _balance;
+    return _balance;
 }
+
 int Account::charge_commission(double rate) {
     pthread_mutex_lock(&write_lock);
     int amount = (int) (_balance * rate);
@@ -55,7 +52,7 @@ int Account::charge_commission(double rate) {
 int Account::check_balance() {
     readers_lock();
     sleep(1);
-    int balance= _balance;
+    int balance = _balance;
     readers_unlock();
     return balance;
 }
@@ -64,6 +61,7 @@ Account::~Account() {
     pthread_mutex_destroy(&(this->write_lock));
     pthread_mutex_destroy(&(this->read_lock));
 }
+
 void Account::readers_lock() {
     pthread_mutex_lock(&this->read_lock);
     this->rd_count++;

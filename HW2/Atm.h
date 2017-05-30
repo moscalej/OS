@@ -19,23 +19,23 @@ public:
      * This method will run the Atm:
      * it will open the txt file indicate on the path and run all the commands
      * for the ATM
-     * @param path the path to the txt comand file
+     * @param path the path to the txt command file
      */
     void do_commands(string path);
 
 private:
     /**
      * This method will Create an account on the data base
-     * it will also print if it it was able to made the account
+     * it will also print to logs if it it was able to made the account
      * @param id Account id
      * @param password The password corresponding to the id
-     * @param initial_amount The accound initial id
+     * @param initial_amount The account initial balance
      */
     void account(int id,string password, int initial_amount);
 
     /**
      * This method will make a deposit to the source account
-     * it will also print if it it was able to made the deposit
+     * it will also print to logs if it it was able to made the deposit
      * and the details
      * @param id : user id
      * @param password  :user password

@@ -55,7 +55,7 @@ public:
     friend void * bank_charge(void * arg);
 
     /**
-     *These methods and rd_count are the readers code for the ReadWrithe problem on
+     *These methods and rd_count are the readers code for the ReadWrithe problem
      * we also use pthread_rwlock_t on parts of our code to keep the things simple
      * but in these case we made it by hand :D
      */

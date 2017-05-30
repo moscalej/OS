@@ -18,7 +18,7 @@ void * bank_print(void * arg){
         printf("\033[1;1H");
         cout<<"Current Bank status"<<endl;
 
-        pthread_mutex_lock(&temp->accountDataBase->db_write_lock);
+        pthread_mutex_lock(&(temp->accountDataBase->db_write_lock));
 
         for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
 
@@ -26,16 +26,19 @@ void * bank_print(void * arg){
                 " $ , Account Password - " << it->second->_password << endl;
 
         }
-        cout<<"The Bank has "<<temp->accountDataBase->_balance<<" $"<<endl;
+
         pthread_mutex_unlock(&(temp->accountDataBase->db_write_lock));
 
-       pthread_rwlock_rdlock(temp->finish_thread);// this check if is time to finish :D
+        cout<<"The Bank has "<<temp->accountDataBase->_balance<<" $"<<endl;
+
+        pthread_rwlock_rdlock(temp->finish_thread);// this check if is time to finish :D
         if(*temp->finish_bool==1) break;
-       pthread_rwlock_unlock(temp->finish_thread);
+        pthread_rwlock_unlock(temp->finish_thread);
+
         usleep(500000);
 
     }
-   // pthread_rwlock_unlock(temp->finish_thread);
+    pthread_rwlock_unlock(temp->finish_thread);
     pthread_exit(NULL);
 }
 
@@ -43,11 +46,14 @@ void * bank_charge(void * arg){
 
     Args *temp = (Args *) arg;
     map<int, Account *>::iterator it;
+
     while (true) {
         sleep(3);
         int amount = 0;
         float interest = (rand() % 3 + 2) / (float)100;
+        //Charge the interest to every account on the ADB
         for (it = temp->accountDataBase->_Accounts.begin(); it != temp->accountDataBase->_Accounts.end(); ++it) {
+
             temp->accountDataBase->readers_lock();
             amount=it->second->charge_commission(interest);
             temp->accountDataBase->_balance += amount;
@@ -61,22 +67,25 @@ void * bank_charge(void * arg){
         sleep(3);
 
     }
-   // pthread_rwlock_unlock(temp->finish_thread);
+    pthread_rwlock_unlock(temp->finish_thread);
     pthread_exit(NULL);
 }
 
 
 
 void *atm_thread(void *arg) {
-    Args *temp = (Args *) arg;
+    Args *temp = (Args *) arg;                                          //setting values to ATM
     string path_file = string(temp->text);
     Atm ATM(temp->Atm_number, temp->accountDataBase, temp->ioThreadSave);
+
     ATM.do_commands(path_file);
+
     pthread_exit(NULL);
 }
 
-Args::Args(AccountDataBase *accountDataBase, IOThreadSave *ioThreadSave, char *text, int Atm_number,
-           pthread_rwlock_t * finish_lock, int *finish_bool) {
+Args::Args(AccountDataBase *accountDataBase, IOThreadSave *ioThreadSave, char *text,
+           int Atm_number, pthread_rwlock_t * finish_lock, int *finish_bool) {
+
     this->finish_bool =finish_bool;
     this->finish_thread =finish_lock;
     this->accountDataBase = accountDataBase;
