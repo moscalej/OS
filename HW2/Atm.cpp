@@ -190,8 +190,7 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
       msg=doesntExist;
         target_err=true;
     }
-    else {
-        if (temp1->check_password(password)) {
+    else if (temp1->check_password(password)) {
             if (source_id < target_id) {
                 if (temp1->withdraw(amount)) {
                     temp2->deposit(amount);
@@ -218,7 +217,7 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
             }
         } else
             msg=badPassword;
-    }
+
 
     _ADT->readers_unlock();
     if (target_err)

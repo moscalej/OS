@@ -39,7 +39,7 @@ void IOThreadSave::save_to_log(printMsg msg, int atm_num, int id, string passwor
             logFile << atm_num << ": Account " << id << " balance is " << balance << endl;
             break;
         case success_close:
-            logFile << atm_num << ": Account " << id << " is now closed. balance was" << balance << endl;
+            logFile << atm_num << ": Account " << id << " is now closed. balance was " << balance << endl;
             break;
         case success_transfer:
             logFile << atm_num << ": Transfer " << amount << " from account " << id << " to account " << target_id
