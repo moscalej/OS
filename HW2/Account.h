@@ -1,4 +1,8 @@
-
+//
+// This document was create it by
+//  Alejandro Moscoso and Yonathan Haimovich
+//  for the Hw 2 of Operating systems 2017 spring
+//
 
 #ifndef HW2_ACCOUNT_H
 #define HW2_ACCOUNT_H

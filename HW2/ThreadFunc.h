@@ -1,5 +1,7 @@
 //
-// Created by alejandro on 5/27/2017.
+// This document was create it by
+//  Alejandro Moscoso and Yonathan Haimovich
+//  for the Hw 2 of Operating systems 2017 spring
 //
 
 #ifndef HW2_ARGS_H

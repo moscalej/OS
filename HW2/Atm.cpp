@@ -1,5 +1,7 @@
 //
-// Created by amoscoso on 5/21/2017.
+// This document was create it by
+//  Alejandro Moscoso and Yonathan Haimovich
+//  for the Hw 2 of Operating systems 2017 spring
 //
 
 #include <unistd.h>
