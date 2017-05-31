@@ -48,9 +48,12 @@ void AccountDataBase::readers_unlock() {
 
 
 Account *AccountDataBase::search_account(int account_id) {
-    Account *temp = this->_Accounts[account_id];
-
-    return temp;
+    map<int, Account *>::iterator it;
+    it = this->_Accounts.find((account_id));
+    if (it->second->_id==account_id)
+        return it->second;
+    else
+    return NULL;
 
 }
 
