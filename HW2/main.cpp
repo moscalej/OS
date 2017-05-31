@@ -51,15 +51,15 @@ int main(int argc, char **argv) {
     for (int i = 0; i < N ; i++) {
         pthread_join(threads[i], NULL);
     }
-    //pthread_mutex_lock(&thread_finish); //Tells the Bank thread to close
+    pthread_mutex_lock(&thread_finish); //Tells the Bank thread to close
     finish=2;
-   // pthread_mutex_unlock(&thread_finish);
+    pthread_mutex_unlock(&thread_finish);
 
     pthread_join(bank_charge_thread,NULL);
     finish=1;                               //Tells the Bank Print to close
     pthread_join(bank_print_thread,NULL);
 
     //Todo we need to relese all the alocate memery
-
+    pthread_mutex_destroy(&thread_finish);
     return 0;
 }

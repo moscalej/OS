@@ -34,14 +34,14 @@ void * bank_print(void * arg){
 
         cout<<"The Bank has "<<temp->accountDataBase->_balance<<" $"<<endl;
 
-        //pthread_mutex_lock(temp->finish_thread);// this check if is time to finish :D
+        pthread_mutex_lock(temp->finish_thread);// this check if is time to finish :D
         if(*temp->finish_bool==1) break;
-       // pthread_mutex_unlock(temp->finish_thread);
+       pthread_mutex_unlock(temp->finish_thread);
 
         usleep(500000);
 
     }
-   // pthread_rwlock_unlock(temp->finish_thread);
+   pthread_rwlock_unlock(temp->finish_thread);
     pthread_exit(NULL);
 }
 
@@ -64,9 +64,9 @@ void * bank_charge(void * arg){
             temp->ioThreadSave->Bank_to_Log(interest, amount, it->first);
         }
 
-        //pthread_mutex_lock(temp->finish_thread); // this check if is time to finish :D
+        pthread_mutex_lock(temp->finish_thread); // this check if is time to finish :D
         if(*temp->finish_bool==2) break;
-       // pthread_mutex_unlock(temp->finish_thread);
+        pthread_mutex_unlock(temp->finish_thread);
         sleep(3);
 
     }
