@@ -41,7 +41,7 @@ void * bank_print(void * arg){
         usleep(500000);
 
     }
-    pthread_rwlock_unlock(temp->finish_thread);
+   // pthread_rwlock_unlock(temp->finish_thread);
     pthread_exit(NULL);
 }
 
@@ -70,7 +70,7 @@ void * bank_charge(void * arg){
         sleep(3);
 
     }
-    pthread_rwlock_unlock(temp->finish_thread);
+    //pthread_rwlock_unlock(temp->finish_thread);
     pthread_exit(NULL);
 }
 
