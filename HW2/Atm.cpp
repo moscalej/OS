@@ -54,7 +54,7 @@ void Atm::do_commands(string path) {
         if(instruction[0] == "B") {
             this->check_balance(atoi(instruction[1].c_str()), instruction[2]);
         }
-        if(instruction[0] == "C") {
+        if(instruction[0] == "Q") {
             this->close_account(atoi(instruction[1].c_str()), instruction[2]);
         }
         if(instruction[0] == "T") {
