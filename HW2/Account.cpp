@@ -31,16 +31,18 @@ int Account::deposit(int amount) {
 }
 
 int Account::withdraw(int amount) {
+    int new_bal=-1;
     pthread_mutex_lock(&write_lock);
     sleep(1);
     if (this->_balance < amount)
-        return -1;
+        new_bal -1;
     else {
 
         this->_balance = _balance - amount;
+        new_bal=_balance;
     }
     pthread_mutex_unlock(&write_lock);
-    return _balance;
+    return new_bal;
 }
 
 int Account::charge_commission(double rate) {
