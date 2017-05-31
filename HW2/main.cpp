@@ -15,7 +15,7 @@ using namespace std;
 //TODO: check the paths to the #logs# and to the read folder
 
 int main(int argc, char **argv) {
-    if (argc < 3 || argc != argv[1]+2) {
+    if (argc < 3 || argc != atoi(argv[1])+2) {
         cout<< "illegal arguments"<<endl;
         exit(1);
     }
@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     pthread_rwlock_init(& thread_finish,NULL);
     int finish=3;
 
-    int N = argv[1];
+    int N = atoi(argv[1]);
 
     Args bank_arguments(&ADB, &IOTS, NULL, 0, &thread_finish, &finish);
     Args Atm_arguments[N];
