@@ -15,6 +15,10 @@ using namespace std;
 //TODO: check the paths to the #logs# and to the read folder
 
 int main(int argc, char **argv) {
+    if (argc < 3) {
+        cout<< "illegal arguments"<<endl;
+        exit(1);
+    }
 
     IOThreadSave IOTS;
     AccountDataBase ADB;
@@ -22,7 +26,7 @@ int main(int argc, char **argv) {
     pthread_rwlock_init(& thread_finish,NULL);
     int finish=3;
 
-    int N = 1; //Todo: our read number of method has to change
+    int N = argv[1];
 
     Args bank_arguments(&ADB, &IOTS, NULL, 0, &thread_finish, &finish);
     Args Atm_arguments[N];
@@ -35,7 +39,7 @@ int main(int argc, char **argv) {
         Atm_arguments[i].Atm_number = i+1;
         Atm_arguments[i].ioThreadSave = &IOTS;
         Atm_arguments[i].accountDataBase = &ADB;
-        Atm_arguments[i].text = argv[i + 1];
+        Atm_arguments[i].text = argv[i + 2];
 
     }
 
