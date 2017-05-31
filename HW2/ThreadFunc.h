@@ -24,7 +24,7 @@
 class Args {
 public:
     Args(AccountDataBase *accountDataBase, IOThreadSave *ioThreadSave, char *text, int Atm_number,
-             pthread_rwlock_t *finish_lock, int *finish_bool);
+             pthread_mutex_t *finish_lock, int *finish_bool);
 
     Args() {}
 
@@ -32,7 +32,7 @@ public:
     AccountDataBase *accountDataBase;
     IOThreadSave * ioThreadSave;
     char *text;
-    pthread_rwlock_t * finish_thread;
+    pthread_mutex_t * finish_thread;
     int * finish_bool;
 
 };
