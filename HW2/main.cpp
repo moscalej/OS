@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
     pthread_create(&bank_print_thread, NULL, &bank_print, (void *) &bank_arguments);
     for (int i = 0; i < N ; i++) {
-        pthread_create(&threads[i], NULL, atm_thread, (void *) &Atm_arguments);
+        pthread_create(&threads[i], NULL, atm_thread, (void *) &Atm_arguments[i]);
     }
     pthread_create(&bank_charge_thread, NULL, &bank_charge, (void *) &bank_arguments);
     for (int i = 0; i < N ; i++) {
