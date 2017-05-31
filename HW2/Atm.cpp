@@ -33,6 +33,7 @@ void Atm::do_commands(string path) {
             file.close();
             break;
         }
+        usleep(100000);
         istringstream iss(line);
         string instruction[5];
         int i = 0;
