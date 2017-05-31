@@ -3,7 +3,7 @@
 //  Alejandro Moscoso and Yonathan Haimovich
 //  for the Hw 2 of Operating systems 2017 spring
 //
-
+#include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
 #include "ThreadFunc.h"
