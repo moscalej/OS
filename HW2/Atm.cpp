@@ -155,8 +155,8 @@ void Atm::check_balance(int id, string password){
 
 void Atm::close_account(int id, string password){
     printMsg msg;
+    int balance=0;
     pthread_mutex_lock(&this->_ADT->db_write_lock);
-    sleep(1);
     Account *temp = this->_ADT->search_account(id);
     if (temp == NULL) {
         msg=doesntExist;
@@ -164,6 +164,7 @@ void Atm::close_account(int id, string password){
     else {
         if (temp->check_password(password))
         {
+            balance=temp->get_balance();
             this->_ADT->delete_account(id);
             msg=success_close;
         }
@@ -171,7 +172,7 @@ void Atm::close_account(int id, string password){
             msg=badPassword;
     }
     pthread_mutex_unlock(&this->_ADT->db_write_lock);
-    this->IOTS->save_to_log(msg,this->_atm_number,id,"",0,0,0,0);
+    this->IOTS->save_to_log(msg,this->_atm_number,id,"",0,balance,0,0);
     return;
 
 }
