@@ -50,7 +50,7 @@ void AccountDataBase::readers_unlock() {
 Account *AccountDataBase::search_account(int account_id) {
     map<int, Account *>::iterator it;
     it = this->_Accounts.find((account_id));
-    if (it->second->_id==account_id)
+    if (it!=_Accounts.end())
         return it->second;
     else
     return NULL;
