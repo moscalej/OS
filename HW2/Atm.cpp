@@ -188,25 +188,26 @@ void Atm::transfer(int source_id, string password, int target_id, int amount) {
     if (temp1 == NULL ) {
          msg=doesntExist;
         this->IOTS->save_to_log(msg,this->_atm_number,source_id,password,amount,0,0,0);
-        return;
+
     }
     else if (temp2 == NULL ) {
       msg=doesntExist;
         this->IOTS->save_to_log(msg,this->_atm_number,target_id,password,amount,0,0,0);
-        return;
+
     }
     else if (temp1->check_password(password)) {
             if (temp1->transfer(amount,temp2))
             {
                 msg=success_transfer;
+                source_new_balance=temp1->get_balance();
+                target_new_balance=temp2->get_balance();
             } else
             {
                 msg=insufficient;
             }
         } else
             msg=badPassword;
-    source_new_balance=temp1->get_balance();
-    target_new_balance=temp2->get_balance();
+
     _ADT->readers_unlock();
     this->IOTS->save_to_log(msg,this->_atm_number,source_id,password,amount,source_new_balance,target_id,target_new_balance);
     return;
