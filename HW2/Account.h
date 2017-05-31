@@ -47,7 +47,8 @@ public:
      * @return the balance in the account
      */
     int check_balance();
-
+    bool transfer(int amount,Account *target_account);
+    int get_balance();
     /**
      * The next to methods are the ones use by the bank threads
      * we made then friend so the bank can access the private arguments

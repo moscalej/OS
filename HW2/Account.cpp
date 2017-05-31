@@ -81,5 +81,56 @@ void Account::readers_unlock() {
     pthread_mutex_unlock(&this->read_lock);
 }
 
+bool Account::transfer(int amount, Account *target_account) {
+    bool success;
+    if (_id<target_account->_id)
+    {
+        pthread_mutex_lock(&this->write_lock);
+        pthread_mutex_lock(&target_account->write_lock);
+        sleep(1);
+        if (this->_balance>=amount)
+        {
+            this->_balance-=amount;
+            target_account->_balance+=amount;
+            success= true;
+        } else {
+
+            success= false;
+        }
+        pthread_mutex_unlock(&this->write_lock);
+        pthread_mutex_lock(&target_account->write_lock);
+        return success;
+    }
+    else if ((_id==target_account->_id))
+    {
+        return true;
+    } else
+    {
+        pthread_mutex_lock(&target_account->write_lock);
+        pthread_mutex_lock(&this->write_lock);
+        sleep(1);
+        if (this->_balance>=amount)
+        {
+            this->_balance-=amount;
+            target_account->_balance+=amount;
+
+            success= true;
+        } else {
+            success= false;
+        }
+        pthread_mutex_unlock(&target_account->write_lock);
+        pthread_mutex_unlock(&this->write_lock);
+        return success;
+    }
+
+}
+
+int Account::get_balance() {
+    readers_lock();
+    int balance=_balance;
+    readers_unlock();
+    return balance;
+}
+
 
 
