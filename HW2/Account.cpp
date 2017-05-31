@@ -100,7 +100,7 @@ bool Account::transfer(int amount, Account *target_account) {
             success= false;
         }
         pthread_mutex_unlock(&this->write_lock);
-        pthread_mutex_lock(&target_account->write_lock);
+        pthread_mutex_unlock(&target_account->write_lock);
         return success;
     }
     else if ((_id==target_account->_id))
