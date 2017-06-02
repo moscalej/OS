@@ -58,20 +58,23 @@ Account *AccountDataBase::search_account(int account_id) {
 }
 
 bool AccountDataBase::delete_account(int account_id) {
-//todo need to what hapend if the key is not on the map
-//    todo also to think how will the dinamics will work for the delete
-    Account *temp = this->_Accounts[account_id];
-    if (temp != NULL) {
-        this->_Accounts.erase(account_id);
-        delete (temp);
+    map<int, Account *>::iterator it;
+    it = this->_Accounts.find((account_id));
+    if (it!=_Accounts.end()){
+        delete(it->second);
         return true;
     }
-    return false;
+    else
+        return false;
 }
 
 AccountDataBase::~AccountDataBase() {
     pthread_mutex_destroy(&(this->db_read_lock));
     pthread_mutex_destroy(&(this->db_write_lock));
+    map<int, Account *>::iterator it;
+    for (it = this->_Accounts.begin()    ;it != this->_Accounts.end() ; ++it) {
+        delete (it->second);
+    }
 
 }
 

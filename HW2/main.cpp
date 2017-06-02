@@ -11,8 +11,6 @@
 using namespace std;
 
 
-//TODO: create a destructor for all the class witch will destroy the relevant locks
-//TODO: check the paths to the #logs# and to the read folder
 
 int main(int argc, char **argv) {
     if (argc < 3 || argc != atoi(argv[1])+2) {
@@ -58,7 +56,7 @@ int main(int argc, char **argv) {
     finish=1;                               //Tells the Bank Print to close
     pthread_join(bank_print_thread,NULL);
 
-    //Todo we need to relese all the alocate memery
+
     pthread_mutex_destroy(&thread_finish);
     return 0;
 }
