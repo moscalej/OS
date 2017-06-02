@@ -11,6 +11,8 @@
 using namespace std;
 
 
+//TODO: create a destructor for all the class witch will destroy the relevant locks
+
 
 int main(int argc, char **argv) {
     if (argc < 3 || argc != atoi(argv[1])+2) {
