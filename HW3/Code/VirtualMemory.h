@@ -5,6 +5,7 @@
 #ifndef HW3_VIRTUALMEMORY_H
 #define HW3_VIRTUALMEMORY_H
 
+#include "OurPointer.h"
 
 class VirtualMemory {
 public:
