@@ -5,17 +5,33 @@
 #ifndef HW3_PAGETABLE_H
 #define HW3_PAGETABLE_H
 
-
 #pragma once
-#include “PageDirectoryEntry.h”
+
+#include <map>
+#include "PageDirectoryEntry.h"
+#include "PageTableEntry.h"
+#include "PageDirectoryEntry.h"
+#include "SwapDevice.h"
+#include <queue>
+using namespace std;
+
 class VirtualMemory; //You will probably want to include this in PageTable.cpp
 class PageTable
 {
 public:
 //Your Constructor (and Destructor if you need one) should go here
     int* GetPage (unsigned int adr);
+
 private:
-//Fill the class with the necessary member variables
+    queue<int*> freeFramesList; //move this to PT
+
+    SwapDevice * swapDevice;
+
+    map<int,int> lastUse;
+
+    std::map<unsigned , PageDirectoryEntry > _PDE;
+
+
 };
 
 #endif //HW3_PAGETABLE_H

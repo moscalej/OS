@@ -3,3 +3,7 @@
 //
 
 #include "PageTable.h"
+
+int *PageTable::GetPage(unsigned int adr) {
+    return nullptr;
+}

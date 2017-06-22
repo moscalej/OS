@@ -44,11 +44,13 @@ OurPointer OurMalloc(size_t size) { //allocates a pointer, we added the code for
 }
 int* GetPage(unsigned int adr) { return pageTable.GetPage(adr); }
 private:
-size_t allocated;
+
+    PageTable pageTable;
+    PhysMem * PM;
+
     /*The number of ints already allocated, ((allocated *4) = (number of bytes already allocated)), this can also be used as the next
         address to be allocated.
         */
-queue<int*> freeFramesList; //move this to PT
-PageTable pageTable;
+    size_t allocated;
 };
 #endif //HW3_VIRTUALMEMORY_H
