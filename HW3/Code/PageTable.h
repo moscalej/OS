@@ -6,9 +6,16 @@
 #define HW3_PAGETABLE_H
 
 
-class PageTable {
-
+#pragma once
+#include “PageDirectoryEntry.h”
+class VirtualMemory; //You will probably want to include this in PageTable.cpp
+class PageTable
+{
+public:
+//Your Constructor (and Destructor if you need one) should go here
+    int* GetPage (unsigned int adr);
+private:
+//Fill the class with the necessary member variables
 };
-
 
 #endif //HW3_PAGETABLE_H
