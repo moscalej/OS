@@ -21,10 +21,11 @@ int * PageTable::GetPage(unsigned int full_VA) {
         return this->_PDE[PageDirEntry].get_address(full_VA);
     }
     int* new_phys_address=swapDevice_->write_this_page_to_the_frame(full_VA);
-    int old_VA=this->lastUse.find(new_phys_address);
-    if (old_VA != lastUse.end()) {
+    map<int*,int>::iterator old_pair;
+    old_pair=this->lastUse.find(new_phys_address);
+    if (old_pair != lastUse.end()) {
         this->lastUse[new_phys_address] = full_VA;
-        this->_PDE[PageDirEntry].set_valid(old_VA, false);
+        this->_PDE[PageDirEntry].set_valid(old_pair->second, false);
     }
     this->_PDE[PageDirEntry].set_address(full_VA, new_phys_address);
     this->_PDE[PageDirEntry].set_valid( full_VA,true);
