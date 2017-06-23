@@ -24,3 +24,10 @@ int SwapDevice::ReadFrameFromSwapDevice(int pageNumber, int* pageIn) {
 SwapDevice::SwapDevice(PhysMem *PM) : PM(PM) {
 
 }
+
+int SwapDevice::write_this_page_to_the_frame(unsigned virtual_address) {
+    /*
+     * get VM, pop frame_number from queue, swap physical memory, return frame_number,
+     * push back to queue
+     */
+}
