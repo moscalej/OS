@@ -1,5 +1,5 @@
 #include "SwapDevice.h"
-#include "HelpFunc.h"
+
 
 #define FRAMESZ 4096
 

@@ -6,7 +6,7 @@
 #define HW3_OURPOINTER_H
 
 
-#pragma once
+
 
 
 
