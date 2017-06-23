@@ -40,14 +40,7 @@ void ReleaseFrame(int* framePointer);
 the framePointer, make sure you only use this function with a pointer to the
 beginning of the Frame! it should be the same pointer as held in the PTE.
  */
-OurPointer OurMalloc(size_t size) { //allocates a pointer, we added the code for your convenience
-    if (allocated + size >= (VIRTMEMSIZE >> 2)) {
-        throw "We are limited to 4294967296 bytes with our 32 bit address size";
-    }
-    OurPointer ptr(allocated, this);
-    allocated += size;
-    return ptr;
-}
+OurPointer OurMalloc(size_t size);
 int* GetPage(unsigned int adr);
 
 private:
