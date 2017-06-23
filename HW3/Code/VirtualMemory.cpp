@@ -6,7 +6,6 @@
 #include "OurPointer.h"
 
 
-
 VirtualMemory::VirtualMemory() {
 
 
