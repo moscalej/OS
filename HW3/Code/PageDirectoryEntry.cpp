@@ -15,12 +15,19 @@ PageDirectoryEntry::PageDirectoryEntry() {
     {
         _PTE[i]=PageTableEntry();
     }
+    allocated_=false;
 
 }
 
-void PageDirectoryEntry::set_address(int full_VA, int *new_address) {
+bool PageDirectoryEntry::set_address(int full_VA, int *new_address) {
     int PageTableEntry= bits_to_take(12,10,full_VA);
     _PTE[PageTableEntry].set_page_address(new_address);
+    if (allocated_==false)
+    {
+        allocated_= true;
+        return true;
+    }
+    return false;
 }
 
 bool PageDirectoryEntry::is_valid(int full_VA) {
