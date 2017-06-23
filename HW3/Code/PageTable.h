@@ -19,6 +19,9 @@ class VirtualMemory; //You will probably want to include this in PageTable.cpp
 class PageTable
 {
 public:
+
+    PageTable();
+
 //Your Constructor (and Destructor if you need one) should go here
     int* GetPage (unsigned int adr);
 
