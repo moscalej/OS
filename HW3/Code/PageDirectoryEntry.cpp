@@ -11,10 +11,7 @@ int * PageDirectoryEntry::get_address(int full_VA) {
 }
 
 PageDirectoryEntry::PageDirectoryEntry() {
-    for (int i=0; i<1024; i++)
-    {
-        _PTE[i]=PageTableEntry();
-    }
+
     allocated_=false;
 
 }

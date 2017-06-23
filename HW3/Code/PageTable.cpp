@@ -38,15 +38,16 @@ int * PageTable::GetPage(unsigned int full_VA) {
 
 }
 
- PageTable::PageTable(SwapDevice *swapDevice) {
-     swapDevice_=swapDevice;
+ PageTable::PageTable() {
+
+     SwapDevice * temp = new SwapDevice;
+     this->swapDevice_=temp;
+
+
      logFile.open("./log.csv");
      logFile<<"Page Number,Virtual Address,Physical Address,Page Fault,Swap,Evicted,Allocated Page Table Entries"<<endl;
 
-     for(int i=0; i<1023; i++)
-     {
-         _PDE[i]=PageDirectoryEntry();
-     }
+
 
 
  }
@@ -64,10 +65,7 @@ int * PageTable::GetPage(unsigned int full_VA) {
 
  }
 
- PageTable::PageTable() {
-     SwapDevice * temp = new (SwapDevice);
-     this->swapDevice_=temp;
- }
+
 
 
 
