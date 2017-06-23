@@ -5,3 +5,8 @@
 #include "VirtualMemory.h"
 
 VirtualMemory::VirtualMemory() {}
+
+int *VirtualMemory::GetPage(unsigned int adr) {
+    return pageTable.GetPage(adr);
+
+}

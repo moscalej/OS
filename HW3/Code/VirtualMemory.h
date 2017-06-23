@@ -17,14 +17,20 @@ using namespace std;
 class VirtualMemory {
     friend class PageTable;
 public:
-    VirtualMemory();
+
     /*Initialize freeFramesList to contain all 64 frame
-    pointers as given by PhysMem Class, initialize the PageTable, give the
-    pageTable a pointer to this object so it can utilize GetFreeFrame and
-    ReleaseFrame
-     */
+pointers as given by PhysMem Class, initialize the PageTable, give the
+pageTable a pointer to this object so it can utilize GetFreeFrame and
+ReleaseFrame
+ */
+    VirtualMemory();
+
 ~VirtualMemory();
+
+
 int* GetFreeFrame();
+
+
 /*Remove one item from the freeFrameList and
 return it – suggestion, use memset(framePtr, 0, PAGESIZE) before return,
 might help debugging!
@@ -42,7 +48,8 @@ OurPointer OurMalloc(size_t size) { //allocates a pointer, we added the code for
     allocated += size;
     return ptr;
 }
-int* GetPage(unsigned int adr) { return pageTable.GetPage(adr); }
+int* GetPage(unsigned int adr);
+
 private:
 
     PageTable pageTable;
