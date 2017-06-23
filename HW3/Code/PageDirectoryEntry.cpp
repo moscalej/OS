@@ -4,6 +4,6 @@
 
 #include "PageDirectoryEntry.h"
 
-int PageDirectoryEntry::get_page_address() {
+int PageDirectoryEntry::get_frame_number(int full_address) {
     return 0;
 }

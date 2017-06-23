@@ -33,7 +33,7 @@ public:
      * @param adr
      * @return The frame Number
      */
-    int GetPage (unsigned int full_address);
+    int GetPage (unsigned int full_adr);
 
 private:
     int is_valid(unsigned int full_address);
