@@ -4,14 +4,14 @@
 
 #ifndef HW3_VIRTUALMEMORY_H
 #define HW3_VIRTUALMEMORY_H
-
 #pragma once
 #include <queue>
 #include "PageTable.h"
+#include "OurPointer.h"
 #define PAGESIZE 4096
 #define VIRTMEMSIZE 4294967296
 #define NUMOFFRAMES 64
-class OurPointer;
+
 using namespace std;
 class VirtualMemory {
 
