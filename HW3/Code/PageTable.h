@@ -36,17 +36,13 @@ public:
     int GetPage (unsigned int full_adr);
 
 private:
-    int is_valid(unsigned int full_address);
-    void set_valid(unsigned int full_address, bool state);
-    int swap_frame(unsigned int full_address);
 
 
+    SwapDevice * swapDevice_;
 
-    SwapDevice * swapDevice;
+    int lastUse[64];
 
-    map<int,int> lastUse;
-
-    std::map<unsigned , PageDirectoryEntry > _PDE;
+    PageDirectoryEntry  _PDE[1024];
 
 
 };
