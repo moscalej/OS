@@ -6,8 +6,8 @@
 
 int * PageDirectoryEntry::get_address(int full_VA) {
     int PageTableEntry= bits_to_take(12,10,full_VA);
-    _PTE[PageTableEntry].get_page_address();
-    return 0;
+
+    return _PTE[PageTableEntry].get_page_address();
 }
 
 PageDirectoryEntry::PageDirectoryEntry() {

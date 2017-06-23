@@ -31,7 +31,7 @@ OurPointer OurPointer::operator--(int) {
 
 OurPointer &OurPointer::operator++() {
 
-    this->_adr++;
+    this->_adr=this->_adr + 4;
     if(this->_adr>this->address_end){
         std::cerr<<"segmentation fault"<<std::endl;
     }
@@ -39,7 +39,7 @@ OurPointer &OurPointer::operator++() {
 }
 
 OurPointer &OurPointer::operator--() {
-    this->_adr--;
+    this->_adr=this->_adr - 4;
     if(this->_adr<this->address_start){
         std::cerr<<"segmentation foult"<<std::endl;
     }

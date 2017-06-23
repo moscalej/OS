@@ -53,9 +53,11 @@ int * PageTable::GetPage(unsigned int full_VA) {
      int swap=0;
      int evicted_page=-1;
      if (page_fault)
-         if (PA!=NULL)
+         if (PA!=NULL){
+
              swap=1;
              evicted_page=evicted;
+         }
      logFile<<page_num<<","<<VA<<","<<phys_adr<<","<<(int)page_fault<<","<<swap<<","<<evicted_page<<","<<(int)allocated_PTE<<endl;
 
  }
