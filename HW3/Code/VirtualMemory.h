@@ -19,29 +19,34 @@ class VirtualMemory {
 public:
 
     /*Initialize freeFramesList to contain all 64 frame
-pointers as given by PhysMem Class, initialize the PageTable, give the
-pageTable a pointer to this object so it can utilize GetFreeFrame and
-ReleaseFrame
- */
+    pointers as given by PhysMem Class, initialize the PageTable, give the
+    pageTable a pointer to this object so it can utilize GetFreeFrame and
+    ReleaseFrame
+
+     builds the fisical memory
+     builds the Page Table
+     builds swap divice(with pointer of fisical) gives pointer to Page Table
+     */
     VirtualMemory();
 
-~VirtualMemory();
+    ~VirtualMemory();
 
 
-int* GetFreeFrame();
+    int* GetFreeFrame();
 
 
-/*Remove one item from the freeFrameList and
-return it – suggestion, use memset(framePtr, 0, PAGESIZE) before return,
-might help debugging!
- */
-void ReleaseFrame(int* framePointer);
-/*releases the frame pointed by
-the framePointer, make sure you only use this function with a pointer to the
-beginning of the Frame! it should be the same pointer as held in the PTE.
- */
-OurPointer OurMalloc(size_t size);
-int* GetPage(unsigned int adr);
+    /*Remove one item from the freeFrameList and
+    return it – suggestion, use memset(framePtr, 0, PAGESIZE) before return,
+    might help debugging!
+    */
+    void ReleaseFrame(int* framePointer);
+
+    /*releases the frame pointed by
+    the framePointer, make sure you only use this function with a pointer to the
+    beginning of the Frame! it should be the same pointer as held in the PTE.
+    */
+    OurPointer OurMalloc(size_t size);
+    int* GetPage(unsigned int adr);
 
 private:
 

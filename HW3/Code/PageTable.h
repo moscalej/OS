@@ -15,18 +15,32 @@
 #include <queue>
 using namespace std;
 
-class VirtualMemory; //You will probably want to include this in PageTable.cpp
+
 class PageTable
 {
 public:
+    /**
+     * The constructor builds all the 1024 Page directory entry
+     *
+     *
+     * @param swapDevice
+     */
+    PageTable(SwapDevice *swapDevice);
 
-    PageTable();
-
-//Your Constructor (and Destructor if you need one) should go here
-    int* GetPage (unsigned int adr);
+    /**
+     * This Method will give to the virtual memory the frame that it needs
+     * from the fisical memory
+     * @param adr
+     * @return The frame Number
+     */
+    int GetPage (unsigned int full_address);
 
 private:
-    queue<int*> freeFramesList; //move this to PT
+    int is_valid(unsigned int full_address);
+    void set_valid(unsigned int full_address, bool state);
+    int swap_frame(unsigned int full_address);
+
+
 
     SwapDevice * swapDevice;
 

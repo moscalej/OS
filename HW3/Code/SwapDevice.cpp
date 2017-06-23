@@ -20,3 +20,7 @@ int SwapDevice::ReadFrameFromSwapDevice(int pageNumber, int* pageIn) {
     memcpy(pageIn, _data[pageNumber], FRAMESZ);
     return 0;
 }
+
+SwapDevice::SwapDevice(PhysMem *PM) : PM(PM) {
+
+}

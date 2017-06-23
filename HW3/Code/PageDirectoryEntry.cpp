@@ -3,3 +3,7 @@
 //
 
 #include "PageDirectoryEntry.h"
+
+int PageDirectoryEntry::get_page_address() {
+    return 0;
+}
