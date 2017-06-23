@@ -35,14 +35,14 @@ public:
      * @param adr
      * @return The frame Number
      */
-    int GetPage (unsigned int full_adr);
+    int * GetPage(unsigned int full_VA);
 
 private:
 
 
     SwapDevice * swapDevice_;
 
-    int lastUse[64];
+    map<int*,int> lastUse;
     ofstream logFile;
     PageDirectoryEntry  _PDE[1024];
 

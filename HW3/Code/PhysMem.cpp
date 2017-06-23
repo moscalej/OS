@@ -13,5 +13,6 @@ PhysMem & PhysMem::Access() {
 int* PhysMem::GetFrame(int frameNumber) {
 	if (frameNumber < 0 || frameNumber >= 64)
 		throw "Invalid Frame Number";
-	return &(physMem[1024 * frameNumber]);
+	return &(physMem[
+			1024 * frameNumber]);
 }

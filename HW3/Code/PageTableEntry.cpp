@@ -4,11 +4,11 @@
 
 #include "PageTableEntry.h"
 
-int PageTableEntry::get_page_address() {
+int * PageTableEntry::get_page_address() {
     return address_;
 }
 
-void PageTableEntry::set_page_address(int adr) {
+void PageTableEntry::set_page_address(int *adr) {
     address_=adr;
 
 }

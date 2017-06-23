@@ -4,8 +4,8 @@
 
 #include "PageDirectoryEntry.h"
 
-int PageDirectoryEntry::get_frame_number(int full_address) {
-    int PageTableEntry= bits_to_take(12,10,full_address);
+int * PageDirectoryEntry::get_address(int full_VA) {
+    int PageTableEntry= bits_to_take(12,10,full_VA);
     _PTE[PageTableEntry].get_page_address();
     return 0;
 }
@@ -18,19 +18,19 @@ PageDirectoryEntry::PageDirectoryEntry() {
 
 }
 
-void PageDirectoryEntry::set_frame_number(int full_address, int new_frame_number) {
-    int PageTableEntry= bits_to_take(12,10,full_address);
-    _PTE[PageTableEntry].set_page_address(new_frame_number);
+void PageDirectoryEntry::set_address(int full_VA, int *new_address) {
+    int PageTableEntry= bits_to_take(12,10,full_VA);
+    _PTE[PageTableEntry].set_page_address(new_address);
 }
 
-bool PageDirectoryEntry::is_valid(int full_adr) {
-    int PageTableEntry= bits_to_take(12,10,full_adr);
+bool PageDirectoryEntry::is_valid(int full_VA) {
+    int PageTableEntry= bits_to_take(12,10,full_VA);
     return _PTE[PageTableEntry].is_valid();
 
 }
 
-void PageDirectoryEntry::set_valid(int full_adr, bool valid) {
-    int PageTableEntry= bits_to_take(12,10,full_adr);
+void PageDirectoryEntry::set_valid(int full_VA, bool valid) {
+    int PageTableEntry= bits_to_take(12,10,full_VA);
     _PTE[PageTableEntry].set_valid(valid);
     return;
 

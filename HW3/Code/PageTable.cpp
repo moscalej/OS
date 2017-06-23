@@ -5,7 +5,7 @@
 #include "PageTable.h"
 
 
-int PageTable::GetPage(unsigned int full_adr) {
+int * PageTable::GetPage(unsigned int full_VA) {
     //check if the valid on the rigth pagedirectory (translate the addres)
     /*
      * if valid return the frame to the virtual memory
@@ -14,23 +14,23 @@ int PageTable::GetPage(unsigned int full_adr) {
      * unvalid, save new VA in map
      *
      */
-    int PageDirEntry= bits_to_take(22,10,full_adr);
-    bool page_valid=this->_PDE[PageDirEntry].is_valid(full_adr);
+    int PageDirEntry= bits_to_take(22,10,full_VA);
+    bool page_valid=this->_PDE[PageDirEntry].is_valid(full_VA);
     if (page_valid)
     {
-        return this->_PDE[PageDirEntry].get_frame_number(full_adr);
+        return this->_PDE[PageDirEntry].get_address(full_VA);
     }
-    int new_frame_number=swapDevice_->write_this_page_to_the_frame(full_adr);
-    int old_VA=this->lastUse[new_frame_number];
-    if (old_VA != -1) {
-        this->lastUse[new_frame_number] = full_adr;
+    int* new_phys_address=swapDevice_->write_this_page_to_the_frame(full_VA);
+    int old_VA=this->lastUse.find(new_phys_address);
+    if (old_VA != lastUse.end()) {
+        this->lastUse[new_phys_address] = full_VA;
         this->_PDE[PageDirEntry].set_valid(old_VA, false);
     }
-    this->_PDE[PageDirEntry].set_frame_number(full_adr, new_frame_number);
-    this->_PDE[PageDirEntry].set_valid( full_adr,true);
-    logFile<<full_adr/4096<<","<<full_adr<<","<<new_frame_number<<","<<"," <<page_valid<<","<<","<<","<<endl;
+    this->_PDE[PageDirEntry].set_address(full_VA, new_phys_address);
+    this->_PDE[PageDirEntry].set_valid( full_VA,true);
+    logFile<<full_VA/4096<<","<<full_VA<<","<<new_phys_address<<","<<"," <<page_valid<<","<<","<<","<<endl;
 
-    return new_frame_number;
+    return new_phys_address;
 
 }
 
@@ -43,10 +43,7 @@ int PageTable::GetPage(unsigned int full_adr) {
      {
          _PDE[i]=PageDirectoryEntry();
      }
-     for(int i=0; i<63; i++)
-     {
-         lastUse[i]=-1;
-     }
+
 
  }
 
