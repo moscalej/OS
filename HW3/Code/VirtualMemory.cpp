@@ -27,5 +27,6 @@ int &VirtualMemory::get_pointer(unsigned int full_virtual_address) {
 VirtualMemory::VirtualMemory() {
     PageTable * temp = new PageTable;
     this->pageTable=temp;
+    this->allocated=0;
 }
 
