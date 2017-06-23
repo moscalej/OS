@@ -15,7 +15,8 @@ int PageTable::GetPage(unsigned int full_adr) {
      *
      */
     int PageDirEntry= bits_to_take(22,10,full_adr);
-    if (this->_PDE[PageDirEntry].is_valid(full_adr))
+    bool page_valid=this->_PDE[PageDirEntry].is_valid(full_adr);
+    if (page_valid)
     {
         return this->_PDE[PageDirEntry].get_frame_number(full_adr);
     }
@@ -27,12 +28,17 @@ int PageTable::GetPage(unsigned int full_adr) {
     }
     this->_PDE[PageDirEntry].set_frame_number(full_adr, new_frame_number);
     this->_PDE[PageDirEntry].set_valid( full_adr,true);
+    logFile<<full_adr/4096<<","<<full_adr<<","<<new_frame_number<<","<<"," <<page_valid<<","<<","<<","<<endl;
+
     return new_frame_number;
 
 }
 
  PageTable::PageTable(SwapDevice *swapDevice) {
      swapDevice_=swapDevice;
+     logFile.open("./log.csv");
+     logFile<<"Page Number,Virtual Address,Physical Address,Page Fault,Swap,Evicted,Allocated Page Table Entries"<<endl;
+
      for(int i=0; i<1023; i++)
      {
          _PDE[i]=PageDirectoryEntry();

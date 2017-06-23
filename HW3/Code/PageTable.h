@@ -13,6 +13,8 @@
 #include "PageDirectoryEntry.h"
 #include "SwapDevice.h"
 #include <queue>
+#include <fstream>
+
 using namespace std;
 
 
@@ -41,7 +43,7 @@ private:
     SwapDevice * swapDevice_;
 
     int lastUse[64];
-
+    ofstream logFile;
     PageDirectoryEntry  _PDE[1024];
 
 
