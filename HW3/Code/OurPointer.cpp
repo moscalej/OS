@@ -8,11 +8,11 @@
 
 
 
-OurPointer::OurPointer(int adr, VirtualMemory *vrtlMem, int address_end) {
+OurPointer::OurPointer(int adr, int address_end, VirtualMemory *vrtlMem) {
     this->_adr=(unsigned int) adr;
     this->address_start = this->_adr;
     this->_vrtlMem = vrtlMem;
-    this->address_end;
+    this->address_end=address_end;
 }
 
 OurPointer::~OurPointer() {

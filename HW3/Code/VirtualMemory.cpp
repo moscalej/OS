@@ -10,7 +10,7 @@ OurPointer VirtualMemory::OurMalloc(size_t size) {
         if (allocated + size >= (VIRTMEMSIZE >> 2)) {
             throw "We are limited to 4294967296 bytes with our 32 bit address size";
         }
-        OurPointer ptr((int)allocated, this, (int)(allocated + size));
+        OurPointer ptr((int) allocated, (int) (allocated + size), this);
         allocated += size;
         return ptr;
 

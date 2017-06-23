@@ -13,7 +13,7 @@
 class  VirtualMemory;
 class OurPointer {
 public:
-    OurPointer(int adr, VirtualMemory *vrtlMem, int address_end); //Constructor
+    OurPointer(int adr, int address_end, VirtualMemory *vrtlMem); //Constructor
 
     virtual ~OurPointer(); //Destructor
     int& operator*(); //Overload operator*
