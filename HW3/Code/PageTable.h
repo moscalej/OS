@@ -5,17 +5,47 @@
 #ifndef HW3_PAGETABLE_H
 #define HW3_PAGETABLE_H
 
-
 #pragma once
-#include “PageDirectoryEntry.h”
-class VirtualMemory; //You will probably want to include this in PageTable.cpp
+
+#include <map>
+#include "PageDirectoryEntry.h"
+#include "SwapDevice.h"
+#include <queue>
+#include <fstream>
+
+using namespace std;
+
+
 class PageTable
 {
 public:
-//Your Constructor (and Destructor if you need one) should go here
-    int* GetPage (unsigned int adr);
+    /**
+     * The constructor builds all the 1024 Page directory entry
+     *
+     *
+     */
+    PageTable();
+
+    /**
+     * This Method will give to the virtual memory the frame that it needs
+     * from the fisical memory
+     * @param adr
+     * @return The frame Number
+     */
+    int * GetPage(unsigned int full_VA);
+
 private:
-//Fill the class with the necessary member variables
+
+    void print(int VA, int *PA, bool page_fault, int evicted, bool allocated_PTE);
+    SwapDevice * swapDevice_;
+
+    map<int*,int> lastUse;
+    ofstream logFile;
+    PageDirectoryEntry  _PDE[1024];
+
+
 };
+
+
 
 #endif //HW3_PAGETABLE_H

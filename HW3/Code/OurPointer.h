@@ -6,12 +6,16 @@
 #define HW3_OURPOINTER_H
 
 
-#pragma once
-#include "PageTable.h"
+
+
+
+
+class  VirtualMemory;
 class OurPointer {
 public:
-    OurPointer(int adr, VirtualMemory* vrtlMem); //Constructor
-    ~OurPointer(); //Destructor
+    OurPointer(int adr, int address_end, VirtualMemory *vrtlMem); //Constructor
+
+    virtual ~OurPointer(); //Destructor
     int& operator*(); //Overload operator*
     OurPointer& operator++(); //Overload ++operator
     OurPointer operator++(int); //Overload operator++
@@ -19,7 +23,9 @@ public:
     OurPointer operator--(int); //Overload --operator
 private:
 
+    unsigned int address_end;
     unsigned int _adr; //the virtual address
+    unsigned  int address_start;
     VirtualMemory* _vrtlMem; //for requesting translations
 };
 

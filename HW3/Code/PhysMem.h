@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <iostream>
+#include "HelpFunc.h"
 
 using namespace std;
 
