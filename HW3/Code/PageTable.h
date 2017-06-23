@@ -27,6 +27,7 @@ public:
      *
      * @param swapDevice
      */
+    PageTable(){};
     PageTable(SwapDevice *swapDevice);
 
     /**
@@ -48,5 +49,7 @@ private:
 
 
 };
+
+
 
 #endif //HW3_PAGETABLE_H

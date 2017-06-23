@@ -15,7 +15,7 @@
 #define NUMOFFRAMES 64
 using namespace std;
 class VirtualMemory {
-    friend class PageTable;
+
 public:
 
     /*Initialize freeFramesList to contain all 64 frame
@@ -47,6 +47,10 @@ public:
     */
     OurPointer OurMalloc(size_t size);
     int* GetPage(unsigned int adr);
+
+    void ReleaseVirtual(unsigned int address, unsigned int address_end);
+
+    int &get_pointer(unsigned int full_virtual_address);
 
 private:
 
