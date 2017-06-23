@@ -3,6 +3,7 @@
 //
 
 #include "OurPointer.h"
+#include "VirtualMemory.h"
 
 
 OurPointer::OurPointer(int adr, VirtualMemory *vrtlMem, int address_end) {

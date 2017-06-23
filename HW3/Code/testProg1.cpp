@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "VirtualMemory.h"
+#include "OurPointer.h"
 
 #define VECSIZE 50
 

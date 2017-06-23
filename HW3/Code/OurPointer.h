@@ -8,9 +8,9 @@
 
 #pragma once
 
-#include "VirtualMemory.h"
 
 
+class  VirtualMemory;
 class OurPointer {
 public:
     OurPointer(int adr, VirtualMemory *vrtlMem, int address_end); //Constructor

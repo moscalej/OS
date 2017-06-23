@@ -7,11 +7,11 @@
 
 #pragma once
 #include <queue>
-#include "OurPointer.h"
 #include "PageTable.h"
 #define PAGESIZE 4096
 #define VIRTMEMSIZE 4294967296
 #define NUMOFFRAMES 64
+class OurPointer;
 using namespace std;
 class VirtualMemory {
 
@@ -44,7 +44,7 @@ public:
     the framePointer, make sure you only use this function with a pointer to the
     beginning of the Frame! it should be the same pointer as held in the PTE.
     */
-    OurPointer OurMalloc(size_t size);
+    OurPointer  OurMalloc(size_t size);
 
 
     void ReleaseVirtual(unsigned int address, unsigned int address_end);

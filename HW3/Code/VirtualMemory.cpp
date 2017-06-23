@@ -3,6 +3,7 @@
 //
 
 #include "VirtualMemory.h"
+#include "OurPointer.h"
 
 
 

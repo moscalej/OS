@@ -34,16 +34,6 @@ int bits_to_take(int lsb, int number_of_bits, int address) {
     return temp;
 }
 
-/**
- * This fucntion will build an Address from in the next form
- * address[{tag},{set}]
- * @param tag
- * @param set
- * @param set_size
- * @return
- */
-int re_build_address(int tag, int set, int set_size) {
-    return (int) (pow(2, set_size) * tag + set);
-}
+
 
 #endif //HW4_HELPFUNC_H
