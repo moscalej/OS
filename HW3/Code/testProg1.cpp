@@ -1,13 +1,14 @@
 #include <iostream>
 #include <fstream>
 #include "VirtualMemory.h"
-#include "OurPointer.h"
+
 
 #define VECSIZE 50
 
 using namespace std;
 
-int main(){ 
+int main(){
+    int i=0;
     VirtualMemory vrtlMem; 
     
     OurPointer matBase = vrtlMem.OurMalloc(VECSIZE*VECSIZE); 

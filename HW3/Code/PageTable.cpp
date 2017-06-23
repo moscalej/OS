@@ -64,6 +64,11 @@ int * PageTable::GetPage(unsigned int full_VA) {
 
  }
 
+ PageTable::PageTable() {
+     SwapDevice * temp = new (SwapDevice);
+     this->swapDevice_=temp;
+ }
+
 
 
 

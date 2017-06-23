@@ -23,10 +23,8 @@ int SwapDevice::ReadFrameFromSwapDevice(int pageNumber, int *pageIn) {
     return 0;
 }
 
-SwapDevice::SwapDevice(PhysMem *PM) : PM(PM) {
-    /*
-     * We only fill the queue with 64 values that will rotate the number of frames
-     */
+SwapDevice::SwapDevice() {
+
     for (int i = 0; i < 64; ++i) {
         this->freeFramesList.push(std::make_pair(i, i));
     }
@@ -46,8 +44,7 @@ int * SwapDevice::write_this_page_to_the_frame(unsigned virtual_address) {
     int frame_number = this->freeFramesList.front().second;
 
     int page_number = bits_to_take(12, 22, virtual_address);
-    int *frame_pointer = this->PM->GetFrame(frame_number);
-
+    int *frame_pointer = PhysMem::Access().GetFrame(frame_number);
     this->WriteFrameToSwapDevice(old_page_number, frame_pointer);
     int result = this->ReadFrameFromSwapDevice(page_number, frame_pointer);
     this->freeFramesList.pop();

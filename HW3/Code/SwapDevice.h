@@ -9,7 +9,8 @@
 class SwapDevice {
     friend class PageTable;
 public:
-    SwapDevice(PhysMem *PM);
+    SwapDevice();
+
 
     int * write_this_page_to_the_frame(unsigned virtual_address);
 

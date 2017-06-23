@@ -25,7 +25,7 @@ public:
      *
      * @param swapDevice
      */
-    PageTable(){};
+    PageTable();
     PageTable(SwapDevice *swapDevice);
 
     /**
