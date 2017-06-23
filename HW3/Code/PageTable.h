@@ -23,10 +23,8 @@ public:
      * The constructor builds all the 1024 Page directory entry
      *
      *
-     * @param swapDevice
      */
     PageTable();
-    PageTable(SwapDevice *swapDevice);
 
     /**
      * This Method will give to the virtual memory the frame that it needs

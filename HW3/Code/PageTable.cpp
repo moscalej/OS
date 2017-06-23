@@ -42,13 +42,8 @@ int * PageTable::GetPage(unsigned int full_VA) {
 
      SwapDevice * temp = new SwapDevice;
      this->swapDevice_=temp;
-
-
      logFile.open("./log.csv");
      logFile<<"Page Number,Virtual Address,Physical Address,Page Fault,Swap,Evicted,Allocated Page Table Entries"<<endl;
-
-
-
 
  }
 

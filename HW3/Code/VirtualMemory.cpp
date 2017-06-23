@@ -5,15 +5,6 @@
 #include "VirtualMemory.h"
 #include "OurPointer.h"
 
-
-VirtualMemory::VirtualMemory() {
-
-
-
-}
-
-
-
 OurPointer VirtualMemory::OurMalloc(size_t size) {
     //allocates a pointer, we added the code for your convenience
         if (allocated + size >= (VIRTMEMSIZE >> 2)) {
@@ -25,17 +16,16 @@ OurPointer VirtualMemory::OurMalloc(size_t size) {
 
 }
 
-void VirtualMemory::ReleaseVirtual(unsigned int address, unsigned int address_end) {
-
-}
 
 int &VirtualMemory::get_pointer(unsigned int full_virtual_address) {
-    int * page = this->pageTable.GetPage(full_virtual_address);
+    int * page = this->pageTable->GetPage(full_virtual_address);
     int offset= bits_to_take(0,12,full_virtual_address);
 
-    return page[offset];
+    return page[offset] ;
 }
 
-VirtualMemory::~VirtualMemory() {
-
+VirtualMemory::VirtualMemory() {
+    PageTable * temp = new PageTable;
+    this->pageTable=temp;
 }
+

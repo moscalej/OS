@@ -12,7 +12,7 @@ int * PageDirectoryEntry::get_address(int full_VA) {
 
 PageDirectoryEntry::PageDirectoryEntry() {
 
-    allocated_=false;
+    this->allocated_=false;
 
 }
 
