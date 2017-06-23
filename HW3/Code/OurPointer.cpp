@@ -14,7 +14,7 @@ OurPointer::OurPointer(int adr, VirtualMemory *vrtlMem, int address_end) {
 
 OurPointer::~OurPointer() {
     //many things to do
-    this->_vrtlMem->ReleaseVirtual(this->_adr, this->address_end);
+    //this->_vrtlMem->ReleaseVirtual(this->_adr, this->address_end);
 
 }
 
@@ -30,7 +30,7 @@ OurPointer &OurPointer::operator++() {
 
     this->_adr++;
     if(this->_adr>this->address_end){
-        std::cerr<<"segmentation foult"<<std::endl;
+        std::cerr<<"segmentation fault"<<std::endl;
     }
     return *this;
 }

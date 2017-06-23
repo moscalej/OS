@@ -9,8 +9,6 @@
 
 #include <map>
 #include "PageDirectoryEntry.h"
-#include "PageTableEntry.h"
-#include "PageDirectoryEntry.h"
 #include "SwapDevice.h"
 #include <queue>
 #include <fstream>

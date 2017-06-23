@@ -10,10 +10,7 @@ VirtualMemory::VirtualMemory() {
 
 }
 
-int *VirtualMemory::GetPage(unsigned int adr) {
-    return NULL;
 
-}
 
 OurPointer VirtualMemory::OurMalloc(size_t size) {
     //allocates a pointer, we added the code for your convenience
@@ -35,4 +32,8 @@ int &VirtualMemory::get_pointer(unsigned int full_virtual_address) {
     int offset= bits_to_take(0,12,full_virtual_address);
 
     return page[offset];
+}
+
+VirtualMemory::~VirtualMemory() {
+
 }

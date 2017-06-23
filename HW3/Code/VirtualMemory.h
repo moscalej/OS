@@ -7,8 +7,7 @@
 
 #pragma once
 #include <queue>
-#include "ourpointer.h"
-#include "PhysMem.h"
+#include "OurPointer.h"
 #include "PageTable.h"
 #define PAGESIZE 4096
 #define VIRTMEMSIZE 4294967296
@@ -32,7 +31,7 @@ public:
     ~VirtualMemory();
 
 
-    int* GetFreeFrame();
+
 
 
     /*Remove one item from the freeFrameList and
@@ -46,7 +45,7 @@ public:
     beginning of the Frame! it should be the same pointer as held in the PTE.
     */
     OurPointer OurMalloc(size_t size);
-    int* GetPage(unsigned int adr);
+
 
     void ReleaseVirtual(unsigned int address, unsigned int address_end);
 
@@ -55,7 +54,7 @@ public:
 private:
 
     PageTable pageTable;
-    PhysMem * PM;
+
 
     /*The number of ints already allocated, ((allocated *4) = (number of bytes already allocated)), this can also be used as the next
         address to be allocated.

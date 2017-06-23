@@ -18,7 +18,7 @@ bool PageTableEntry::is_valid() {
 }
 
 void PageTableEntry::set_valid(bool valid) {
-    valid_=valid
+    valid_=valid;
 
 }
 

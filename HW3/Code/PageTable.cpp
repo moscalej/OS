@@ -53,7 +53,7 @@ int * PageTable::GetPage(unsigned int full_VA) {
 
  void PageTable::print(int VA, int *PA, bool page_fault, int evicted, bool allocated_PTE) {
      int page_num=VA/4096;
-     int phys_adr=(*PA)*4096+bits_to_take(0,12,VA);//need to correct -offset of firs frame
+     int* phys_adr=((PA)+bits_to_take(0,12,VA));//need to correct -offset of firs frame
      int swap=0;
      int evicted_page=-1;
      if (page_fault)
