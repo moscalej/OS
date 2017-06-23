@@ -4,10 +4,14 @@
 
 #include "VirtualMemory.h"
 
-VirtualMemory::VirtualMemory() {}
+
+
+VirtualMemory::VirtualMemory() {
+
+}
 
 int *VirtualMemory::GetPage(unsigned int adr) {
-    return pageTable.GetPage(adr);
+    return NULL;
 
 }
 
@@ -20,4 +24,13 @@ OurPointer VirtualMemory::OurMalloc(size_t size) {
         allocated += size;
         return ptr;
 
+}
+
+void VirtualMemory::ReleaseVirtual(unsigned int address, unsigned int address_end) {
+
+}
+
+int &VirtualMemory::get_pointer(unsigned int full_virtual_address) {
+    int * page = this->pageTable.GetPage(full_virtual_address);
+    return this->pageTable.GetPage(full_virtual_address) +( alf= (int*)bits_to_take(0,12,full_virtual_address)) ;
 }
