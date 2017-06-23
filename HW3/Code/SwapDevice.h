@@ -10,7 +10,7 @@ class SwapDevice {
 public:
     SwapDevice(PhysMem *PM);
 
-    int write_this_page_to_the_frame(unsigned virtual_address);
+    int * write_this_page_to_the_frame(unsigned virtual_address);
 
 
 
