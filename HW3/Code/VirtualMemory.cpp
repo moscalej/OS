@@ -3,7 +3,7 @@
 //
 
 #include "VirtualMemory.h"
-#include "OurPointer.h"
+
 
 OurPointer VirtualMemory::OurMalloc(size_t size) {
     //allocates a pointer, we added the code for your convenience
@@ -29,5 +29,10 @@ VirtualMemory::VirtualMemory() {
     PageTable * temp = new PageTable;
     this->pageTable=temp;
     this->allocated=0;
+}
+
+VirtualMemory::~VirtualMemory() {
+    delete(this->pageTable);
+
 }
 
