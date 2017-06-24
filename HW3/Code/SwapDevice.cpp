@@ -32,12 +32,7 @@ SwapDevice::SwapDevice() {
 }
 
 int * SwapDevice::write_this_page_to_the_frame(unsigned virtual_address) {
-    /*
-     * get VM, pop frame_number from queue, swap physical memory, return frame_number,
-     * push back to queue
-     * we will work here only with pages number for that we need to change the values to page numbers from virtual address
-     *
-     */
+
 
 
     int old_page_number = this->freeFramesList.front().first;

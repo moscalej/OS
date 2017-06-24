@@ -1,11 +1,12 @@
 #include <unordered_map>
-#include <vector>
+#include <stdlib.h>
+
 #include <string.h>
 #include <iostream>
 #include <queue>
+
 #include "PhysMem.h"
 
-#define PAGESIZE 4096
 class SwapDevice {
     friend class PageTable;
 public:
