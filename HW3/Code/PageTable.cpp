@@ -38,7 +38,7 @@ int * PageTable::GetPage(unsigned int full_VA) {
         allocated_PTE=this->_PDE[PageDirEntry].set_address(full_VA, new_phys_address);
         this->_PDE[PageDirEntry].set_valid(full_VA, true);
     }
-    this->print(full_VA, new_phys_address, !page_valid, swapDevice_->freeFramesList.back().first, allocated_PTE);
+    this->print(full_VA, new_phys_address, !page_valid, existance_swap, evicted_page, allocated_PTE);
 
     return new_phys_address;
 
@@ -53,15 +53,13 @@ int * PageTable::GetPage(unsigned int full_VA) {
 
  }
 
- void PageTable::print(int VA, int *PA, bool page_fault, int evicted, bool allocated_PTE) {
+ void PageTable::print(int VA, int *PA, bool page_fault, int exist_in_SD, int evicted, bool allocated_PTE) {
      int page_num=VA/4096;
      int* phys_adr=((PA)+bits_to_take(0,12,VA)/4);//need to correct -offset of firs frame
-     int swap=0;
+     int swap=exist_in_SD+1;
      int evicted_page=-1;
      if (page_fault)
-         if (PA!=NULL){
-
-             swap=1;
+         if (exist_in_SD==0){
              evicted_page=evicted;
          }
      logFile<<page_num<<","<<VA<<","<<(phys_adr)<<","<<(int)page_fault<<","<<swap<<","<<evicted_page<<","<<(int)allocated_PTE<<endl;

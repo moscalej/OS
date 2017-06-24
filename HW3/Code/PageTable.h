@@ -36,7 +36,7 @@ public:
 
 private:
 
-    void print(int VA, int *PA, bool page_fault, int evicted, bool allocated_PTE);
+    void print(int VA, int *PA, bool page_fault, int exist_in_SD, int evicted, bool allocated_PTE);
     SwapDevice * swapDevice_;
 
     map<int*,int> lastUse;
