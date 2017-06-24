@@ -23,7 +23,7 @@ int * PageTable::GetPage(unsigned int full_VA) {
     if (page_valid)
     {
          new_phys_address= this->_PDE[PageDirEntry].get_address(full_VA);
-        existance_swap=-1;
+
     } else {
         new_phys_address = swapDevice_->write_this_page_to_the_frame(full_VA, existance_swap, evicted_page);
         map<int *, int>::iterator old_pair;
