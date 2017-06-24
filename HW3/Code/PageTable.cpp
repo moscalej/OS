@@ -59,11 +59,12 @@ int * PageTable::GetPage(unsigned int full_VA) {
      int* phys_adr=((PA)+bits_to_take(0,12,VA)/4);//need to correct -offset of firs frame
      int swap=0;
      int evicted_page=-1;
-     if (page_fault)
-         if (exist_in_SD==0){
-             evicted_page=evicted;
-             swap=exist_in_SD+1;
+     if (page_fault) {
+         if (exist_in_SD == 0) {
+             evicted_page = evicted;
+             swap = 1;
          }
+     }
      logFile<<page_num<<","<<VA<<","<<(phys_adr)<<","<<(int)page_fault<<","<<swap<<","<<evicted_page<<","<<(int)allocated_PTE<<endl;
 
  }
