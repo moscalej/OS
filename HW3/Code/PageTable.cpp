@@ -16,18 +16,24 @@ int * PageTable::GetPage(unsigned int full_VA) {
      */
     int* new_phys_address=NULL;
     bool allocated_PTE=false;
+    int existance_swap=3;
+    int evicted_page=-1;
     int PageDirEntry= bits_to_take(22,10,full_VA);
     bool page_valid=this->_PDE[PageDirEntry].is_valid(full_VA);
     if (page_valid)
     {
          new_phys_address= this->_PDE[PageDirEntry].get_address(full_VA);
     } else {
-        new_phys_address = swapDevice_->write_this_page_to_the_frame(full_VA);
+        new_phys_address = swapDevice_->write_this_page_to_the_frame(full_VA, existance_swap, evicted_page);
         map<int *, int>::iterator old_pair;
+        std::pair<int*, int> new_pair = std::make_pair(new_phys_address, full_VA);
         old_pair = this->lastUse.find(new_phys_address);
         if (old_pair != lastUse.end()) {
-            this->lastUse[new_phys_address] = full_VA;
             this->_PDE[PageDirEntry].set_valid(old_pair->second, false);
+            this->lastUse[new_phys_address] = full_VA;
+        } else
+        {
+            this->lastUse.insert(new_pair);
         }
         allocated_PTE=this->_PDE[PageDirEntry].set_address(full_VA, new_phys_address);
         this->_PDE[PageDirEntry].set_valid(full_VA, true);
@@ -49,7 +55,7 @@ int * PageTable::GetPage(unsigned int full_VA) {
 
  void PageTable::print(int VA, int *PA, bool page_fault, int evicted, bool allocated_PTE) {
      int page_num=VA/4096;
-     int* phys_adr=((PA)+bits_to_take(0,12,VA));//need to correct -offset of firs frame
+     int* phys_adr=((PA)+bits_to_take(0,12,VA)/4);//need to correct -offset of firs frame
      int swap=0;
      int evicted_page=-1;
      if (page_fault)
@@ -58,7 +64,7 @@ int * PageTable::GetPage(unsigned int full_VA) {
              swap=1;
              evicted_page=evicted;
          }
-     logFile<<page_num<<","<<VA<<","<<phys_adr<<","<<(int)page_fault<<","<<swap<<","<<evicted_page<<","<<(int)allocated_PTE<<endl;
+     logFile<<page_num<<","<<VA<<","<<(phys_adr)<<","<<(int)page_fault<<","<<swap<<","<<evicted_page<<","<<(int)allocated_PTE<<endl;
 
  }
 

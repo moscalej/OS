@@ -9,10 +9,10 @@
 
 
 OurPointer::OurPointer(int adr, int address_end, VirtualMemory *vrtlMem) {
-    this->_adr=(unsigned int) adr;
-    this->address_start = this->_adr;
+    this->_adr=(unsigned int)(adr * 4);
+    this->address_start = (4 *this->_adr);
     this->_vrtlMem = vrtlMem;
-    this->address_end=address_end;
+    this->address_end=(unsigned int) (4 * address_end);
 }
 
 OurPointer::~OurPointer() {
@@ -31,7 +31,7 @@ OurPointer OurPointer::operator--(int) {
 
 OurPointer &OurPointer::operator++() {
 
-    this->_adr=this->_adr + 1;
+    this->_adr=this->_adr + 4;
     if(this->_adr>this->address_end){
         std::cerr<<"segmentation fault"<<std::endl;
     }
@@ -39,7 +39,7 @@ OurPointer &OurPointer::operator++() {
 }
 
 OurPointer &OurPointer::operator--() {
-    this->_adr=this->_adr - 1;
+    this->_adr=this->_adr - 4;
     if(this->_adr<this->address_start){
         std::cerr<<"segmentation foult"<<std::endl;
     }
@@ -54,6 +54,6 @@ OurPointer OurPointer::operator++(int) {
 }
 
 int &OurPointer::operator*() {
-
-    return this->_vrtlMem->get_pointer(this->_adr);
+    int & temp =this->_vrtlMem->get_pointer(this->_adr);
+    return temp ;
 }

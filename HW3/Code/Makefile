@@ -19,4 +19,4 @@ PhysMem.o: PhysMem.cpp PhysMem.h
 HelpFunc.o: HelpFunc.cpp HelpFunc.h
 # Cleaning old files before new make
 clean:
-	$(RM) $(TARGET) *.o *~ "#"* core.*
+	$(RM) $(TARGET) *.o *~ "#"*

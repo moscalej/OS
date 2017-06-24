@@ -12,7 +12,7 @@ class SwapDevice {
 public:
     SwapDevice();
 
-    int * write_this_page_to_the_frame(unsigned virtual_address);
+    int *write_this_page_to_the_frame(unsigned virtual_address, int &exist_swap_dive, int &evicted_page);
 
 private:
     void WriteFrameToSwapDevice(int pageNumber, int * page_out); //Write the content of page to the swap device, "pageOut" is the frame base pointer where the page is now allocated
@@ -20,4 +20,5 @@ private:
     std::unordered_map<int, int*> _data;
     std::queue< std::pair<int,int> > freeFramesList;
     size_t _size;
+    int start_counter = 64;
 };

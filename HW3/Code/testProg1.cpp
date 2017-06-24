@@ -3,15 +3,13 @@
 #include "VirtualMemory.h"
 
 
-#define VECSIZE 50
+#define VECSIZE 260
 
 using namespace std;
 
 int main(){
 
-
-
-   VirtualMemory vrtlMem;
+    VirtualMemory vrtlMem;
 
     OurPointer matBase = vrtlMem.OurMalloc(VECSIZE*VECSIZE);
     OurPointer vecBase = vrtlMem.OurMalloc(VECSIZE);
@@ -26,10 +24,10 @@ int main(){
 
     srand(1);
     for (int i = 0; i < VECSIZE * VECSIZE; ++i) {
-        *(mat++) = rand() % 100;
+        *(mat++) =1+ rand() % 100;
     }
     mat = matBase; for (int i = 0; i < VECSIZE; ++i) {
-        *(vec++) = rand() % 20000;
+        *(vec++) =1+ rand() % 100;
         *(res++) = 0;
     }
     vec = vecBase;
@@ -40,7 +38,6 @@ int main(){
             int mat_value = *(mat++);  //our fix for log
             int vec_value = *(vec++); //log file consistency
             *res += mat_value * vec_value;
-
         }
         vec = vecBase;
         ++res;

@@ -31,22 +31,30 @@ SwapDevice::SwapDevice() {
 
 }
 
-int * SwapDevice::write_this_page_to_the_frame(unsigned virtual_address) {
+int * SwapDevice::write_this_page_to_the_frame(unsigned virtual_address, int &exist_swap_dive, int &evicted_page) {
 
 
 
     int old_page_number = this->freeFramesList.front().first;
     int frame_number = this->freeFramesList.front().second;
-
+    evicted_page=old_page_number;
     int page_number = bits_to_take(12, 22, virtual_address);
     int *frame_pointer = PhysMem::Access().GetFrame(frame_number);
+
     this->WriteFrameToSwapDevice(old_page_number, frame_pointer);
-    int result = this->ReadFrameFromSwapDevice(page_number, frame_pointer);
+    exist_swap_dive = this->ReadFrameFromSwapDevice(page_number, frame_pointer);
+
+
     this->freeFramesList.pop();
     std::pair<int, int> temp = std::make_pair(page_number, frame_number);
     this->freeFramesList.push(temp);
+    if(this->start_counter !=0){
+        exist_swap_dive = -1;
+        this->start_counter --;
+        evicted_page=-1;
+    }
 
-    return (result == 0) ? frame_pointer : NULL;
+    return frame_pointer ;
 
 
 }
