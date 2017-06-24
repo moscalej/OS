@@ -48,6 +48,7 @@ int * SwapDevice::write_this_page_to_the_frame(unsigned virtual_address, int &ex
     this->freeFramesList.pop();
     std::pair<int, int> temp = std::make_pair(page_number, frame_number);
     this->freeFramesList.push(temp);
+
     if(this->start_counter !=0){
         exist_swap_dive = -1;
         this->start_counter --;
