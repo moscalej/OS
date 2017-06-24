@@ -9,10 +9,8 @@ using namespace std;
 
 int main(){
 
-    int i =0;
-    int j = 3;
 
-//    int i=0;
+
    VirtualMemory vrtlMem;
 
     OurPointer matBase = vrtlMem.OurMalloc(VECSIZE*VECSIZE);
