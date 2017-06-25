@@ -3,7 +3,7 @@
 #include "VirtualMemory.h"
 
 
-#define VECSIZE 50
+#define VECSIZE 300
 
 using namespace std;
 

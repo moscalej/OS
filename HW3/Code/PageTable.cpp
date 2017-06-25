@@ -52,12 +52,14 @@ int * PageTable::GetPage(unsigned int full_VA) {
      logFile.open("./log.csv");
      logFile<<"Page Number,Virtual Address,Physical Address,Page Fault,Swap,Evicted,Allocated Page Table Entries"<<endl;
 
+
  }
 
  void PageTable::print(int VA, int *PA, bool page_fault, int exist_in_SD, int evicted, bool allocated_PTE) {
      int page_num=VA/4096;
      int* phys_adr=((PA)+bits_to_take(0,12,VA)/4);//need to correct -offset of firs frame
      int swap=0;
+     uint32_t phys_adr_decimal_shifted=reinterpret_cast<uintptr_t>(phys_adr)-reinterpret_cast<uintptr_t>(swapDevice_->first_frame_);
      int evicted_page=-1;
      if (page_fault) {
          if (exist_in_SD == 0) {
@@ -65,7 +67,7 @@ int * PageTable::GetPage(unsigned int full_VA) {
              swap = 1;
          }
      }
-     logFile<<page_num<<","<<VA<<","<<(phys_adr)<<","<<(int)page_fault<<","<<swap<<","<<evicted_page<<","<<(int)allocated_PTE<<endl;
+     logFile<<page_num<<","<<VA<<","<<phys_adr_decimal_shifted<<","<<(int)page_fault<<","<<swap<<","<<evicted_page<<","<<(int)allocated_PTE<<endl;
 
  }
 

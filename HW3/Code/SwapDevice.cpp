@@ -28,6 +28,7 @@ SwapDevice::SwapDevice() {
     for (int i = 0; i < 64; ++i) {
         this->freeFramesList.push(std::make_pair(i, i));
     }
+    first_frame_ = PhysMem::Access().GetFrame(0);
 
 }
 

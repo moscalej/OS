@@ -21,4 +21,5 @@ private:
     std::queue< std::pair<int,int> > freeFramesList;
     size_t _size;
     int start_counter = 64;
+    int* first_frame_;
 };
