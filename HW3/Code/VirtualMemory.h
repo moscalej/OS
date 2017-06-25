@@ -8,16 +8,22 @@
 #include <queue>
 #include "PageTable.h"
 #include "OurPointer.h"
-#define PAGESIZE 4096
+
 #define VIRTMEMSIZE 4294967296
-#define NUMOFFRAMES 64
+
 
 using namespace std;
 class Ourpointer;
 class VirtualMemory {
 
 public:
+
+    /**
+     *
+     */
     VirtualMemory();
+
+    virtual ~VirtualMemory();
 
     OurPointer OurMalloc(size_t size);
 

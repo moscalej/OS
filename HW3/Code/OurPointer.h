@@ -13,6 +13,12 @@
 class  VirtualMemory;
 class OurPointer {
 public:
+    /**Constructor
+     * will construct a pointer with a virtual mememory and size (to know if we have segmentation foult (a little extra)
+     * @param adr - The number of the first byte of the virtual memory (this number can change)
+     * @param address_end  - The max address that this pointer can reach
+     * @param vrtlMem  - Pointer to the virtual Memory handler
+     */
     OurPointer(int adr, int address_end, VirtualMemory *vrtlMem); //Constructor
 
     virtual ~OurPointer(); //Destructor
