@@ -27,10 +27,10 @@ public:
     PageTable();
 
     /**
-     * This Method will give to the virtual memory the frame that it needs
-     * from the fisical memory
+     * This Method will give to the virtual memory the frame pointer from the corresponding page.
+     * will also validate/unvalidate new/old page, update address if doesn't exist in page
      * @param adr
-     * @return The frame Number
+     * @return The frame pointer
      */
     int * GetPage(unsigned int full_VA);
 
