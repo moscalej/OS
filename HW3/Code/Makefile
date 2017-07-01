@@ -2,13 +2,13 @@ CCC = g++
 CXXFLAGS = -Wall -g  -std=c++0x
 # pavel removed the pthread flag
 CXXLINK = $(CCC)
-OBJS = testProg1.o OurPointer.o PageTable.o PageDirectoryEntry.o PageTableEntry.o VirtualMemory.o PhysMem.o SwapDevice.o HelpFunc.o
+OBJS = main.o OurPointer.o PageTable.o PageDirectoryEntry.o PageTableEntry.o VirtualMemory.o PhysMem.o SwapDevice.o HelpFunc.o
 RM = rm -f
 # Creating the  executable
-testProg1: $(OBJS)
-	$(CXXLINK) -o testProg1 $(CXXFLAGS) $(OBJS) 
+main: $(OBJS)
+	$(CXXLINK) -o main $(CXXFLAGS) $(OBJS)
 # Creating the object files
-testprog1.o: testprog1.cpp VirtualMemory.h
+main.o: main.cpp VirtualMemory.h
 OurPointer.o: OurPointer.cpp OurPointer.h VirtualMemory.h
 PageTable.o: PageTable.cpp PageTable.h 
 PageDirectoryEntry.o: PageDirectoryEntry.cpp PageDirectoryEntry.h

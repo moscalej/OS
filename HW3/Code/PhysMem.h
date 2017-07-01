@@ -7,6 +7,9 @@ using namespace std;
 
 #define PHYSMEMSZ 262144
 
+/*
+ * Provide by curse Staff
+ */
 class PhysMem {
 friend class VirtualMemory;
 public:

@@ -25,7 +25,7 @@ int * PageTable::GetPage(unsigned int full_VA) {
          new_phys_address= this->_PDE[PageDirEntry].get_address(full_VA);
 
     } else {
-        new_phys_address = swapDevice_->write_this_page_to_the_frame(full_VA, existance_swap, evicted_page);
+        new_phys_address = swapDevice_->fetch_frame_from_virtual(full_VA, existance_swap, evicted_page);
         map<int *, int>::iterator old_pair;
         std::pair<int*, int> new_pair = std::make_pair(new_phys_address, full_VA);
         old_pair = this->lastUse.find(new_phys_address);
@@ -59,7 +59,7 @@ int * PageTable::GetPage(unsigned int full_VA) {
      int page_num=VA/4096;
      int* phys_adr=((PA)+bits_to_take(0,12,VA)/4);//need to correct -offset of firs frame
      int swap=0;
-     uint32_t phys_adr_decimal_shifted=reinterpret_cast<uintptr_t>(phys_adr)-reinterpret_cast<uintptr_t>(swapDevice_->first_frame_);
+     uint32_t phys_adr_decimal_shifted= reinterpret_cast<uintptr_t>(phys_adr)-reinterpret_cast<uintptr_t>(swapDevice_->first_frame_);
      int evicted_page=-1;
      if (page_fault) {
          if (exist_in_SD == 0) {

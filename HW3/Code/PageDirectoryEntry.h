@@ -16,7 +16,9 @@ class PageDirectoryEntry {
 
 
 public:
-    PageDirectoryEntry();
+    PageDirectoryEntry(); //Constructor
+
+
     int * get_address(int full_VA); //Pointer to beginning of frame
     bool set_address(int full_VA, int *new_address); //Set the pointer to a frame
     bool is_valid(int full_VA); //Returns whether the entry is valid
